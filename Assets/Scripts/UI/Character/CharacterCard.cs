@@ -1,37 +1,43 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CharacterCard : MonoBehaviour
 {
     [Header("Component")]
-    public Character character;
-    private Button selfButton;
+    [SerializeField]private TMP_Text characterName;
+    [SerializeField]private Image characterImage;
+    [SerializeField]private Slider characterHealthBar;
+    [SerializeField]private GameObject pageImageObj;
+    private Toggle toggle;
     
-    // [Header("Settings")]
-    [Space(30)]
-    public UnityEvent OnClickToOpenEvent;
-    public UnityEvent OnClickToCloseEvent;
-    
+    [Header("Settings")]
+    public CharacterDetailsSO characterDetails;
     //[Header("Debug")]
-    private bool isOpen;
 
     private void Awake()
     {
-        selfButton = GetComponent<Button>();
-        selfButton.onClick.AddListener(() =>
-        {
-            isOpen = !isOpen;
-            if(isOpen)
-                OnClickToOpenEvent?.Invoke();
-            else
-                OnClickToCloseEvent?.Invoke();
-        });
+        toggle = GetComponent<Toggle>();
     }
     
+    public void InitialUpdateData()
+    {
+        characterName.text = characterDetails.characterName;
+        characterImage.sprite = characterDetails.characterSprite;
+        characterHealthBar.maxValue = characterDetails.health;
+        characterHealthBar.value = characterDetails.health;
+        
+        toggle.group = transform.parent.GetComponent<ToggleGroup>();
+    }
     
+    public void OnToggleValueChanged(bool isOn)
+    {
+        if (isOn)
+            EventHandler.CallCharacterCardPress(characterDetails);
+        
+        pageImageObj.SetActive(isOn);
+    }
 }

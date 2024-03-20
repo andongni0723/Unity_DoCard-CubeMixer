@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43929a1fb0e9345a4a2bf7fe8a467f4c, type: 3}
+  m_Name: WarCude
+  m_EditorClassIdentifier: 
+  characterSprite: {fileID: 21300000, guid: 2b9bf8ec5d54fe249ac9e20979ccd42c, type: 3}
+  characterName: "\u597D\u6230\u65B9\u584A"
+  characterDescription: 
+  health: 50
+  skillButtonsGroupPrefab: {fileID: 6684503081504046911, guid: cf3fb2facfb20452982253de68bf7318,
+    type: 3}

@@ -35,6 +35,11 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         defaultMaterial = meshRenderer.material;
     }
 
+    private void OnValidate()
+    {
+        // tilePosition = new Vector2(transform.GetSiblingIndex(), transform.parent.GetSiblingIndex());
+    }
+    
     #region Event
 
     private void OnEnable()

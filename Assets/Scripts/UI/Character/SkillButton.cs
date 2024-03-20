@@ -9,7 +9,7 @@ public class SkillButton : MonoBehaviour
 {
     //[Header("Component")]
     private Transform handPanelTransform;
-    private CharacterCard parentCharacterCard;
+    private CharacterCardManager parentCharacterCard;
     private Button button;
     private Image backgroundImage;
 
@@ -21,7 +21,7 @@ public class SkillButton : MonoBehaviour
     private void Awake()
     {
         handPanelTransform = GameObject.FindWithTag("HandPanel").transform;
-        parentCharacterCard = GetComponentInParent<CharacterCard>();
+        parentCharacterCard = GetComponentInParent<CharacterCardManager>();
         backgroundImage = GetComponentInChildren<Image>();
         button = GetComponent<Button>();
         button.onClick.AddListener(ClickAction);
@@ -55,6 +55,6 @@ public class SkillButton : MonoBehaviour
     
     private void ClickAction()
     {
-        parentCharacterCard.character.ButtonCallUseSkill(skillDetails);
+        // parentCharacterCard.character.ButtonCallUseSkill(skillDetails);
     }
 }

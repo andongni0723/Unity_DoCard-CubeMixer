@@ -20,6 +20,15 @@ public class EventHandler
         TilePosAddManagerList?.Invoke(grids, pos);
     }
 
+    #region Game
+
+    public static Action<List<CharacterDetailsSO>> PlayerCharactersInitialized;
+    public static void CallPlayerCharactersInitialized(List<CharacterDetailsSO> data)
+    {
+        PlayerCharactersInitialized?.Invoke(data);
+    }
+    #endregion
+
 
     #region Character
 
@@ -34,12 +43,17 @@ public class EventHandler
     {
         CharacterCancelMove?.Invoke();
     }
-    
-    // public static Action<GameObject, Vector2> CharacterMove;
-    // public static void OnCharacterMove(GameObject tileGameObject, Vector2 tilePos)
-    // {
-    //     CharacterMove?.Invoke(tileGameObject, tilePos);
-    // }
+
+    #endregion
+
+
+    #region UI
+
+    public static Action<CharacterDetailsSO> CharacterCardPress;
+    public static void CallCharacterCardPress(CharacterDetailsSO data)
+    {
+        CharacterCardPress?.Invoke(data);
+    } 
 
     #endregion
     
