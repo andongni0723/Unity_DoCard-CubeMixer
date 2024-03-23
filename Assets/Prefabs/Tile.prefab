@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2255248560379910789}
   - component: {fileID: 1159085118519368294}
   m_Layer: 0
-  m_Name: Tile1
+  m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,6 +123,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canWalkMaterial: {fileID: 2100000, guid: 89695ed14d43a499f808d61df9168eed, type: 2}
   mouseTargetMaterial: {fileID: 2100000, guid: eee90037082a84b97bc3ff74d1a34259, type: 2}
+  inAttackRangeMaterial: {fileID: 2100000, guid: 33579e56488db44a4b659437d54f0374,
+    type: 2}
   standY: 0.7
   standDuration: 0.3
   tilePosition: {x: 0, y: 0}

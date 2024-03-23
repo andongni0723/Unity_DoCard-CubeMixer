@@ -15,5 +15,6 @@ public class CharacterDetailsSO : ScriptableObject
     public int health;
 
     [Space(15)] 
+    public GameObject characterPrefab;
     public GameObject skillButtonsGroupPrefab;
 }

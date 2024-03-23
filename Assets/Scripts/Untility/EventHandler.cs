@@ -27,21 +27,33 @@ public class EventHandler
     {
         PlayerCharactersInitialized?.Invoke(data);
     }
+    
+    public static Action CharacterObjectGeneratedDone;
+    public static void CallCharacterObjectGeneratedDone()
+    {
+        CharacterObjectGeneratedDone?.Invoke();
+    } 
     #endregion
 
 
     #region Character
 
-    public static Action<Character, Vector2, int> CharacterNearTileAnimation;
-    public static void CallCharacterNearTileAnimation(Character character, Vector2 playerPos, int distance)
+    public static Action<Character, Vector2, Vector2, Vector2> TileUpAnimation;
+    public static void CallTileUpAnimation(Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
     {
-        CharacterNearTileAnimation?.Invoke(character, playerPos, distance);
+        TileUpAnimation?.Invoke(character, skillAttackRange, playerPos, distance);
+    }
+    
+    public static Action<Vector2, Vector2> AttackRangeColor;
+    public static void CallAttackRangeColor(Vector2 tilePos, Vector2 distance)
+    {
+        AttackRangeColor?.Invoke(tilePos, distance);
     }
 
-    public static Action CharacterCancelMove;
-    public static void CallCharacterCancelMove()
+    public static Action CharacterMoveEnd;
+    public static void CallCharacterMoveEnd()
     {
-        CharacterCancelMove?.Invoke();
+        CharacterMoveEnd?.Invoke();
     }
 
     #endregion

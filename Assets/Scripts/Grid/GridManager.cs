@@ -12,8 +12,10 @@ public class GridManager : Singleton<GridManager>
 
     //[Header("Debug")]
 
-    private void OnValidate()
+    public override void Awake()
     {
+        base.Awake();
+        
         try
         {
             for (int i = 0; i <= 19; i++)

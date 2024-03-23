@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 6971175147129084137}
   - component: {fileID: 6681182686045406903}
   m_Layer: 5
-  m_Name: OriginCude Skill Buttons
+  m_Name: OriginCube Skill Buttons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,6 +116,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttons: {fileID: 3372216281054255656}
   characterDetails: {fileID: 0}
+  characterGameData:
+    maxHealth: 0
+    currentHealth: 0
+    characterObject: {fileID: 0}
 --- !u!1001 &1717067397446538647
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -249,6 +253,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4459448971257290012, guid: e6db483b6ebb549a4a92737e3ee38b20,
+        type: 3}
+      propertyPath: skillDetails
+      value: 
+      objectReference: {fileID: 11400000, guid: 8e3bcd6f3d236435795a4ac6fa3556ad,
+        type: 2}
     - target: {fileID: 5884203122835319358, guid: e6db483b6ebb549a4a92737e3ee38b20,
         type: 3}
       propertyPath: m_Sprite
@@ -410,6 +420,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4459448971257290012, guid: e6db483b6ebb549a4a92737e3ee38b20,
+        type: 3}
+      propertyPath: skillDetails
+      value: 
+      objectReference: {fileID: 11400000, guid: 8e3bcd6f3d236435795a4ac6fa3556ad,
+        type: 2}
     - target: {fileID: 5884203122835319358, guid: e6db483b6ebb549a4a92737e3ee38b20,
         type: 3}
       propertyPath: m_Sprite
@@ -571,6 +587,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4459448971257290012, guid: e6db483b6ebb549a4a92737e3ee38b20,
+        type: 3}
+      propertyPath: skillDetails
+      value: 
+      objectReference: {fileID: 11400000, guid: a1a3ad843bc334e0b930eb819e22f985,
+        type: 2}
     - target: {fileID: 5884203122835319358, guid: e6db483b6ebb549a4a92737e3ee38b20,
         type: 3}
       propertyPath: m_Sprite

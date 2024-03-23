@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     [Header("Settings")] 
     public Material canWalkMaterial;
     public Material mouseTargetMaterial;
+    public Material inAttackRangeMaterial;
     private Material defaultMaterial;
     
     [Space(15)]
@@ -23,10 +24,12 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     //[Header("Debug")]
     [Header("Data")] 
     public Vector2 tilePosition;
-
+    
     private bool isStand = false;
     private bool isMouseHit = false;
+    private bool inAttackRange = false;
     private Character tempCharacterWantToMove;
+    private Vector2 tempCharacterAttackRangeDistance;
 
     private void Awake()
     {
@@ -44,12 +47,13 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void OnEnable()
     {
-        EventHandler.TilePosYStand += OnTilePosYStand;
-        EventHandler.TilePosXStand += OnTilePosXStand;
-        EventHandler.TilePosAddManagerList += OnTilePosAddManagerList;
+        EventHandler.TilePosYStand += OnTilePosYStand; // Test Stand
+        EventHandler.TilePosXStand += OnTilePosXStand; // Test Stand
+        EventHandler.TilePosAddManagerList += OnTilePosAddManagerList; // Initial Setting
         
-        EventHandler.CharacterNearTileAnimation += OnCharacterNearTileAnimation;
-        EventHandler.CharacterCancelMove += OnCharacterCancelMove;
+        EventHandler.TileUpAnimation += OnTileUpAnimation; // Tile up animation
+        EventHandler.CharacterMoveEnd += OnCharacterCancelMove; // Tile down animation
+        EventHandler.AttackRangeColor += OnAttackRangeColor; // Check and Set Material to Attack Range Color
     }
 
     private void OnDisable()
@@ -58,20 +62,26 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         EventHandler.TilePosXStand += OnTilePosXStand;
         
         EventHandler.TilePosAddManagerList += OnTilePosAddManagerList;
-        EventHandler.CharacterNearTileAnimation -= OnCharacterNearTileAnimation;
-        EventHandler.CharacterCancelMove -= OnCharacterCancelMove;
+        EventHandler.TileUpAnimation -= OnTileUpAnimation;
+        EventHandler.CharacterMoveEnd -= OnCharacterCancelMove;
+        EventHandler.AttackRangeColor -= OnAttackRangeColor;
     }
 
-    private void OnCharacterNearTileAnimation(Character character, Vector2 playerPos, int distance)
+    private void OnTileUpAnimation(Character character,Vector2 skillAttackRange,  Vector2 playerPos, Vector2 distance)
     {
-        if(Vector2.Distance(playerPos, tilePosition) <= distance)
+        tempCharacterWantToMove = character;
+        tempCharacterAttackRangeDistance = skillAttackRange;
+        
+        if(Vector2.Distance(playerPos, tilePosition) <= distance.y && !CheckNotTempCharacterOnTile())
         {
             isStand = true;
-            tempCharacterWantToMove = character;
             transform.DOMoveY(standY, standDuration);
         }
+        
+        if(isMouseHit)
+            EventHandler.CallAttackRangeColor(tilePosition, skillAttackRange);
     }
-    
+
     private void OnCharacterCancelMove()
     {
         if(isStand)
@@ -80,11 +90,23 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             tempCharacterWantToMove = null;
             transform.DOMoveY(0, standDuration);
         }
+
+        inAttackRange = false;
     }
-    
+
+    private void OnAttackRangeColor(Vector2 targetTilePos, Vector2 distance)
+    {
+        inAttackRange = Mathf.Abs(tilePosition.x - targetTilePos.x) < distance.x &&
+                        Mathf.Abs(tilePosition.y - targetTilePos.y) < distance.y;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         isMouseHit = true;
+        if(isStand)
+            EventHandler.CallAttackRangeColor(tilePosition, tempCharacterAttackRangeDistance);
+
+        // Debug.Log(tempCharacterAttackRangeDistance.x + " " + tempCharacterAttackRangeDistance.y);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -97,7 +119,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if (isStand)
         {
             if(tempCharacterWantToMove != null)
-                tempCharacterWantToMove.TileCallClickAction(gameObject, tilePosition);
+                tempCharacterWantToMove.TileReturnClickData(gameObject, tilePosition);
         }
     } 
 
@@ -112,10 +134,42 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (isMouseHit && isStand)
             meshRenderer.material = mouseTargetMaterial;
+        else if(inAttackRange)
+            meshRenderer.material = inAttackRangeMaterial;
         else if(isStand)
             meshRenderer.material = canWalkMaterial;
         else
             meshRenderer.material = defaultMaterial;
+    }
+
+    /// <summary>
+    /// Check if there is a character on the tile (If temp character on tile, this method will ignore it)
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckNotTempCharacterOnTile()
+    {
+        for(int i = 0 ; i < transform.childCount; i++)
+        {
+            if (!transform.GetChild(i).CompareTag("Character")) continue;
+            return transform.GetChild(i) != tempCharacterWantToMove.transform;
+        }
+        
+        return false;
+    }
+    
+    /// <summary>
+    /// Check if there is a character on the tile (If temp character on tile, this method will ignore it)
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckHaveCharacterOnTile()
+    {
+        for(int i = 0 ; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).CompareTag("Character"))
+                return true;
+        }
+        
+        return false;
     }
 
     #region Test

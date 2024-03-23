@@ -27,7 +27,7 @@ public class SkillButtonManager : MonoBehaviour
                 .GetComponent<CharacterSkillButtonsGroup>();
             
             characterCard.characterDetails = character;
-            characterCard.InitialUpdateUI();
+            characterCard.InitialUpdateData();
         }
     }
 }

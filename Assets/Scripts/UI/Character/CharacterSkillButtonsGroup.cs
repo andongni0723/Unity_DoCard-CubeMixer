@@ -10,15 +10,18 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     
     [Header("Settings")]
     public CharacterDetailsSO characterDetails;
+    public CharacterGameData characterGameData;
     //[Header("Debug")]
 
     private void OnEnable()
     {
         EventHandler.CharacterCardPress += OnCharacterCardPress;
+        EventHandler.CharacterObjectGeneratedDone += InitialUpdateData;
     }
     private void OnDisable()
     {
         EventHandler.CharacterCardPress -= OnCharacterCardPress;
+        EventHandler.CharacterObjectGeneratedDone -= InitialUpdateData;
     }
 
     private void OnCharacterCardPress(CharacterDetailsSO data)
@@ -26,8 +29,15 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
         buttons.SetActive(data == characterDetails);
     }
 
-    public void InitialUpdateUI()
+    public void InitialUpdateData()
     {
         buttons.SetActive(false);
+        characterGameData = CharacterManager.Instance.LoadData(characterDetails.characterName);
+        
+        for (int i = 0; i < buttons.transform.childCount; i++)
+        {
+            SkillButton skillButton = buttons.transform.GetChild(i).GetComponent<SkillButton>();
+            skillButton.InitialUpdate(this);
+        }
     }
 }
