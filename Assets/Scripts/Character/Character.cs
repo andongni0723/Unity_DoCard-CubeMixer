@@ -93,7 +93,7 @@ public class Character : MonoBehaviour
                     EventHandler.CallCharacterMoveEnd();
                 }
                 
-                AttackAction(skillDetails);
+                AttackAction(skillDetails, skillTileReturnDataList);
                 break;
                 
         }
@@ -124,7 +124,7 @@ public class Character : MonoBehaviour
         await UniTask.Yield(0); 
     }
 
-    protected virtual void AttackAction(SkillDetailsSO skillDetails)
+    protected virtual void AttackAction(SkillDetailsSO skillDetails, List<TileReturnData> skillTileReturnDataList)
     {
         // Write on child class
     }

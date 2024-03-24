@@ -26,10 +26,8 @@ public class CharacterGenerator : MonoBehaviour
     {
         foreach (var character in data)
         {
-            // Set spawn position
-            RandomSpawnPosition();
             Transform tileTransform = GridManager.Instance.GetTileWithTilePos((int)startSpawnPosition.x, 
-                                        (int)startSpawnPosition.y).transform;
+                (int)startSpawnPosition.y).transform;
             
             // Generate
             Character characterObj = Instantiate(character.characterPrefab, 
@@ -42,6 +40,9 @@ public class CharacterGenerator : MonoBehaviour
             // Save Data
             CharacterManager.Instance.SaveData(character.characterName,
                 new CharacterGameData(character.health, character.health, characterObj.gameObject));
+            
+            // Set spawn position
+            RandomSpawnPosition();
         } 
         
         EventHandler.CallCharacterObjectGeneratedDone();

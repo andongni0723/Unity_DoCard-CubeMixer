@@ -20,5 +20,5 @@ MonoBehaviour:
   moveRange: 0
   attackAimTime: 1
   SkillAimDataList:
-  - skillAttackRange: {x: 1, y: 1}
-    skillCastRange: {x: 2, y: 2}
+  - skillAttackRange: {x: 2, y: 2}
+    skillCastRange: {x: 1, y: 1}

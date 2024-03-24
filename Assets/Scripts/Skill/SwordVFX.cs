@@ -1,5 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
+
+default:
+                break;ng System.Collections.Generic;
 using UnityEngine;
 
 public class SwordVFX : MonoBehaviour

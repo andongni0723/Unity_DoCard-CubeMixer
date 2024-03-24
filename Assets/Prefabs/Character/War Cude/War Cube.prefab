@@ -61,8 +61,11 @@ PlayableDirector:
     value: {fileID: 6248752517604659440}
   - key: {fileID: 5099993794089276810, guid: 70a870cd84f654310aa7f7b63fe983d8, type: 2}
     value: {fileID: 4014900443091482949}
+  - key: {fileID: 6908262682381057560, guid: 70a870cd84f654310aa7f7b63fe983d8, type: 2}
+    value: {fileID: 9180260374749552914}
   m_ExposedReferences:
     m_References:
+    - 08f39a653cb8c401993cff4ebefa0671: {fileID: 2482265709349717348}
     - fcd179514f2b74366a7d3d18f9a26a24: {fileID: 6248752517604659440}
 --- !u!1 &1324462390568950382
 GameObject:
@@ -279,7 +282,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4909678718128179962}
   - component: {fileID: 1618061395782379089}
-  - component: {fileID: 1289177912257910823}
   m_Layer: 0
   m_Name: Sowrd Rotate
   m_TagString: Untagged
@@ -302,7 +304,7 @@ Transform:
   m_Children:
   - {fileID: 6221055099446862570}
   m_Father: {fileID: 4613229908980542078}
-  m_LocalEulerAnglesHint: {x: 0, y: 720, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -12.086139, z: 0}
 --- !u!95 &1618061395782379089
 Animator:
   serializedVersion: 7
@@ -325,18 +327,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1289177912257910823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2117545304171386302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d22277f5535c4c7e850247a17e6aef8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2299330687562322746
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +486,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -553,7 +543,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: 156
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -10778,6 +10768,9 @@ MonoBehaviour:
   moveMaxDistance: 3
   characterTilePosition: {x: 4, y: 5}
   skillTileReturnDataList: []
+  skillRotate: {fileID: 8961900500847861942}
+  skillTrail: {fileID: 4999369235833482769}
+  skillLightWorld: {fileID: 0}
 --- !u!1 &6248752517604659440
 GameObject:
   m_ObjectHideFlags: 0
@@ -10788,7 +10781,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7690706778609474179}
   - component: {fileID: 8980216055923166552}
-  - component: {fileID: 5656688605673563072}
   m_Layer: 0
   m_Name: Sword Trail
   m_TagString: Untagged
@@ -10811,7 +10803,7 @@ Transform:
   m_Children:
   - {fileID: 4324279736429968353}
   m_Father: {fileID: 1723778174025814211}
-  m_LocalEulerAnglesHint: {x: 0, y: 94.5838, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 129.69693, z: 0}
 --- !u!95 &8980216055923166552
 Animator:
   serializedVersion: 7
@@ -10834,18 +10826,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5656688605673563072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6248752517604659440}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d22277f5535c4c7e850247a17e6aef8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6674250844448602155
 GameObject:
   m_ObjectHideFlags: 0
@@ -11287,9 +11267,12 @@ PlayableDirector:
     value: {fileID: 1618061395782379089}
   - key: {fileID: -645553362793543410, guid: 8049eb287fe4246459e0bc19f3f17806, type: 2}
     value: {fileID: 4014900443091482949}
+  - key: {fileID: 3048103953384970437, guid: 8049eb287fe4246459e0bc19f3f17806, type: 2}
+    value: {fileID: 3079723053855487972}
   m_ExposedReferences:
     m_References:
     - fcd179514f2b74366a7d3d18f9a26a24: {fileID: 0}
+    - 9caeb8b5a33a14ed0835cdb7c13cb9bf: {fileID: 4156127402093720017}
 --- !u!1 &9078487915177632924
 GameObject:
   m_ObjectHideFlags: 0
