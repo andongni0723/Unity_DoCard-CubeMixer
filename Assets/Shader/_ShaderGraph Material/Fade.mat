@@ -45,7 +45,7 @@ Material:
     - _Threshold: 0.12
     m_Colors:
     - _Base_Color: {r: 0, g: 0, b: 0, a: 1}
-    - _Color: {r: 15.999999, g: 0, b: 0, a: 1}
+    - _Color: {r: 2.9960778, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6176460597440874325

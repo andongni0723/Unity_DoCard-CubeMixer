@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d969930520284343b378ef93d799772, type: 3}
-  m_Name: WarCude_Trail
+  m_Name: Test Skill
   m_EditorClassIdentifier: 
   skillSprite: {fileID: 21300000, guid: 45751a4124f67c443bf96ed1df7c550b, type: 3}
   skillName: "\u9023\u65AC"
@@ -18,7 +18,15 @@ MonoBehaviour:
   skillDescription: 
   skillType: 2
   moveRange: 0
-  attackAimTime: 1
+  attackAimTime: 5
   SkillAimDataList:
-  - skillAttackRange: {x: 3, y: 2}
-    skillCastRange: {x: 1, y: 1}
+  - skillAttackRange: {x: 2, y: 2}
+    skillCastRange: {x: 3, y: 3}
+  - skillAttackRange: {x: 3, y: 3}
+    skillCastRange: {x: 3, y: 3}
+  - skillAttackRange: {x: 1, y: 9}
+    skillCastRange: {x: 3, y: 3}
+  - skillAttackRange: {x: 9, y: 1}
+    skillCastRange: {x: 3, y: 3}
+  - skillAttackRange: {x: 1, y: 1}
+    skillCastRange: {x: 3, y: 3}
