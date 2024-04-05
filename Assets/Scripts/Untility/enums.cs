@@ -5,3 +5,8 @@ public enum SkillButtonType
     Attack,
     Skill
 }
+
+public enum Team
+{
+    Red, Blue
+}

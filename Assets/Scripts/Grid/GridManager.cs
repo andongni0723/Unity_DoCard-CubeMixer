@@ -39,6 +39,7 @@ public class GridManager : Singleton<GridManager>
     
     public Tile GetTileWithTilePos(int x, int y)
     {
+        Debug.Log($"GetTileWithTilePos x: {x}, y: {y}");
         return tilesList[y][x];
     }
 }

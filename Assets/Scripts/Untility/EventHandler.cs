@@ -28,6 +28,24 @@ public class EventHandler
         PlayerCharactersInitialized?.Invoke(data);
     }
     
+    public static Action<List<CharacterDetailsSO>> EnemyCharactersInitialized;
+    public static void CallEnemyCharactersInitialized(List<CharacterDetailsSO> data)
+    {
+        EnemyCharactersInitialized?.Invoke(data);
+    }
+
+    public static Action ReturnCharacterInitializedDone;
+    public static void CallReturnCharacterInitializedDone()
+    {
+        ReturnCharacterInitializedDone?.Invoke();
+    }
+    
+    public static Action CharacterObjectGenerate;
+    public static void CallCharacterObjectGenerate()
+    {
+        CharacterObjectGenerate?.Invoke();
+    }
+    
     public static Action CharacterObjectGeneratedDone;
     public static void CallCharacterObjectGeneratedDone()
     {

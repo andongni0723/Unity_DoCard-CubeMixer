@@ -10765,6 +10765,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5613449332c344afb85f26c04a5f7a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 987867880831591601}
+  blueBodyMaterial: {fileID: 2100000, guid: 791b54b4a2cd049348d6895ad51de678, type: 2}
+  id: 0
   moveMaxDistance: 3
   characterTilePosition: {x: 4, y: 5}
   skillTileReturnDataList: []

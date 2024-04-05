@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class TileReturnData
@@ -22,11 +23,21 @@ public class TileReturnData
 
 public class Character : MonoBehaviour
 {
-    //[Header("Component")]
-    [Header("Settings")] 
-    [Range(0, 20)]public int moveMaxDistance;
+    [Header("Component")]
+    public MeshRenderer body;
     
-    [Header("Debug")]
+    [Space(15)]
+    public Material blueBodyMaterial;
+    
+    
+    [Header("Settings")] 
+    [SerializeField]private int id;
+    public int ID => id;
+
+    [Range(0, 20)]public int moveMaxDistance;
+
+    [Header("Debug")] 
+    private Team team;
     public Vector2 characterTilePosition;
     private Camera mainCamera;
     private bool isTileReturn = false;
@@ -56,10 +67,30 @@ public class Character : MonoBehaviour
 
     #endregion
 
+    public void InitialUpdateData(int id)
+    {
+        this.id = id;
+    }
+
+    public void SetTeam(Team team)
+    {
+        this.team = team;
+        Debug.Log("join team: " + team);
+        if (team == Team.Blue)
+        {
+            body.material = blueBodyMaterial;
+            Debug.Log("Change");
+        }
+    }
+    
+    // --------------- Game --------------- // 
+    
+    
     public void ButtonCallUseSkill(SkillDetailsSO skillDetailsSo)
     {
         StartCoroutine(SkillExecuteAction(skillDetailsSo));
     }
+    
     /// <summary>
     /// Call by skill button, when skill button click
     /// </summary>

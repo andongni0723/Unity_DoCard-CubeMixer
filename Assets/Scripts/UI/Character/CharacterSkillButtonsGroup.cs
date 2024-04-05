@@ -32,7 +32,7 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     public void InitialUpdateData()
     {
         buttons.SetActive(false);
-        characterGameData = CharacterManager.Instance.LoadData(characterDetails.characterName);
+        characterGameData = GameManager.Instance.selfCharacterManager.LoadData(characterDetails.characterName);
         
         for (int i = 0; i < buttons.transform.childCount; i++)
         {

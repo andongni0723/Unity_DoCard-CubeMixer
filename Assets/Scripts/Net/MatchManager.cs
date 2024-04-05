@@ -14,11 +14,14 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using UnityEngine;
+using TMPro;
 
-public class MatchManager : MonoBehaviour
+public class MatchManager : Singleton<MatchManager>
 {
     [Header("Component")]
     public GameObject panel;
+    public TMP_Text messageText;
+    public TMP_Text networkStatusText;
     private UnityTransport transport;
     
     //[Header("Settings")]
@@ -28,10 +31,19 @@ public class MatchManager : MonoBehaviour
     //[Header("Debug")]
     private Lobby currentConnectedLobby;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         Application.targetFrameRate = 300;
         transport = FindObjectOfType<UnityTransport>();
+    }
+
+    // public int GetCurrentPlayerInLobby()
+    // {
+    // }
+    public int GetMaxPlayerInLobby()
+    {
+        return currentConnectedLobby.MaxPlayers;
     }
 
     public async void CreateOrJoinLobby()
@@ -43,6 +55,11 @@ public class MatchManager : MonoBehaviour
         // 成功連接大廳
         if(currentConnectedLobby != null)
             panel.SetActive(false);
+        
+        // 顯示網路狀態
+        networkStatusText.text = $"IsHost: {NetworkManager.Singleton.IsHost}\n" +
+                                 $"IsServer: {NetworkManager.Singleton.IsServer}\n" +
+                                 $"IsClient: {NetworkManager.Singleton.IsClient}\n";
     }
 
     private async Task Authenticate()
@@ -76,6 +93,7 @@ public class MatchManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log("No Lobby can quick join");
+            messageText.text = "No Lobby can quick join, creating new lobby...";
             return null;
         }
     }
