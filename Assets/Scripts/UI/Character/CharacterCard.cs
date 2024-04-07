@@ -13,8 +13,9 @@ public class CharacterCard : MonoBehaviour
     [SerializeField]private Slider characterHealthBar;
     [SerializeField]private GameObject pageImageObj;
     private Toggle toggle;
-    
-    [Header("Settings")]
+
+    [Header("Settings")] 
+    public string ID;
     public CharacterDetailsSO characterDetails;
     //[Header("Debug")]
 

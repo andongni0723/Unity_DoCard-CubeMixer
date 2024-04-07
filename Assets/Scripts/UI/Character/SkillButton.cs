@@ -67,12 +67,6 @@ public class SkillButton : MonoBehaviour
             .From(parentManager.transform.position)); // move
 
     }
-
-    public void ParentClickToClose()
-    {
-        transform.SetParent(parentManager.transform);
-        backgroundImage.gameObject.SetActive(false);
-    }
     
     private void ClickAction()
     {
@@ -83,7 +77,7 @@ public class SkillButton : MonoBehaviour
         else
         {
             isOn = true;            
-            parentManager.characterGameData.characterObject.GetComponent<Character>().ButtonCallUseSkill(skillDetails);
+            parentManager.character.ButtonCallUseSkill(skillDetails);
         }
     }
 }

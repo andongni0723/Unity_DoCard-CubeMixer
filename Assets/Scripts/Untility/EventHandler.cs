@@ -51,6 +51,12 @@ public class EventHandler
     {
         CharacterObjectGeneratedDone?.Invoke();
     } 
+    
+    public static Action UIObjectGenerate;
+    public static void CallUIObjectGenerate()
+    {
+        UIObjectGenerate?.Invoke();
+    }
     #endregion
 
 

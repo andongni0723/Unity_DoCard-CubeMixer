@@ -25,14 +25,15 @@ public class Character : MonoBehaviour
 {
     [Header("Component")]
     public MeshRenderer body;
+    public CharacterManager characterManager;
     
     [Space(15)]
     public Material blueBodyMaterial;
     
     
     [Header("Settings")] 
-    [SerializeField]private int id;
-    public int ID => id;
+    [SerializeField]private string id;
+    public string ID => id;
 
     [Range(0, 20)]public int moveMaxDistance;
 
@@ -67,19 +68,18 @@ public class Character : MonoBehaviour
 
     #endregion
 
-    public void InitialUpdateData(int id)
+    public void InitialUpdateData(string id)
     {
         this.id = id;
+        DetailsManager.Instance.NewCharacterDetails(this);
     }
 
     public void SetTeam(Team team)
     {
         this.team = team;
-        Debug.Log("join team: " + team);
         if (team == Team.Blue)
         {
             body.material = blueBodyMaterial;
-            Debug.Log("Change");
         }
     }
     

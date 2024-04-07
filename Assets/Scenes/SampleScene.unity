@@ -1395,6 +1395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selfCharacterManager: {fileID: 0}
   enemyCharacterManager: {fileID: 0}
+  selfTeam: 0
 --- !u!4 &455270274
 Transform:
   m_ObjectHideFlags: 0
@@ -6620,7 +6621,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 402.47363, y: 0}
+  m_AnchoredPosition: {x: 401.89, y: 0}
   m_SizeDelta: {x: 804.9463, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &513627188
@@ -6649,7 +6650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 175
     m_Right: 0
     m_Top: 184
     m_Bottom: 0
@@ -6676,10 +6677,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterCardPrefab: {fileID: 291680620419159245, guid: a3d1112303a5947899be99b708ef0433,
     type: 3}
+  team: 0
+  currentGenerateID: 1
   currentChooseCharacter:
     maxHealth: 0
     currentHealth: 0
     characterObject: {fileID: 0}
+    tilePosition: {x: 0, y: 0}
 --- !u!4 &528989413 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2366105369947334816, guid: d40753f09d1ad43b58ea872b1fd504c0,
@@ -33883,6 +33887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillButtonPrefab: {fileID: 6684503081504046911, guid: cf3fb2facfb20452982253de68bf7318,
     type: 3}
+  team: 0
 --- !u!4 &1725908075 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2366105369947334816, guid: d40753f09d1ad43b58ea872b1fd504c0,
@@ -39430,6 +39435,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fae0e84c11b54646bfa33c23336bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
+  characterManager: {fileID: 0}
+  blueBodyMaterial: {fileID: 0}
   id: 0
   moveMaxDistance: 3
   characterTilePosition: {x: 4, y: 12}
@@ -52318,7 +52326,7 @@ PrefabInstance:
     - target: {fileID: 4024805961781468023, guid: a3d1112303a5947899be99b708ef0433,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 402.47314
+      value: 577.47314
       objectReference: {fileID: 0}
     - target: {fileID: 4024805961781468023, guid: a3d1112303a5947899be99b708ef0433,
         type: 3}

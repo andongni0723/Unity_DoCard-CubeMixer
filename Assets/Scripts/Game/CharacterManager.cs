@@ -27,8 +27,6 @@ public class CharacterManager : NetworkBehaviour
 {
     [Header("Component")] 
     private CharacterGenerator characterGenerator;
-
-    
     
     [Header("Settings")]
     // public List<CharacterDetailsSO> characterDetailsList;
@@ -48,6 +46,12 @@ public class CharacterManager : NetworkBehaviour
         }
         else
             GameManager.Instance.SetEnemyCharacterManager(this);
+        
+        foreach (var index in characterDetailsList)
+        {
+            CharacterDetailsSO data = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
+            SaveData(data.characterName, new CharacterGameData(data.health, data.health));
+        }
     }
 
     private void Awake()
@@ -76,11 +80,7 @@ public class CharacterManager : NetworkBehaviour
 
     private void Start()
     {
-        foreach (var index in characterDetailsList)
-        {
-            CharacterDetailsSO data = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
-            SaveData(data.characterName, new CharacterGameData(data.health, data.health));
-        }
+        
     }
 
     [ServerRpc]
@@ -100,6 +100,12 @@ public class CharacterManager : NetworkBehaviour
     }
     public bool LoadPosition(string key, ref Vector2 data)
     {
+        if(characterGameDataDict.TryGetValue(key, out var value))
+        {
+            data = value.tilePosition;
+            return true;
+        }
+        
         if (characterGameDataDict[key].tilePosition == new Vector2(-1, -1))
             return false;
         

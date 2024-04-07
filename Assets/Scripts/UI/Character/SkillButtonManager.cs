@@ -6,28 +6,55 @@ public class SkillButtonManager : MonoBehaviour
 {
     [Header("Component")]
     public GameObject skillButtonPrefab;
-    // [Header("Settings")]
-    // [Header("Debug")]
+
+    [Header("Settings")] 
+    [SerializeField] private Team team;
+    
+    [Header("Debug")]
+    private int currentGenerateID = 1;
     
     // get event
     private void OnEnable()
     {
-        EventHandler.PlayerCharactersInitialized += OnPlayerCharactersInitialized;
+        EventHandler.UIObjectGenerate += OnUIObjectGenerate; // Update data and Call Generate Skill Button Group
     }
     private void OnDisable()
     {
-        EventHandler.PlayerCharactersInitialized -= OnPlayerCharactersInitialized;
+        EventHandler.UIObjectGenerate -= OnUIObjectGenerate;
     }
 
-    private void OnPlayerCharactersInitialized(List<CharacterDetailsSO> data)
+    private void OnUIObjectGenerate()
     {
-        foreach (var character in data)
+        team = GameManager.Instance.selfTeam;
+        var data = GameManager.Instance.selfCharacterManager.characterDetailsList;
+        CharacterSkillGroupGenerate(data);
+    }
+
+    private void CharacterSkillGroupGenerate(List<int> data)
+    {
+        foreach (var index in data)
         {
+            var character = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
+
             CharacterSkillButtonsGroup characterCard = Instantiate(character.skillButtonsGroupPrefab, transform)
                 .GetComponent<CharacterSkillButtonsGroup>();
             
+            // Update data
             characterCard.characterDetails = character;
+            characterCard.ID = GenerateCharacterID(team, currentGenerateID);
+            characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.ID); // TODO:
             characterCard.InitialUpdateData();
+
+            currentGenerateID++;
         }
+    }
+    
+    private string GenerateCharacterID(Team team, int currentGenerateID)
+    {
+        string id = team == Team.Red ? "R" : "B";
+        
+        id += currentGenerateID.ToString("00");
+        
+        return id;
     }
 }

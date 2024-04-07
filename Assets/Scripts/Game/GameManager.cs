@@ -9,7 +9,9 @@ public class GameManager : Singleton<GameManager>
     [Header("Component")]
     [SerializeField] public CharacterManager selfCharacterManager;
     [SerializeField] public CharacterManager enemyCharacterManager;
-    //[Header("Settings")]
+    
+    [Header("Settings")]
+    public Team selfTeam; // Update by CharacterGenerate
     
     //[Header("Debug")]
     private int currentPlayerCount = 0;
@@ -43,6 +45,8 @@ public class GameManager : Singleton<GameManager>
     {
         yield return new WaitForSeconds(1);
         EventHandler.CallCharacterObjectGenerate();
+        yield return new WaitForSeconds(0.5f);
+        EventHandler.CallUIObjectGenerate();
     }
     public override void Awake()
     {

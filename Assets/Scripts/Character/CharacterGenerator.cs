@@ -7,34 +7,6 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-// public class NetworkCharacterDetailsIndexList : INetworkSerializable
-// {
-//     public int[] dataArray = Array.Empty<int>();
-//
-//     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-//     {
-//         // Length
-//         int length = 0;
-//         if (!serializer.IsReader)
-//         {
-//             length = dataArray.Length;
-//         }
-//         
-//         serializer.SerializeValue(ref length);
-//         
-//         // Array
-//         if (serializer.IsReader)
-//         {
-//             dataArray = new int[length];
-//         }
-//         
-//         for (int n = 0; n < length; ++n)
-//         {
-//             serializer.SerializeValue(ref dataArray[n]);
-//         }
-//     }
-// }
-
 public class CharacterGenerator : NetworkBehaviour
 {
     //[Header("Component")]
@@ -45,12 +17,13 @@ public class CharacterGenerator : NetworkBehaviour
     private CharacterManager characterManager;
 
     //[Header("Debug")]
+    private int currentGenerateID = 1;
     private bool isInitial = false;
     public Team team; 
     private Vector2 startSpawnPosition;
 
     public NetworkVariable<int> teamNetwork = new(0, writePerm: NetworkVariableWritePermission.Owner);
-    private NetworkVariable<int> currentGenerateID = new(1000);
+    // private NetworkVariable<int> currentGenerateID = new(1000);
     private NetworkList<int> tempDataIndexList = new(writePerm: NetworkVariableWritePermission.Owner);
     
     public override void OnNetworkSpawn()
@@ -67,8 +40,6 @@ public class CharacterGenerator : NetworkBehaviour
         {
             teamNetwork.Value = IsServer ? 0 : 1;
         }
-        
-        
         
         isInitial = true;
         EventHandler.ReturnCharacterInitializedDone();
@@ -94,6 +65,10 @@ public class CharacterGenerator : NetworkBehaviour
     private void OnTeamValueChanged(int previousvalue, int newvalue)
     {
         team = (Team)newvalue;
+        
+        if(IsOwner)
+            GameManager.Instance.selfTeam = team;
+
     }
     
     // Call by Owner
@@ -117,7 +92,7 @@ public class CharacterGenerator : NetworkBehaviour
     [ServerRpc]
     private void currentIDUpdateServerRpc()
     {
-        currentGenerateID.Value++;
+        // currentGenerateID.Value++;
     }
     
     [ServerRpc]
@@ -158,19 +133,16 @@ public class CharacterGenerator : NetworkBehaviour
             Transform tileTransform = GridManager.Instance.GetTileWithTilePos((int)startSpawnPosition.x, 
                 (int)startSpawnPosition.y).transform;
             
-            // Debug.Log($"{teamNetwork.Value}: Generate {character.characterName} at {startSpawnPosition}"); //TODO: Debug
             
             // Generate
             Character characterObj = Instantiate(character.characterPrefab, 
                 tileTransform.position + Vector3.up * 0.1f, Quaternion.identity).GetComponent<Character>();
             
-            // Update Data
-            // characterManager.AddID(currentGenerateID.Value);
-            
             // New Object Setting
             characterObj.transform.parent = tileTransform;
             characterObj.characterTilePosition = startSpawnPosition;
-            characterObj.InitialUpdateData(currentGenerateID.Value); // TODO: add character to save pos and load pos
+            characterObj.characterManager = characterManager;
+            characterObj.InitialUpdateData(GenerateCharacterID(team, currentGenerateID)); // TODO: add character to save pos and load pos
             characterObj.SetTeam(team);
             
             // currentIDUpdateServerRpc();
@@ -181,12 +153,20 @@ public class CharacterGenerator : NetworkBehaviour
             
             // Set spawn position
             startSpawnPosition += Vector2.right;
-            // RandomSpawnPosition();
+            currentGenerateID++;
         }
 
         EventHandler.CallCharacterObjectGeneratedDone();
     }
 
+    private string GenerateCharacterID(Team team, int currentGenerateID)
+    {
+        string id = team == Team.Red ? "R" : "B";
+        
+        id += currentGenerateID.ToString("00");
+        
+        return id;
+    }
     
     private void RandomSpawnPosition()
     {

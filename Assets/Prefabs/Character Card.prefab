@@ -114,6 +114,7 @@ MonoBehaviour:
   characterImage: {fileID: 3642231244342971352}
   characterHealthBar: {fileID: 3771062560238458614}
   pageImageObj: {fileID: 3570316463622401942}
+  ID: 
   characterDetails: {fileID: 0}
 --- !u!1 &2306714528264781744
 GameObject:
@@ -153,8 +154,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -234, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -117, y: 0}
+  m_SizeDelta: {x: -234, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2900808860686695688
 GameObject:
@@ -215,15 +216,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: f49558038b9264a39a2c2af934f525dd, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -239,12 +240,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2900808860686695688}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  m_EffectColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   m_EffectDistance: {x: 20, y: -20}
   m_UseGraphicAlpha: 1
 --- !u!1 &3570316463622401942
@@ -357,8 +358,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21.9932, y: -32.445923}
-  m_SizeDelta: {x: 294.2275, y: 84.8918}
+  m_AnchoredPosition: {x: -13.838, y: -44.726}
+  m_SizeDelta: {x: 365.89, y: 60.332}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3771062560238458614
 MonoBehaviour:
@@ -822,8 +823,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
