@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DetailsManager : Singleton<DetailsManager>
 {
@@ -10,8 +11,27 @@ public class DetailsManager : Singleton<DetailsManager>
     [SerializeField] private List<CharacterDetailsSO> allCharacterDetailsList = new();
     [SerializeField] private Dictionary<string, Character> characterDict = new();
     
-    //[Header("Debug")]
+    [Header("Public Data")]
+    public Vector2 mouseHitTilePos;
     
+    //[Header("Debug")]
+
+    private void OnEnable()
+    {
+        EventHandler.ReturnMouseHitTilePosition += OnReturnMouseHitTilePosition;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.ReturnMouseHitTilePosition -= OnReturnMouseHitTilePosition;
+    }
+
+    private void OnReturnMouseHitTilePosition(Vector2 tilePos)
+    {
+        mouseHitTilePos = tilePos;
+    }
+
+
     public CharacterDetailsSO UseIndexSearchCharacterDetailsSO(int index)
     {
         try
@@ -42,5 +62,7 @@ public class DetailsManager : Singleton<DetailsManager>
             return null;
         }
     }
+    
+    
 }
 

@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    // [Header("Component")]
+    [Header("Component")]
+    private Camera mainCamera;
     private MeshRenderer meshRenderer;
     private GameObject showChild;
 
@@ -16,15 +17,14 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public Material mouseTargetMaterial;
     public Material inAttackRangeMaterial;
     private Material defaultMaterial;
-    
-    [Space(15)]
-    public float standY;
+
+    [Space(15)] public float standY;
     public float standDuration = 0.5f;
-    
+
     //[Header("Debug")]
-    [Header("Data")] 
-    public Vector2 tilePosition;
-    
+    [Header("Data")] public Vector2 tilePosition;
+    public float angle;
+
     private bool isStand = false;
     private bool isMouseHit = false;
     private bool inAttackRange = false;
@@ -36,13 +36,14 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         showChild = transform.GetChild(0).gameObject;
         meshRenderer = GetComponent<MeshRenderer>();
         defaultMaterial = meshRenderer.material;
+        mainCamera = Camera.main;
     }
 
     private void OnValidate()
     {
         // tilePosition = new Vector2(transform.GetSiblingIndex(), transform.parent.GetSiblingIndex());
     }
-    
+
     #region Event
 
     private void OnEnable()
@@ -50,9 +51,9 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         EventHandler.TilePosYStand += OnTilePosYStand; // Test Stand
         EventHandler.TilePosXStand += OnTilePosXStand; // Test Stand
         EventHandler.TilePosAddManagerList += OnTilePosAddManagerList; // Initial Setting
-        
+
         EventHandler.TileUpAnimation += OnTileUpAnimation; // Tile up animation
-        EventHandler.CharacterMoveEnd += OnCharacterCancelMove; // Tile down animation
+        EventHandler.CharacterActionEnd += OnCharacterCancelMove; // Tile down animation
         EventHandler.AttackRangeColor += OnAttackRangeColor; // Check and Set Material to Attack Range Color
     }
 
@@ -60,34 +61,34 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         EventHandler.TilePosYStand -= OnTilePosYStand;
         EventHandler.TilePosXStand += OnTilePosXStand;
-        
+
         EventHandler.TilePosAddManagerList += OnTilePosAddManagerList;
         EventHandler.TileUpAnimation -= OnTileUpAnimation;
-        EventHandler.CharacterMoveEnd -= OnCharacterCancelMove;
+        EventHandler.CharacterActionEnd -= OnCharacterCancelMove;
         EventHandler.AttackRangeColor -= OnAttackRangeColor;
     }
 
-    private void OnTileUpAnimation(Character character,Vector2 skillAttackRange,  Vector2 playerPos, Vector2 distance)
+    private void OnTileUpAnimation(Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
     {
         tempCharacterWantToMove = character;
         tempCharacterAttackRangeDistance = skillAttackRange;
-        
-        if(Vector2.Distance(playerPos, tilePosition) <= distance.y && !CheckNotTempCharacterOnTile())
+
+        if (Vector2.Distance(playerPos, tilePosition) <= distance.y && !CheckNotTempCharacterOnTile())
         {
             isStand = true;
             transform.DOMoveY(standY, standDuration);
         }
-        
-        if(isMouseHit)
+
+        if (isMouseHit)
             EventHandler.CallAttackRangeColor(tilePosition, skillAttackRange);
     }
 
     private void OnCharacterCancelMove()
     {
-        if(isStand)
+        if (isStand)
         {
             isStand = false;
-            tempCharacterWantToMove = null;
+            // tempCharacterWantToMove = null;
             transform.DOMoveY(0, standDuration);
         }
 
@@ -96,14 +97,24 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void OnAttackRangeColor(Vector2 targetTilePos, Vector2 distance)
     {
-        inAttackRange = Mathf.Abs(tilePosition.x - targetTilePos.x) < distance.x &&
-                        Mathf.Abs(tilePosition.y - targetTilePos.y) < distance.y;
+        // if(isMouseHit)
+        //     Debug.Log($"{skillAttackRange}");
+        // if(isMouseHit)
+        //     Debug.Log($"{skillAttackRange}");
+        var newDistance = CheckMouseDirectionToRotateSkillRange(distance);
+        //distance = new Vector2(distance.y, distance.x);
+        inAttackRange = Mathf.Abs(tilePosition.x - targetTilePos.x) < newDistance.x &&
+                        Mathf.Abs(tilePosition.y - targetTilePos.y) < newDistance.y;
     }
+
+    // ------------------- Mouse -------------------
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        EventHandler.CallReturnMouseHitTilePosition(tilePosition);
+     
         isMouseHit = true;
-        if(isStand)
+        if (isStand)
             EventHandler.CallAttackRangeColor(tilePosition, tempCharacterAttackRangeDistance);
 
         // Debug.Log(tempCharacterAttackRangeDistance.x + " " + tempCharacterAttackRangeDistance.y);
@@ -113,36 +124,63 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         isMouseHit = false;
     }
-    
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (isStand)
         {
-            if(tempCharacterWantToMove != null)
+            if (tempCharacterWantToMove != null)
                 tempCharacterWantToMove.TileReturnClickData(gameObject, tilePosition);
         }
-    } 
+    }
 
     #endregion
 
     private void Update()
     {
         UpdateTileColor();
+        // TODO: Fix this , the skill direction is wrong
     }
 
     private void UpdateTileColor()
     {
         if (isMouseHit && isStand)
             meshRenderer.material = mouseTargetMaterial;
-        else if(inAttackRange)
+        else if (inAttackRange)
             meshRenderer.material = inAttackRangeMaterial;
-        else if(isStand)
+        else if (isStand)
             meshRenderer.material = canWalkMaterial;
         else
             meshRenderer.material = defaultMaterial;
     }
 
-    /// <summary>
+    private Vector2 CheckMouseDirectionToRotateSkillRange(Vector2 skillAttackRange)
+    { 
+        // Character Tile Position
+        Vector2 baseTilePos = tempCharacterWantToMove.characterTilePosition;
+        Vector2 dir = DetailsManager.Instance.mouseHitTilePos;
+        Vector2 reverseSkillAttackRange = new Vector2(skillAttackRange.y, skillAttackRange.x);
+        Vector2 vector = dir - baseTilePos;
+        
+        angle = (int)(Mathf.Atan2(vector.y, vector.x) * Mathf.Rad2Deg) - 90; // get angle
+        angle = angle < 0 ? angle + 360 : angle;                             // set angle to 0 - 360
+        angle = vector == Vector2.zero ? 0 : angle;                          // set mouse hit the character position is dir to up
+        
+        // TODO : error
+        // up
+        if (angle is >= 0 and <= 45 or >= 315 and <= 360) // 0 ~ 45 or 315 ~ 360
+            return skillAttackRange;
+        // left
+        if(angle is >= 45 and <= 135)
+            return reverseSkillAttackRange;
+        // right
+        if(angle is >= 225 and <= 315)
+            return reverseSkillAttackRange;
+        // down
+        return skillAttackRange;
+    }
+
+/// <summary>
     /// Check if there is a character on the tile (If temp character on tile, this method will ignore it)
     /// </summary>
     /// <returns></returns>

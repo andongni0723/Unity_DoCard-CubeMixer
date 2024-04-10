@@ -26,6 +26,7 @@ public class Character : MonoBehaviour
     [Header("Component")]
     public MeshRenderer body;
     public CharacterManager characterManager;
+    public PowerPanel powerPanel;
     
     [Space(15)]
     public Material blueBodyMaterial;
@@ -34,11 +35,12 @@ public class Character : MonoBehaviour
     [Header("Settings")] 
     [SerializeField]private string id;
     public string ID => id;
+    public CharacterDetailsSO characterDetails;
 
     [Range(0, 20)]public int moveMaxDistance;
 
     [Header("Debug")] 
-    private Team team;
+    public Team team;
     public Vector2 characterTilePosition;
     private Camera mainCamera;
     private bool isTileReturn = false;
@@ -47,18 +49,19 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+        powerPanel ??= transform.GetChild(0).GetChild(0).GetComponent<PowerPanel>();
     }
 
     #region Event
 
     private void OnEnable()
     {
-        EventHandler.CharacterMoveEnd += OnCharacterCancelMove;
+        EventHandler.CharacterActionEnd += OnCharacterCancelMove;
     }
 
     private void OnDisable()
     {
-        EventHandler.CharacterMoveEnd -= OnCharacterCancelMove;
+        EventHandler.CharacterActionEnd -= OnCharacterCancelMove;
     }
 
     private void OnCharacterCancelMove()
@@ -83,13 +86,41 @@ public class Character : MonoBehaviour
         }
     }
     
-    // --------------- Game --------------- // 
-    
+    // --------------- Tools --------------- //
     
     public void ButtonCallUseSkill(SkillDetailsSO skillDetailsSo)
     {
         StartCoroutine(SkillExecuteAction(skillDetailsSo));
     }
+    
+    /// <summary>
+    /// Use Skill Target Position To Rotate Character 
+    /// </summary>
+    /// <param name="skillTargetPosition"></param>
+    /// <returns>the object rotate value</returns>
+    protected int UseSkillTargetPosToRotateCharacter(Vector2 skillTargetPosition)
+    {
+        Vector2 vector = skillTargetPosition - characterTilePosition;
+        
+        int angle = (int)(Mathf.Atan2(vector.y, vector.x) * Mathf.Rad2Deg) - 90; // get angle
+        angle = angle < 0 ? angle + 360 : angle;                                 // set angle to 0 - 360
+        angle = vector == Vector2.zero ? 0 : angle;                              // set mouse hit the character position is dir to up
+        
+        // up
+        if (angle is >= 0 and <= 45 or >= 315 and <= 360) // 0 ~ 45 or 315 ~ 360
+            return 0;
+        // left
+        if (angle is >= 45 and <= 135)
+            return -90;
+        // right
+        if (angle is >= 225 and <= 315)
+            return 90;
+        // down
+        return 180;
+    }
+    
+    // --------------- Game --------------- // 
+
     
     /// <summary>
     /// Call by skill button, when skill button click
@@ -111,7 +142,7 @@ public class Character : MonoBehaviour
                 
                 yield return new WaitUntil(() => isTileReturn); // back the skill tile return data
                 yield return MoveAction(skillTileReturnDataList[0].tileGameObject, skillTileReturnDataList[0].targetTilePos);
-                EventHandler.CallCharacterMoveEnd();
+                EventHandler.CallCharacterActionEnd();
                 break;
             
             case SkillButtonType.Attack:
@@ -121,7 +152,7 @@ public class Character : MonoBehaviour
                                   skillDetails.SkillAimDataList[i].skillCastRange, i == 0 ? 0.1f : 0f);
                     
                     yield return new WaitUntil(() => isTileReturn); 
-                    EventHandler.CallCharacterMoveEnd();
+                    EventHandler.CallCharacterActionEnd();
                 }
                 
                 AttackAction(skillDetails, skillTileReturnDataList);
@@ -154,11 +185,12 @@ public class Character : MonoBehaviour
 
         await UniTask.Yield(0); 
     }
-
+    
     protected virtual void AttackAction(SkillDetailsSO skillDetails, List<TileReturnData> skillTileReturnDataList)
     {
         // Write on child class
     }
+    
 
     private async UniTask CallTileStandAnimation(Vector2 skillAttackRange, Vector2 maxStandDistance, float duration = 0.1f)
     {
@@ -167,7 +199,8 @@ public class Character : MonoBehaviour
         for (int j = 0; j <= maxStandDistance.y; j++)
         {
             EventHandler.CallTileUpAnimation(this, skillAttackRange, beforeMoveTilePos, new Vector2(j, j));
-            await UniTask.Delay(TimeSpan.FromSeconds(duration)); 
+            await UniTask.Delay(TimeSpan.FromSeconds(duration)); // Let the difference radius tile stand time
+                                                                 // to show the animation
         }
     }
     

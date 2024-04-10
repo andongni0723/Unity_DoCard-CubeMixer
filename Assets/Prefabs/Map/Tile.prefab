@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbc3d0514d3f4c2ab1645194049c6da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
   canWalkMaterial: {fileID: 2100000, guid: 89695ed14d43a499f808d61df9168eed, type: 2}
   mouseTargetMaterial: {fileID: 2100000, guid: eee90037082a84b97bc3ff74d1a34259, type: 2}
   inAttackRangeMaterial: {fileID: 2100000, guid: 33579e56488db44a4b659437d54f0374,
@@ -128,6 +129,7 @@ MonoBehaviour:
   standY: 0.7
   standDuration: 0.3
   tilePosition: {x: 0, y: 0}
+  mousePosition: {x: 0, y: 0, z: 0}
 --- !u!1 &7851541284384387033
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,3 +10,8 @@ public enum Team
 {
     Red, Blue
 }
+
+public enum Direction
+{
+    Up, Down, Left, Right
+}

@@ -42,7 +42,7 @@ public class CharacterGenerator : NetworkBehaviour
         }
         
         isInitial = true;
-        EventHandler.ReturnCharacterInitializedDone();
+        EventHandler.CallReturnCharacterInitializedDone();
     }
     
     // Call by Owner in CharacterManageder
@@ -60,6 +60,7 @@ public class CharacterGenerator : NetworkBehaviour
         
         if(IsOwner)
             tempDataIndexList = new();
+
     }
 
     private void OnTeamValueChanged(int previousvalue, int newvalue)
@@ -113,13 +114,11 @@ public class CharacterGenerator : NetworkBehaviour
     private void CharacterGenerate(NetworkList<int> data)
     {
         data = tempDataIndexList;
-        Debug.Log($"{teamNetwork.Value}: {tempDataIndexList.Count}");
         
         // Set Start Position
         switch (teamNetwork.Value)
         {
             case 0:
-                Debug.Log("RED");
                 startSpawnPosition = redTeamSpawnPosition;
                 break;
             case 1:
@@ -142,6 +141,7 @@ public class CharacterGenerator : NetworkBehaviour
             characterObj.transform.parent = tileTransform;
             characterObj.characterTilePosition = startSpawnPosition;
             characterObj.characterManager = characterManager;
+            characterObj.characterDetails = character;
             characterObj.InitialUpdateData(GenerateCharacterID(team, currentGenerateID)); // TODO: add character to save pos and load pos
             characterObj.SetTeam(team);
             

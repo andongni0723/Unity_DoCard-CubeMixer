@@ -20,19 +20,17 @@ public class EventHandler
         TilePosAddManagerList?.Invoke(grids, pos);
     }
 
-    #region Game
+    #region Tools
 
-    public static Action<List<CharacterDetailsSO>> PlayerCharactersInitialized;
-    public static void CallPlayerCharactersInitialized(List<CharacterDetailsSO> data)
+    public static Action<Vector2> ReturnMouseHitTilePosition;
+    public static void CallReturnMouseHitTilePosition(Vector2 pos)
     {
-        PlayerCharactersInitialized?.Invoke(data);
+        ReturnMouseHitTilePosition?.Invoke(pos);
     }
-    
-    public static Action<List<CharacterDetailsSO>> EnemyCharactersInitialized;
-    public static void CallEnemyCharactersInitialized(List<CharacterDetailsSO> data)
-    {
-        EnemyCharactersInitialized?.Invoke(data);
-    }
+
+    #endregion
+
+    #region Game
 
     public static Action ReturnCharacterInitializedDone;
     public static void CallReturnCharacterInitializedDone()
@@ -74,10 +72,10 @@ public class EventHandler
         AttackRangeColor?.Invoke(tilePos, distance);
     }
 
-    public static Action CharacterMoveEnd;
-    public static void CallCharacterMoveEnd()
+    public static Action CharacterActionEnd;
+    public static void CallCharacterActionEnd()
     {
-        CharacterMoveEnd?.Invoke();
+        CharacterActionEnd?.Invoke();
     }
 
     #endregion
@@ -85,10 +83,10 @@ public class EventHandler
 
     #region UI
 
-    public static Action<CharacterDetailsSO> CharacterCardPress;
-    public static void CallCharacterCardPress(CharacterDetailsSO data)
+    public static Action<CharacterDetailsSO, string> CharacterCardPress;
+    public static void CallCharacterCardPress(CharacterDetailsSO data, string ID)
     {
-        CharacterCardPress?.Invoke(data);
+        CharacterCardPress?.Invoke(data, ID);
     } 
 
     #endregion

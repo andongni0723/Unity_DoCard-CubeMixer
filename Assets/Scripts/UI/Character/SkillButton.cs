@@ -40,11 +40,11 @@ public class SkillButton : MonoBehaviour
 
     private void OnEnable()
     {
-        EventHandler.CharacterMoveEnd += OnCharacterCancelMove;
+        EventHandler.CharacterActionEnd += OnCharacterCancelMove;
     }
     private void OnDisable()
     {
-        EventHandler.CharacterMoveEnd -= OnCharacterCancelMove; // isOn to false
+        EventHandler.CharacterActionEnd -= OnCharacterCancelMove; // isOn to false
     }
 
     private void OnCharacterCancelMove()
@@ -70,10 +70,10 @@ public class SkillButton : MonoBehaviour
     
     private void ClickAction()
     {
-        EventHandler.CallCharacterMoveEnd();
+        EventHandler.CallCharacterActionEnd();
         
         if(isOn)
-            EventHandler.CallCharacterMoveEnd();
+            EventHandler.CallCharacterActionEnd();
         else
         {
             isOn = true;            

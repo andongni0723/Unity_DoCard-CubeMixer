@@ -37,15 +37,8 @@ public class MatchManager : Singleton<MatchManager>
         Application.targetFrameRate = 300;
         transport = FindObjectOfType<UnityTransport>();
     }
-
-    // public int GetCurrentPlayerInLobby()
-    // {
-    // }
-    public int GetMaxPlayerInLobby()
-    {
-        return currentConnectedLobby.MaxPlayers;
-    }
-
+    
+    // Button Event
     public async void CreateOrJoinLobby()
     {
         await Authenticate();

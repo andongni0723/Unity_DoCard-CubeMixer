@@ -27,7 +27,7 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
         EventHandler.CharacterObjectGeneratedDone -= InitialUpdateData;
     }
 
-    private void OnCharacterCardPress(CharacterDetailsSO data)
+    private void OnCharacterCardPress(CharacterDetailsSO data, string ID)
     {
         buttons.SetActive(data == characterDetails);
     }

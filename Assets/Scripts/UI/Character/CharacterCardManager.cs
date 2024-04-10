@@ -43,8 +43,9 @@ public class CharacterCardManager : MonoBehaviour
             CharacterCard characterCard = Instantiate(characterCardPrefab, transform).GetComponent<CharacterCard>();
             
             // Update data
+            characterCard.bindingCharacterID = GenerateCharacterID(team, currentGenerateID);
             characterCard.characterDetails = character;
-            characterCard.ID = GenerateCharacterID(team, currentGenerateID);
+            characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.bindingCharacterID);
             characterCard.InitialUpdateData();
 
             currentGenerateID++;
