@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -21,10 +22,12 @@ public class CharacterCard : MonoBehaviour
 
     //[Header("Debug")]
     public Character character;
+    private Vector3 defaultScale;
 
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
+        defaultScale = transform.localScale;
     }
     
     public void InitialUpdateData()
@@ -43,6 +46,7 @@ public class CharacterCard : MonoBehaviour
         if (isOn)
             EventHandler.CallCharacterCardPress(characterDetails, bindingCharacterID);
         
-        // pageImageObj.SetActive(isOn);
+        
+        GetComponent<RectTransform>().DOScale(isOn ? Vector3.one * 0.8f : defaultScale, 0.2f);
     }
 }

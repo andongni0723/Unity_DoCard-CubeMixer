@@ -80,10 +80,7 @@ public class Character : MonoBehaviour
     public void SetTeam(Team team)
     {
         this.team = team;
-        if (team == Team.Blue)
-        {
-            body.material = blueBodyMaterial;
-        }
+        SetTeamBodyMaterial();
     }
     
     // --------------- Tools --------------- //
@@ -91,6 +88,11 @@ public class Character : MonoBehaviour
     public void ButtonCallUseSkill(SkillDetailsSO skillDetailsSo)
     {
         StartCoroutine(SkillExecuteAction(skillDetailsSo));
+    }
+
+    protected virtual void SetTeamBodyMaterial()
+    {
+        body.material = team == Team.Blue? blueBodyMaterial : body.material;
     }
     
     /// <summary>
