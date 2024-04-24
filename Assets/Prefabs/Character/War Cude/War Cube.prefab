@@ -63,6 +63,8 @@ PlayableDirector:
     value: {fileID: 4014900443091482949}
   - key: {fileID: 6908262682381057560, guid: 70a870cd84f654310aa7f7b63fe983d8, type: 2}
     value: {fileID: 9180260374749552914}
+  - key: {fileID: 9131593987115632548, guid: 70a870cd84f654310aa7f7b63fe983d8, type: 2}
+    value: {fileID: 4615963546955405887}
   m_ExposedReferences:
     m_References:
     - 08f39a653cb8c401993cff4ebefa0671: {fileID: 2482265709349717348}
@@ -15644,6 +15646,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1403010995320518875}
   - component: {fileID: 6025971700011939608}
+  - component: {fileID: 4615963546955405887}
   m_Layer: 0
   m_Name: War Cube
   m_TagString: Character
@@ -15690,6 +15693,8 @@ MonoBehaviour:
   id: 0
   characterDetails: {fileID: 0}
   moveMaxDistance: 3
+  faceRotation: 0
+  isSkillPlaying: 0
   team: 0
   characterTilePosition: {x: 4, y: 5}
   skillTileReturnDataList: []
@@ -15704,10 +15709,39 @@ MonoBehaviour:
   - {fileID: 7950870106324217319}
   - {fileID: 2173441566484848961}
   - {fileID: 5179986590701864632}
-  swordVFXClipList: []
   skillRotate: {fileID: 8961900500847861942}
   skillTrail: {fileID: 4999369235833482769}
   skillLightWorld: {fileID: 0}
+--- !u!114 &4615963546955405887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6115863782023368708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 61747470270c24c768c75332236bb8f1, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6025971700011939608}
+          m_TargetAssemblyTypeName: Character, Assembly-CSharp
+          m_MethodName: SkillActionEnd
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6248752517604659440
 GameObject:
   m_ObjectHideFlags: 0
@@ -21064,10 +21098,13 @@ PlayableDirector:
     value: {fileID: 4014900443091482949}
   - key: {fileID: 3048103953384970437, guid: 8049eb287fe4246459e0bc19f3f17806, type: 2}
     value: {fileID: 3079723053855487972}
+  - key: {fileID: -126880834869454617, guid: 8049eb287fe4246459e0bc19f3f17806, type: 2}
+    value: {fileID: 4615963546955405887}
   m_ExposedReferences:
     m_References:
     - fcd179514f2b74366a7d3d18f9a26a24: {fileID: 0}
     - 9caeb8b5a33a14ed0835cdb7c13cb9bf: {fileID: 4156127402093720017}
+    - 32f2610fa9fc74f948491baa6c442d17: {fileID: 6115863782023368708}
 --- !u!1 &9078487915177632924
 GameObject:
   m_ObjectHideFlags: 0

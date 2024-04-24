@@ -13,10 +13,11 @@ public class WarCube : Character
     public List<GameObject> redSwordVFXList;
     public List<GameObject> blueSwordVFXList;
     public List<MeshRenderer> skillCubeList;
-    public List<TimelineClip> swordVFXClipList;
     public PlayableDirector skillRotate;
     public PlayableDirector skillTrail;
     public PlayableDirector skillLightWorld;
+    
+    // --------------Game-----------------
 
     protected override void SetTeamBodyMaterial()
     {
@@ -32,24 +33,25 @@ public class WarCube : Character
         foreach (var swordVFX in team == Team.Red ? blueSwordVFXList : redSwordVFXList)
             swordVFX.SetActive(false);
 
-        foreach (var clip in swordVFXClipList)
-        {
-            // clip.animationClip.
-        }
+        // foreach (var clip in swordVFXClipList)
+        // {
+        //     // clip.animationClip.
+        // }
     }
 
-    protected override void AttackAction(SkillDetailsSO skillDetailsSO, List<TileReturnData> skillTileReturnDataList)
+    public override IEnumerator AttackAction(string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList)
     {
-        base.AttackAction(skillDetailsSO, skillTileReturnDataList);
-
-        switch (skillDetailsSO.skillID)
+        // base.AttackAction(skillID,skillButtonType, skillTargetPosDataList);
+        SkillActionStart();
+        ResetLookAt();
+        
+        switch (skillID)
         {
             case "001-rotate":
                 skillRotate.Play();
                 break;
             case "002-trail":
-                var dir = UseSkillTargetPosToRotateCharacter(skillTileReturnDataList[0].targetTilePos);
-                Debug.Log(dir);
+                var dir = UseSkillTargetPosToRotateCharacter(skillTargetPosDataList[0]);
                 skillTrail.transform.rotation = Quaternion.Euler(0, dir, 0);
                 skillTrail.Play();
                 break;
@@ -65,5 +67,7 @@ public class WarCube : Character
         
         // skillRotate.transform.rotation = quaternion.identity;
         // skillTrail.transform.rotation = Quaternion.identity;
+        // SetLookAtForward();
+        yield return new WaitUntil(() => !isSkillPlaying);
     }
 }

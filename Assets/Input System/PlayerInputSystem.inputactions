@@ -15,12 +15,12 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MousePress",
+                    "name": "MouseHold",
                     "type": "Button",
                     "id": "e06514fb-75ca-41e0-93cf-bf0df2d9154b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold(pressPoint=0.2)",
+                    "interactions": "Hold(pressPoint=0.1)",
                     "initialStateCheck": false
                 }
             ],
@@ -43,7 +43,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MousePress",
+                    "action": "MouseHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

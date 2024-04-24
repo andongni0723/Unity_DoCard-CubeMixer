@@ -37,12 +37,12 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""MousePress"",
+                    ""name"": ""MouseHold"",
                     ""type"": ""Button"",
                     ""id"": ""e06514fb-75ca-41e0-93cf-bf0df2d9154b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(pressPoint=0.2)"",
+                    ""interactions"": ""Hold(pressPoint=0.1)"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -65,7 +65,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MousePress"",
+                    ""action"": ""MouseHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -77,7 +77,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         // GamePlay
         m_GamePlay = asset.FindActionMap("GamePlay", throwIfNotFound: true);
         m_GamePlay_MouseDelta = m_GamePlay.FindAction("MouseDelta", throwIfNotFound: true);
-        m_GamePlay_MousePress = m_GamePlay.FindAction("MousePress", throwIfNotFound: true);
+        m_GamePlay_MouseHold = m_GamePlay.FindAction("MouseHold", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -140,13 +140,13 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_GamePlay;
     private List<IGamePlayActions> m_GamePlayActionsCallbackInterfaces = new List<IGamePlayActions>();
     private readonly InputAction m_GamePlay_MouseDelta;
-    private readonly InputAction m_GamePlay_MousePress;
+    private readonly InputAction m_GamePlay_MouseHold;
     public struct GamePlayActions
     {
         private @PlayerInputSystem m_Wrapper;
         public GamePlayActions(@PlayerInputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @MouseDelta => m_Wrapper.m_GamePlay_MouseDelta;
-        public InputAction @MousePress => m_Wrapper.m_GamePlay_MousePress;
+        public InputAction @MouseHold => m_Wrapper.m_GamePlay_MouseHold;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -159,9 +159,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @MouseDelta.started += instance.OnMouseDelta;
             @MouseDelta.performed += instance.OnMouseDelta;
             @MouseDelta.canceled += instance.OnMouseDelta;
-            @MousePress.started += instance.OnMousePress;
-            @MousePress.performed += instance.OnMousePress;
-            @MousePress.canceled += instance.OnMousePress;
+            @MouseHold.started += instance.OnMouseHold;
+            @MouseHold.performed += instance.OnMouseHold;
+            @MouseHold.canceled += instance.OnMouseHold;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -169,9 +169,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @MouseDelta.started -= instance.OnMouseDelta;
             @MouseDelta.performed -= instance.OnMouseDelta;
             @MouseDelta.canceled -= instance.OnMouseDelta;
-            @MousePress.started -= instance.OnMousePress;
-            @MousePress.performed -= instance.OnMousePress;
-            @MousePress.canceled -= instance.OnMousePress;
+            @MouseHold.started -= instance.OnMouseHold;
+            @MouseHold.performed -= instance.OnMouseHold;
+            @MouseHold.canceled -= instance.OnMouseHold;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -192,6 +192,6 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
     public interface IGamePlayActions
     {
         void OnMouseDelta(InputAction.CallbackContext context);
-        void OnMousePress(InputAction.CallbackContext context);
+        void OnMouseHold(InputAction.CallbackContext context);
     }
 }

@@ -22,8 +22,8 @@ public class CameraController : MonoBehaviour
     {
         playerControls = new PlayerInputSystem();
 
-        playerControls.GamePlay.MousePress.performed += _ => StartCoroutine(Drag());
-        playerControls.GamePlay.MousePress.canceled += _ => isDragging = false;
+        playerControls.GamePlay.MouseHold.performed += _ => StartCoroutine(Drag());
+        playerControls.GamePlay.MouseHold.canceled += _ => isDragging = false;
         playerControls.GamePlay.MouseDelta.performed += _ =>
             mouseDelta = playerControls.GamePlay.MouseDelta.ReadValue<Vector2>();
        

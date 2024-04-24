@@ -129,8 +129,7 @@ public class CharacterGenerator : NetworkBehaviour
         foreach (var index in data)
         {
             CharacterDetailsSO character = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
-            Transform tileTransform = GridManager.Instance.GetTileWithTilePos((int)startSpawnPosition.x, 
-                (int)startSpawnPosition.y).transform;
+            Transform tileTransform = GridManager.Instance.GetTileWithTilePos(startSpawnPosition).transform;
             
             
             // Generate

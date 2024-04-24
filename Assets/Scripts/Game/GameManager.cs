@@ -7,13 +7,19 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [Header("Component")]
-    [SerializeField] public CharacterManager selfCharacterManager;
-    [SerializeField] public CharacterManager enemyCharacterManager;
+    public CharacterManager selfCharacterManager; 
+    public CharacterManager enemyCharacterManager;
+    
+    [Space(15)]
+    public Camera redMainCamera;
+    public Camera blueMainCamera;
+    
     
     [Header("Settings")]
     public Team selfTeam; // Update by CharacterGenerate
     
     //[Header("Debug")]
+    
     private int currentPlayerCount = 0;
     
     public void SetSelfCharacterManager(CharacterManager characterManager)
@@ -47,9 +53,5 @@ public class GameManager : Singleton<GameManager>
         EventHandler.CallCharacterObjectGenerate();
         yield return new WaitForSeconds(0.5f);
         EventHandler.CallUIObjectGenerate();
-    }
-    public override void Awake()
-    {
-        base.Awake();
     }
 }

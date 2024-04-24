@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -35,9 +36,12 @@ public class Character : MonoBehaviour
     [Header("Settings")] 
     [SerializeField]private string id;
     public string ID => id;
+    
     public CharacterDetailsSO characterDetails;
-
-    [Range(0, 20)]public int moveMaxDistance;
+    [Range(0, 20)]
+    public int moveMaxDistance;
+    public float faceRotation = 0; // red = 0, blue = 180
+    public bool isSkillPlaying = false;
 
     [Header("Debug")] 
     public Team team;
@@ -56,15 +60,15 @@ public class Character : MonoBehaviour
 
     private void OnEnable()
     {
-        EventHandler.CharacterActionEnd += OnCharacterCancelMove;
+        EventHandler.CharacterActionEnd += OnCharacterActionEnd;
     }
 
     private void OnDisable()
     {
-        EventHandler.CharacterActionEnd -= OnCharacterCancelMove;
+        EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
     }
 
-    private void OnCharacterCancelMove()
+    private void OnCharacterActionEnd()
     {
         isTileReturn = false;
     }
@@ -81,18 +85,30 @@ public class Character : MonoBehaviour
     {
         this.team = team;
         SetTeamBodyMaterial();
+        SetLookAtForward();
     }
     
     // --------------- Tools --------------- //
     
     public void ButtonCallUseSkill(SkillDetailsSO skillDetailsSo)
     {
+        StopAllCoroutines();
         StartCoroutine(SkillExecuteAction(skillDetailsSo));
     }
 
     protected virtual void SetTeamBodyMaterial()
     {
         body.material = team == Team.Blue? blueBodyMaterial : body.material;
+    }
+    
+    protected void SetLookAtForward()
+    {
+        faceRotation = team == Team.Red ? 0 : 180;
+        transform.rotation = Quaternion.Euler(0, faceRotation, 0);
+    }
+    protected void ResetLookAt()
+    {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
     
     /// <summary>
@@ -121,47 +137,8 @@ public class Character : MonoBehaviour
         return 180;
     }
     
-    // --------------- Game --------------- // 
-
-    
-    /// <summary>
-    /// Call by skill button, when skill button click
-    /// </summary>
-    /// <param name="skillDetails"></param>
-    private IEnumerator SkillExecuteAction(SkillDetailsSO skillDetails)
-    {
-        skillTileReturnDataList.Clear();
-        
-        switch (skillDetails.skillType)
-        {
-            case SkillButtonType.Empty:
-                Debug.LogError("The skill button is not bind with any skill");
-                break;
-            
-            case SkillButtonType.Move:
-                yield return CallTileStandAnimation(Vector2.zero, 
-                    new Vector2(skillDetails.moveRange, skillDetails.moveRange));
-                
-                yield return new WaitUntil(() => isTileReturn); // back the skill tile return data
-                yield return MoveAction(skillTileReturnDataList[0].tileGameObject, skillTileReturnDataList[0].targetTilePos);
-                EventHandler.CallCharacterActionEnd();
-                break;
-            
-            case SkillButtonType.Attack:
-                for (int i = 0; i < skillDetails.attackAimTime; i++)
-                {
-                    yield return CallTileStandAnimation(skillDetails.SkillAimDataList[i].skillAttackRange,
-                                  skillDetails.SkillAimDataList[i].skillCastRange, i == 0 ? 0.1f : 0f);
-                    
-                    yield return new WaitUntil(() => isTileReturn); 
-                    EventHandler.CallCharacterActionEnd();
-                }
-                
-                AttackAction(skillDetails, skillTileReturnDataList);
-                break;
-                
-        }
-    }
+  
+    // --------------- Callback and Child override --------------- //
 
     /// <summary>
     /// Call by tile, when mouse click the target tile
@@ -173,34 +150,96 @@ public class Character : MonoBehaviour
         isTileReturn = true;
         skillTileReturnDataList.Add(new TileReturnData(tileGameObject, targetTilePos));
     }
+    
+    public virtual void SkillActionStart() => isSkillPlaying = true;
+    public virtual void SkillActionEnd()
+    {
+        isSkillPlaying = false;
+        Debug.Log("Skill Done");
+    }
 
-    private async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos)
+    public virtual IEnumerator AttackAction
+        (string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList) {
+        Debug.Log("Parent");yield return null;}
+    
+    
+    // --------------- Game --------------- // 
+
+    /// <summary>
+    /// Call by skill button, when skill button click
+    /// </summary>
+    /// <param name="skillDetails"></param>
+    private IEnumerator SkillExecuteAction(SkillDetailsSO skillDetails)
+    {
+        skillTileReturnDataList.Clear();
+        
+        switch (skillDetails.skillType)
+        {
+            case SkillButtonType.Empty:
+                Debug.LogError("SkillButtonType is Empty :The skill button is not bind with any skill");
+                break;
+            
+            case SkillButtonType.Move:
+                yield return CallTileStandAnimation(skillDetails, Vector2.zero, 
+                    new Vector2(skillDetails.moveRange, skillDetails.moveRange));
+                
+                yield return new WaitUntil(() => isTileReturn); // back the skill tile return data
+                yield return MoveAction(skillTileReturnDataList[0].tileGameObject, skillTileReturnDataList[0].targetTilePos);
+                EventHandler.CallCharacterActionEnd();
+                break;
+            
+            case SkillButtonType.Attack:
+                for (int i = 0; i < skillDetails.attackAimTime; i++)
+                {
+                    yield return CallTileStandAnimation(skillDetails, skillDetails.SkillAimDataList[i].skillAttackRange,
+                                  skillDetails.SkillAimDataList[i].skillCastRange, i == 0 ? 0.1f : 0f);
+                    
+                    yield return new WaitUntil(() => isTileReturn); 
+                    EventHandler.CallCharacterActionEnd();
+                }
+                
+                var skillTargetPosList = 
+                    skillTileReturnDataList
+                    .Select(data => new Vector2(data.targetTilePos.x, data.targetTilePos.y))
+                    .ToList();
+                
+                StartCoroutine(AttackAction(skillDetails.skillID,skillDetails.skillType, skillTargetPosList));
+                break;
+        }
+        
+        // Record the character action
+        characterManager.characterActionRecord.
+            AddCharacterActionData(ID, skillDetails.skillID,skillDetails.skillType ,skillTileReturnDataList);
+    }
+
+    public async UniTask MoveAction(Vector2 targetTilePos)
+    {
+        await MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos);
+    }
+    protected async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos)
     {
         // Move Animation
         var position = tileGameObject.transform.position;
-        transform.DOMove(new Vector3(position.x, 0.1f, position.z), 0.5f).OnComplete(() =>
-        {
-            // Update Data
-            characterTilePosition = targetTilePos;
-            transform.SetParent(tileGameObject.transform);  
-        });
+        transform.DOMove(new Vector3(position.x, 0.1f, position.z), 0.5f)
+            .OnComplete(() =>
+            {
+                // Update Data
+                characterTilePosition = targetTilePos;
+                transform.SetParent(tileGameObject.transform);  
+            });
 
         await UniTask.Yield(0); 
     }
-    
-    protected virtual void AttackAction(SkillDetailsSO skillDetails, List<TileReturnData> skillTileReturnDataList)
-    {
-        // Write on child class
-    }
-    
+   
 
-    private async UniTask CallTileStandAnimation(Vector2 skillAttackRange, Vector2 maxStandDistance, float duration = 0.1f)
+
+    private async UniTask CallTileStandAnimation(SkillDetailsSO data, Vector2 skillAttackRange, Vector2 maxStandDistance, float duration = 0.1f)
     {
         Vector2 beforeMoveTilePos = characterTilePosition;
         
         for (int j = 0; j <= maxStandDistance.y; j++)
         {
-            EventHandler.CallTileUpAnimation(this, skillAttackRange, beforeMoveTilePos, new Vector2(j, j));
+            EventHandler.CallTileUpAnimation(data, this, skillAttackRange, beforeMoveTilePos, new Vector2(j, j));
             await UniTask.Delay(TimeSpan.FromSeconds(duration)); // Let the difference radius tile stand time
                                                                  // to show the animation
         }

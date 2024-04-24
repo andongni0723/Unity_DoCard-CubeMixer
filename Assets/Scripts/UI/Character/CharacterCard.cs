@@ -39,6 +39,7 @@ public class CharacterCard : MonoBehaviour
         
         toggle.group = transform.parent.GetComponent<ToggleGroup>();
         toggle.isOn = true;
+        // EventHandler.CallCharacterCardPress(characterDetails, bindingCharacterID);
     }
     
     public void OnToggleValueChanged(bool isOn)

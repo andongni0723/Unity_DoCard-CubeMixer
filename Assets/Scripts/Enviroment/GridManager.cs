@@ -37,9 +37,9 @@ public class GridManager : Singleton<GridManager>
         }
     }
     
-    public Tile GetTileWithTilePos(int x, int y)
+    public Tile GetTileWithTilePos(Vector2 pos)
     {
         // Debug.Log($"GetTileWithTilePos x: {x}, y: {y}");
-        return tilesList[y][x];
+        return tilesList[(int)pos.y][(int)pos.x];
     }
 }

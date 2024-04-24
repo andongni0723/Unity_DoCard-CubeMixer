@@ -10,10 +10,12 @@ public class PowerPanel : MonoBehaviour
     public GameObject chooseOutlineImage;
     //[Header("Settings")]
     //[Header("Debug")]
+    private Camera mainCamera;
 
     private void Awake()
     {
         character ??= transform.parent.parent.GetComponent<Character>();
+        mainCamera = Camera.main;
     }
 
     private void Start()
@@ -27,6 +29,8 @@ public class PowerPanel : MonoBehaviour
             gameObject.SetActive(false);
     }
 
+    // ----------------- Event -----------------
+    
     private void OnEnable()
     {
         EventHandler.CharacterCardPress += OnCharacterCardPress;
@@ -40,5 +44,11 @@ public class PowerPanel : MonoBehaviour
     private void OnCharacterCardPress(CharacterDetailsSO details, string ID)
     {
         chooseOutlineImage.SetActive(character.ID == ID);
+    }
+
+    // ----------------- Game -----------------
+    private void LateUpdate()
+    {
+        transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
     }
 }

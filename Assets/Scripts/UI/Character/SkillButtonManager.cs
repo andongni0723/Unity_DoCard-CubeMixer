@@ -32,9 +32,9 @@ public class SkillButtonManager : MonoBehaviour
 
     private void CharacterSkillGroupGenerate(List<int> data)
     {
-        foreach (var index in data)
+        for (int i = 0; i < data.Count; i++)
         {
-            var character = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
+            var character = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(data[i]);
 
             CharacterSkillButtonsGroup characterCard = Instantiate(character.skillButtonsGroupPrefab, transform)
                 .GetComponent<CharacterSkillButtonsGroup>();
@@ -45,6 +45,10 @@ public class SkillButtonManager : MonoBehaviour
             characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.ID); // TODO:
             characterCard.InitialUpdateData();
 
+            // Last skill button group turn on
+            if(i == data.Count - 1) 
+                EventHandler.CallCharacterCardPress(character, characterCard.ID);
+            
             currentGenerateID++;
         }
     }

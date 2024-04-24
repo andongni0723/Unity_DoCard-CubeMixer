@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 520950139615388053}
   - component: {fileID: 4982914753975606245}
   - component: {fileID: 8059593614366435544}
+  - component: {fileID: -5627373818642922223}
   m_Layer: 0
   m_Name: Character Manager
   m_TagString: Untagged
@@ -85,3 +86,15 @@ MonoBehaviour:
   team: 0
   teamNetwork:
     m_InternalValue: 0
+--- !u!114 &-5627373818642922223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8672907208314559130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe1f84f752cd8486ab32edb01338f085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -16,6 +16,7 @@ MonoBehaviour:
   skillName: "\u5713\u65AC"
   skillID: 001-rotate
   skillDescription: 
+  isSkillAreaCanEnemyOn: 1
   skillType: 2
   moveRange: 0
   attackAimTime: 1

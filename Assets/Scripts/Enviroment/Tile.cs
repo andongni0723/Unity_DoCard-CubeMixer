@@ -68,15 +68,18 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         EventHandler.AttackRangeColor -= OnAttackRangeColor;
     }
 
-    private void OnTileUpAnimation(Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
+    private void OnTileUpAnimation(SkillDetailsSO data, Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
     {
         tempCharacterWantToMove = character;
         tempCharacterAttackRangeDistance = skillAttackRange;
 
-        if (Vector2.Distance(playerPos, tilePosition) <= distance.y && !CheckNotTempCharacterOnTile())
+        if (Vector2.Distance(playerPos, tilePosition) <= distance.y)
         {
+            // If skill area can't enemy on and have character who not temp one on the tile
+            if (!data.isSkillAreaCanEnemyOn && CheckHaveCharacterWhoNotTempCharacterWOnTile()) return;
+            
             isStand = true;
-            transform.DOMoveY(standY, standDuration);
+            transform.DOMoveY(standY, standDuration); 
         }
 
         if (isMouseHit)
@@ -181,10 +184,10 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
 
 /// <summary>
-    /// Check if there is a character on the tile (If temp character on tile, this method will ignore it)
+    /// Check if there is a character ＂who not temp character" on the tile
     /// </summary>
     /// <returns></returns>
-    private bool CheckNotTempCharacterOnTile()
+    private bool CheckHaveCharacterWhoNotTempCharacterWOnTile()
     {
         for(int i = 0 ; i < transform.childCount; i++)
         {
@@ -196,7 +199,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     
     /// <summary>
-    /// Check if there is a character on the tile (If temp character on tile, this method will ignore it)
+    /// Check if there is a character on the tile
     /// </summary>
     /// <returns></returns>
     private bool CheckHaveCharacterOnTile()

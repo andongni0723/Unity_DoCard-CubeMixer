@@ -55,15 +55,21 @@ public class EventHandler
     {
         UIObjectGenerate?.Invoke();
     }
+    
+    public static Action InitialPressCharacterCard;
+    public static void CallInitialPressCharacterCard()
+    {
+        InitialPressCharacterCard?.Invoke();
+    }
     #endregion
 
 
     #region Character
 
-    public static Action<Character, Vector2, Vector2, Vector2> TileUpAnimation;
-    public static void CallTileUpAnimation(Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
+    public static Action<SkillDetailsSO, Character, Vector2, Vector2, Vector2> TileUpAnimation;
+    public static void CallTileUpAnimation(SkillDetailsSO data, Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
     {
-        TileUpAnimation?.Invoke(character, skillAttackRange, playerPos, distance);
+        TileUpAnimation?.Invoke(data, character, skillAttackRange, playerPos, distance);
     }
     
     public static Action<Vector2, Vector2> AttackRangeColor;
@@ -76,6 +82,18 @@ public class EventHandler
     public static void CallCharacterActionEnd()
     {
         CharacterActionEnd?.Invoke();
+    }
+
+    public static Action UpdateCharacterActionData;
+    public static void CallUpdateCharacterActionData()
+    {
+        UpdateCharacterActionData?.Invoke();
+    }
+
+    public static Action TurnCharacterStartAction;
+    public static void CallTurnCharacterStartAction()
+    {
+        TurnCharacterStartAction?.Invoke();
     }
 
     #endregion

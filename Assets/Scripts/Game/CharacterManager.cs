@@ -1,38 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-
-
-[Serializable]
-public class CharacterGameData
-{
-    public int maxHealth;
-    public int currentHealth;
-    public GameObject characterObject;
-    public Vector2 tilePosition;
-
-    public CharacterGameData(int maxHealth, int currentHealth, GameObject characterObject = null)
-    {
-        this.maxHealth = maxHealth;
-        this.currentHealth = currentHealth;
-        this.characterObject = characterObject;
-        this.tilePosition = new Vector2(-1, -1);
-    }
-}
 
 public class CharacterManager : NetworkBehaviour
 {
     [Header("Component")] 
     private CharacterGenerator characterGenerator;
+    public CharacterActionRecord characterActionRecord;
     
     [Header("Settings")]
     // public List<CharacterDetailsSO> characterDetailsList;
     public List<int> characterDetailsList;
     public Dictionary<string, CharacterGameData> characterGameDataDict = new();
-    private NetworkList<int> characterIDList;
+    // private NetworkList<int> characterIDList;
+    // public NetworkCharacterActionDataList characterActionDataList = new();
+    public NetworkVariable<FixedString512Bytes> characterActionDataString
+        = new(writePerm: NetworkVariableWritePermission.Owner);
+
 
     //[Header("Debug")]
 
@@ -52,23 +40,38 @@ public class CharacterManager : NetworkBehaviour
             CharacterDetailsSO data = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
             SaveData(data.characterName, new CharacterGameData(data.health, data.health));
         }
+        
+        //character action list On Value Changed
+        characterActionDataString.OnValueChanged += (previous, current) =>
+        {
+            if (!IsOwner)
+            {
+                characterActionRecord.StringDataToListData(current.Value);
+            }
+        };
     }
 
     private void Awake()
     {
         characterGenerator = GetComponent<CharacterGenerator>();
-        characterIDList = new();
+        characterActionRecord = GetComponent<CharacterActionRecord>();
+        // characterIDList = new();
     }
 
-    // Event
+    // ------------------- Event -------------------
+    
     private void OnEnable()
     {
-        EventHandler.CharacterObjectGenerate += CallCharacterGenerate;
+        EventHandler.CharacterObjectGenerate += CallCharacterGenerate; // not owner generate character
+        EventHandler.UpdateCharacterActionData += SaveCharacterActionData; // update character action data
+        EventHandler.TurnCharacterStartAction += OnTurnCharacterStartAction;
     }
 
     private void OnDisable()
     {
         EventHandler.CharacterObjectGenerate -= CallCharacterGenerate;
+        EventHandler.UpdateCharacterActionData -= SaveCharacterActionData;
+        EventHandler.TurnCharacterStartAction -= OnTurnCharacterStartAction;
     }
 
     private void CallCharacterGenerate()
@@ -77,41 +80,63 @@ public class CharacterManager : NetworkBehaviour
         characterGenerator.ExecuteCharacterGenerate(characterDetailsList);
     }
 
-
-    private void Start()
+    private void OnTurnCharacterStartAction()
     {
-        
+        StartCoroutine(CharacterActionListToAttackAction(characterActionRecord.characterActionDataList));
     }
 
-    [ServerRpc]
-    private void AddIDServerRpc(int id)
+    // ------------------- Game -------------------
+    private void SaveCharacterActionData()
     {
-        characterIDList.Add(id);
+        characterActionDataString.Value = characterActionRecord.ListDataToStringData();
     }
     
-    public void AddID(int id)
+    private IEnumerator CharacterActionListToAttackAction(List<CharacterActionData> actionDataList)
     {
-        AddIDServerRpc(id);
-    }
-
-    public void SavePosition(string key, Vector2 saveTilePos)
-    {
-        characterGameDataDict[key].tilePosition = saveTilePos;
-    }
-    public bool LoadPosition(string key, ref Vector2 data)
-    {
-        if(characterGameDataDict.TryGetValue(key, out var value))
+        int i = 0;
+        foreach (var actionData in actionDataList)
         {
-            data = value.tilePosition;
-            return true;
+            var character = DetailsManager.Instance.UseCharacterIDSearchCharacter(actionData.actionCharacterID);
+            
+            if(actionData.actionType == SkillButtonType.Move)
+                yield return character.MoveAction(actionData.actionTilePosList[0]);
+            else
+                yield return StartCoroutine(character.AttackAction(actionData.actionSkillName, actionData.actionType, actionData.actionTilePosList));
+
+            Debug.Log($"{i}: one action end");
+            i++;
         }
-        
-        if (characterGameDataDict[key].tilePosition == new Vector2(-1, -1))
-            return false;
-        
-        data = characterGameDataDict[key].tilePosition;
-        return true;
     }
+    
+    // [ServerRpc]
+    // private void AddIDServerRpc(int id)
+    // {
+    //     characterIDList.Add(id);
+    // }
+    
+    // public void AddID(int id)
+    // {
+    //     AddIDServerRpc(id);
+    // }
+    //
+    // public void SavePosition(string key, Vector2 saveTilePos)
+    // {
+    //     characterGameDataDict[key].tilePosition = saveTilePos;
+    // }
+    // public bool LoadPosition(string key, ref Vector2 data)
+    // {
+    //     if(characterGameDataDict.TryGetValue(key, out var value))
+    //     {
+    //         data = value.tilePosition;
+    //         return true;
+    //     }
+    //     
+    //     if (characterGameDataDict[key].tilePosition == new Vector2(-1, -1))
+    //         return false;
+    //     
+    //     data = characterGameDataDict[key].tilePosition;
+    //     return true;
+    // }
 
     public void SaveData(string key, CharacterGameData data)
     {
@@ -128,16 +153,143 @@ public class CharacterManager : NetworkBehaviour
        
     }
     
-    public CharacterGameData LoadData(string key)
+    // public CharacterGameData LoadData(string key)
+    // {
+    //     if (characterGameDataDict.TryGetValue(key, out var data))
+    //     {
+    //         return data;
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("Key not found");
+    //         return null;
+    //     }
+    // }
+}
+
+// ------------------- Data -------------------
+
+[Serializable]
+public class CharacterGameData
+{
+    public int maxHealth;
+    public int currentHealth;
+    public GameObject characterObject;
+    public Vector2 tilePosition;
+
+    public CharacterGameData(int maxHealth, int currentHealth, GameObject characterObject = null)
     {
-        if (characterGameDataDict.TryGetValue(key, out var data))
-        {
-            return data;
-        }
-        else
-        {
-            Debug.LogError("Key not found");
-            return null;
-        }
+        this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
+        this.characterObject = characterObject;
+        this.tilePosition = new Vector2(-1, -1);
     }
+}
+
+[Serializable]
+public class NetworkCharacterActionDataList : NetworkVariableBase
+{
+       public List<CharacterActionData> tilePosList = new();
+
+       public override void WriteField(FastBufferWriter writer)
+       {
+           // Serialize the data we need to synchronize
+           writer.WriteValueSafe(tilePosList.Count);
+           foreach (var data in tilePosList)
+           {
+               WriteString(ref data.actionCharacterID, writer);
+               WriteString(ref data.actionSkillName, writer);
+               
+               writer.WriteValueSafe(data.actionType);
+               writer.WriteValueSafe(data.actionTilePosList.Count);
+               foreach (var tilePos in data.actionTilePosList)
+               {
+                   writer.WriteValueSafe(tilePos);
+               }
+           }
+       }
+
+       public override void ReadField(FastBufferReader reader)
+       {
+           // De-Serialize the data being synchronized
+           reader.ReadValueSafe(out int itemsToUpdate);
+           tilePosList.Clear();
+           for (int i = 0; i < itemsToUpdate; i++)
+           {
+               var newTilePosList = new CharacterActionData();
+               
+               ReadString(out newTilePosList.actionCharacterID, reader);
+               ReadString(out newTilePosList.actionSkillName, reader);
+               reader.ReadValueSafe(out newTilePosList.actionType);
+
+               reader.ReadValueSafe(out int itemsCount);
+               newTilePosList.actionTilePosList.Clear();
+               for (int j = 0; j < itemsCount; j++)
+               {
+                   reader.ReadValueSafe(out Vector2 tempTilePos);
+                   newTilePosList.actionTilePosList.Add(tempTilePos);
+               }
+               tilePosList.Add(newTilePosList);
+           }
+       }
+       
+       public void WriteString(ref string Text, FastBufferWriter writer)
+       {
+           // If there isn't thing, then return 0 as the string size
+           if (string.IsNullOrEmpty(Text))
+           {
+               writer.WriteValueSafe(0);
+               return;
+           }
+
+           var textByteArray = System.Text.Encoding.ASCII.GetBytes(Text);
+
+           // Write the total size of the string
+           writer.WriteValueSafe(textByteArray.Length);
+           var toalBytesWritten = 0;
+           var bytesRemaining = textByteArray.Length;
+           // Write the string values
+           while (bytesRemaining > 0)
+           {
+               writer.WriteValueSafe(textByteArray[toalBytesWritten]);
+               toalBytesWritten++;
+               bytesRemaining = textByteArray.Length - toalBytesWritten;
+           }
+       }
+
+       public void ReadString(out string Text, FastBufferReader reader)
+       {
+           // Reset our string to empty
+           Text = string.Empty;
+           // Get the string size in bytes
+           reader.ReadValueSafe(out int stringSize);
+
+           // If there isn't thing, then we are done
+           if (stringSize == 0)
+           {
+               return;
+           }
+
+           // allocate an byte array to 
+           var byteArray = new byte[stringSize];
+           for(int i = 0; i < stringSize; i++)
+           {
+               reader.ReadValueSafe(out byte tempByte);
+               byteArray[i] = tempByte;
+           }
+        
+           // Convert it back to a string
+           Text = System.Text.Encoding.ASCII.GetString(byteArray);
+       }
+
+       public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
+       {
+           // Do nothing for this example
+       }
+
+       public override void WriteDelta(FastBufferWriter writer)
+       {
+           // Do nothing for this example
+       }
+
 }
