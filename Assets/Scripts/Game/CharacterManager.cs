@@ -93,7 +93,6 @@ public class CharacterManager : NetworkBehaviour
     
     private IEnumerator CharacterActionListToAttackAction(List<CharacterActionData> actionDataList)
     {
-        int i = 0;
         foreach (var actionData in actionDataList)
         {
             var character = DetailsManager.Instance.UseCharacterIDSearchCharacter(actionData.actionCharacterID);
@@ -102,9 +101,8 @@ public class CharacterManager : NetworkBehaviour
                 yield return character.MoveAction(actionData.actionTilePosList[0]);
             else
                 yield return StartCoroutine(character.AttackAction(actionData.actionSkillName, actionData.actionType, actionData.actionTilePosList));
-
-            Debug.Log($"{i}: one action end");
-            i++;
+            
+            yield return new WaitForSeconds(0.3f);
         }
     }
     

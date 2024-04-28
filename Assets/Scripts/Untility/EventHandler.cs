@@ -56,11 +56,19 @@ public class EventHandler
         UIObjectGenerate?.Invoke();
     }
     
-    public static Action InitialPressCharacterCard;
-    public static void CallInitialPressCharacterCard()
+    
+    public static Action<string, SkillDetailsSO> CharacterUseSkill;
+    public static void CallCharacterUseSkill(string characterName, SkillDetailsSO skillData)
     {
-        InitialPressCharacterCard?.Invoke();
+        CharacterUseSkill?.Invoke(characterName, skillData);
     }
+
+    public static Action TurnCharacterStartAction;
+    public static void CallTurnCharacterStartAction()
+    {
+        TurnCharacterStartAction?.Invoke();
+    }
+
     #endregion
 
 
@@ -88,12 +96,6 @@ public class EventHandler
     public static void CallUpdateCharacterActionData()
     {
         UpdateCharacterActionData?.Invoke();
-    }
-
-    public static Action TurnCharacterStartAction;
-    public static void CallTurnCharacterStartAction()
-    {
-        TurnCharacterStartAction?.Invoke();
     }
 
     #endregion

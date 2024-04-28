@@ -21,6 +21,7 @@ public class SkillDetailsSO : ScriptableObject
     
     [Header("Skill Editor")]
     public string skillName;
+    public string skillDisplayName;
     public string skillID;
     public string skillDescription;
     public bool isSkillAreaCanEnemyOn;

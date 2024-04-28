@@ -209,14 +209,14 @@ public class Character : MonoBehaviour
         
         // Record the character action
         characterManager.characterActionRecord.
-            AddCharacterActionData(ID, skillDetails.skillID,skillDetails.skillType ,skillTileReturnDataList);
+            AddCharacterActionData(ID, skillDetails, skillTileReturnDataList);
     }
 
     public async UniTask MoveAction(Vector2 targetTilePos)
     {
         await MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos);
     }
-    protected async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos)
+    private async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos)
     {
         // Move Animation
         var position = tileGameObject.transform.position;
@@ -230,8 +230,6 @@ public class Character : MonoBehaviour
 
         await UniTask.Yield(0); 
     }
-   
-
 
     private async UniTask CallTileStandAnimation(SkillDetailsSO data, Vector2 skillAttackRange, Vector2 maxStandDistance, float duration = 0.1f)
     {
@@ -244,22 +242,4 @@ public class Character : MonoBehaviour
                                                                  // to show the animation
         }
     }
-    
-    // IEnumerator Test()
-    // {
-    //     while (true)
-    //     {
-    //         yield return new WaitForSeconds(1f);
-    //         Vector2 beforeMoveTilePos = characterTilePosition;
-    //         
-    //         for (int i = 0; i <= moveMaxDistance; i++)
-    //         {
-    //             EventHandler.CallCharacterNearTileAnimation(this, beforeMoveTilePos, i);
-    //             yield return new WaitForSeconds(0.1f);
-    //         }
-    //
-    //         yield return new WaitForSeconds(1f);
-    //         EventHandler.CallCharacterCancelMove();
-    //     }
-    // }
 }

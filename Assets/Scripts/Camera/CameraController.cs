@@ -32,7 +32,12 @@ public class CameraController : MonoBehaviour
         var camera = GetComponent<CinemachineVirtualCamera>();
         cameraTrack = camera.GetCinemachineComponent<CinemachineTrackedDolly>();
     }
-    
+
+    private void OnDisable()
+    {
+        playerControls.GamePlay.Disable();
+    }
+
     IEnumerator Drag()
     {
         isDragging = true;

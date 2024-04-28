@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CharacterActionRecord : MonoBehaviour
 {
     //[Header("Component")]
     //[Header("Settings")]
-    //[Header("Debug")]
+    [Header("Debug")]
     public List<CharacterActionData> characterActionDataList = new();
     
-    public void AddCharacterActionData(string id, string skillID, SkillButtonType type, List<TileReturnData> tileReturnDataList)
+    public void AddCharacterActionData(string id, SkillDetailsSO skillData, List<TileReturnData> tileReturnDataList)
     {
         List<Vector2> tilePosList = new();
         foreach (var data in tileReturnDataList)
@@ -20,12 +21,16 @@ public class CharacterActionRecord : MonoBehaviour
         characterActionDataList.Add(new CharacterActionData()
         {
             actionCharacterID = id,
-            actionSkillName = skillID,
-            actionType = type,
+            actionSkillName = skillData.skillID,
+            actionType = skillData.skillType,
             actionTilePosList = tilePosList
         });
+        
+        EventHandler.CallCharacterUseSkill(
+            DetailsManager.Instance.UseCharacterIDSearchCharacter(id).characterDetails.characterName, skillData);
     }
 
+    
     // - List Data
     // [0]:
     // characterID = "B01"
@@ -44,14 +49,10 @@ public class CharacterActionRecord : MonoBehaviour
         
         foreach (var data in characterActionDataList)
         {
-            var tilePosList = string.Empty;
-            // var tilePosList = data.actionTilePosList.Aggregate(string.Empty, (current, tilePos) => current + $"{tilePos.x},{tilePos.y}|");
-
-            foreach (var tilePos in data.actionTilePosList)
-            {
-                tilePosList += $"{tilePos.x}_{tilePos.y}|";
-            }
-            tilePosList = tilePosList.Remove(tilePosList.Length - 1);
+            // (1, 1), (1, 2), (1, 3) -> 1_1|1_2|1_3
+            var tilePosList = data.actionTilePosList.
+                Aggregate(string.Empty, (current, tilePos) => current + $"{tilePos.x}_{tilePos.y}|")
+                .TrimEnd('|');
             
             result += $"{{{data.actionCharacterID},{data.actionSkillName},{(int)data.actionType},({tilePosList})}}";
         }
