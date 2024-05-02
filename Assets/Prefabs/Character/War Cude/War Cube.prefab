@@ -15647,6 +15647,7 @@ GameObject:
   - component: {fileID: 1403010995320518875}
   - component: {fileID: 6025971700011939608}
   - component: {fileID: 4615963546955405887}
+  - component: {fileID: 129668794684209697}
   m_Layer: 0
   m_Name: War Cube
   m_TagString: Character
@@ -15742,6 +15743,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &129668794684209697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6115863782023368708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9d6d6d2b08694cdba363c3d679b0f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6248752517604659440
 GameObject:
   m_ObjectHideFlags: 0

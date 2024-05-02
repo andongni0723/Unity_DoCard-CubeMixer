@@ -148,7 +148,7 @@ public class CharacterGenerator : NetworkBehaviour
             
             // Save Data
             characterManager.SaveData(character.characterName,
-                new CharacterGameData(character.health, character.health, characterObj.gameObject));
+                new CharacterGameData(character.health,character.power, character.health, character.power, characterObj.gameObject));
             
             // Set spawn position
             startSpawnPosition += Vector2.right;

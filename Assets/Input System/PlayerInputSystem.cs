@@ -42,7 +42,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""id"": ""e06514fb-75ca-41e0-93cf-bf0df2d9154b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(pressPoint=0.1)"",
+                    ""interactions"": ""Hold(pressPoint=1.401298E-45)"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -62,7 +62,18 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""9055665a-161d-43fa-86bd-3d44c58e3304"",
                     ""path"": ""<Mouse>/press"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(pressPoint=0.05)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fe04b95-3c77-4fe2-ad4c-bc5f1e38a3e1"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": ""Hold(pressPoint=0.05)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MouseHold"",

@@ -13,6 +13,7 @@ public class CharacterDetailsSO : ScriptableObject
     public string characterName;
     [TextArea]public string characterDescription;
     public int health;
+    public int power;
 
     [Space(15)] 
     public GameObject characterPrefab;

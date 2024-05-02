@@ -38,7 +38,7 @@ public class CharacterManager : NetworkBehaviour
         foreach (var index in characterDetailsList)
         {
             CharacterDetailsSO data = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
-            SaveData(data.characterName, new CharacterGameData(data.health, data.health));
+            SaveData(data.characterName, new CharacterGameData(data.health, data.power, data.health, data.power));
         }
         
         //character action list On Value Changed
@@ -171,123 +171,135 @@ public class CharacterManager : NetworkBehaviour
 public class CharacterGameData
 {
     public int maxHealth;
+    public int maxPower;
     public int currentHealth;
+    public int currentPower;
     public GameObject characterObject;
     public Vector2 tilePosition;
 
-    public CharacterGameData(int maxHealth, int currentHealth, GameObject characterObject = null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="maxHealth">if value is -1, method will not setting</param>
+    /// <param name="maxPower">if value is -1, method will not setting</param>
+    /// <param name="currentHealth"></param>
+    /// <param name="currentPower"></param>
+    /// <param name="characterObject"></param>
+    public CharacterGameData(int maxHealth, int maxPower, int currentHealth, int currentPower, GameObject characterObject = null, Vector2 tilePosition = default)
     {
         this.maxHealth = maxHealth;
         this.currentHealth = currentHealth;
+        this.maxPower = maxPower;
+        this.currentPower = currentPower;
         this.characterObject = characterObject;
-        this.tilePosition = new Vector2(-1, -1);
+        this.tilePosition = tilePosition;
     }
 }
 
-[Serializable]
-public class NetworkCharacterActionDataList : NetworkVariableBase
-{
-       public List<CharacterActionData> tilePosList = new();
-
-       public override void WriteField(FastBufferWriter writer)
-       {
-           // Serialize the data we need to synchronize
-           writer.WriteValueSafe(tilePosList.Count);
-           foreach (var data in tilePosList)
-           {
-               WriteString(ref data.actionCharacterID, writer);
-               WriteString(ref data.actionSkillName, writer);
-               
-               writer.WriteValueSafe(data.actionType);
-               writer.WriteValueSafe(data.actionTilePosList.Count);
-               foreach (var tilePos in data.actionTilePosList)
-               {
-                   writer.WriteValueSafe(tilePos);
-               }
-           }
-       }
-
-       public override void ReadField(FastBufferReader reader)
-       {
-           // De-Serialize the data being synchronized
-           reader.ReadValueSafe(out int itemsToUpdate);
-           tilePosList.Clear();
-           for (int i = 0; i < itemsToUpdate; i++)
-           {
-               var newTilePosList = new CharacterActionData();
-               
-               ReadString(out newTilePosList.actionCharacterID, reader);
-               ReadString(out newTilePosList.actionSkillName, reader);
-               reader.ReadValueSafe(out newTilePosList.actionType);
-
-               reader.ReadValueSafe(out int itemsCount);
-               newTilePosList.actionTilePosList.Clear();
-               for (int j = 0; j < itemsCount; j++)
-               {
-                   reader.ReadValueSafe(out Vector2 tempTilePos);
-                   newTilePosList.actionTilePosList.Add(tempTilePos);
-               }
-               tilePosList.Add(newTilePosList);
-           }
-       }
-       
-       public void WriteString(ref string Text, FastBufferWriter writer)
-       {
-           // If there isn't thing, then return 0 as the string size
-           if (string.IsNullOrEmpty(Text))
-           {
-               writer.WriteValueSafe(0);
-               return;
-           }
-
-           var textByteArray = System.Text.Encoding.ASCII.GetBytes(Text);
-
-           // Write the total size of the string
-           writer.WriteValueSafe(textByteArray.Length);
-           var toalBytesWritten = 0;
-           var bytesRemaining = textByteArray.Length;
-           // Write the string values
-           while (bytesRemaining > 0)
-           {
-               writer.WriteValueSafe(textByteArray[toalBytesWritten]);
-               toalBytesWritten++;
-               bytesRemaining = textByteArray.Length - toalBytesWritten;
-           }
-       }
-
-       public void ReadString(out string Text, FastBufferReader reader)
-       {
-           // Reset our string to empty
-           Text = string.Empty;
-           // Get the string size in bytes
-           reader.ReadValueSafe(out int stringSize);
-
-           // If there isn't thing, then we are done
-           if (stringSize == 0)
-           {
-               return;
-           }
-
-           // allocate an byte array to 
-           var byteArray = new byte[stringSize];
-           for(int i = 0; i < stringSize; i++)
-           {
-               reader.ReadValueSafe(out byte tempByte);
-               byteArray[i] = tempByte;
-           }
-        
-           // Convert it back to a string
-           Text = System.Text.Encoding.ASCII.GetString(byteArray);
-       }
-
-       public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
-       {
-           // Do nothing for this example
-       }
-
-       public override void WriteDelta(FastBufferWriter writer)
-       {
-           // Do nothing for this example
-       }
-
-}
+// [Serializable]
+// public class NetworkCharacterActionDataList : NetworkVariableBase
+// {
+//        public List<CharacterActionData> tilePosList = new();
+//
+//        public override void WriteField(FastBufferWriter writer)
+//        {
+//            // Serialize the data we need to synchronize
+//            writer.WriteValueSafe(tilePosList.Count);
+//            foreach (var data in tilePosList)
+//            {
+//                WriteString(ref data.actionCharacterID, writer);
+//                WriteString(ref data.actionSkillName, writer);
+//                
+//                writer.WriteValueSafe(data.actionType);
+//                writer.WriteValueSafe(data.actionTilePosList.Count);
+//                foreach (var tilePos in data.actionTilePosList)
+//                {
+//                    writer.WriteValueSafe(tilePos);
+//                }
+//            }
+//        }
+//
+//        public override void ReadField(FastBufferReader reader)
+//        {
+//            // De-Serialize the data being synchronized
+//            reader.ReadValueSafe(out int itemsToUpdate);
+//            tilePosList.Clear();
+//            for (int i = 0; i < itemsToUpdate; i++)
+//            {
+//                var newTilePosList = new CharacterActionData();
+//                
+//                ReadString(out newTilePosList.actionCharacterID, reader);
+//                ReadString(out newTilePosList.actionSkillName, reader);
+//                reader.ReadValueSafe(out newTilePosList.actionType);
+//
+//                reader.ReadValueSafe(out int itemsCount);
+//                newTilePosList.actionTilePosList.Clear();
+//                for (int j = 0; j < itemsCount; j++)
+//                {
+//                    reader.ReadValueSafe(out Vector2 tempTilePos);
+//                    newTilePosList.actionTilePosList.Add(tempTilePos);
+//                }
+//                tilePosList.Add(newTilePosList);
+//            }
+//        }
+//        
+//        public void WriteString(ref string Text, FastBufferWriter writer)
+//        {
+//            // If there isn't thing, then return 0 as the string size
+//            if (string.IsNullOrEmpty(Text))
+//            {
+//                writer.WriteValueSafe(0);
+//                return;
+//            }
+//
+//            var textByteArray = System.Text.Encoding.ASCII.GetBytes(Text);
+//
+//            // Write the total size of the string
+//            writer.WriteValueSafe(textByteArray.Length);
+//            var toalBytesWritten = 0;
+//            var bytesRemaining = textByteArray.Length;
+//            // Write the string values
+//            while (bytesRemaining > 0)
+//            {
+//                writer.WriteValueSafe(textByteArray[toalBytesWritten]);
+//                toalBytesWritten++;
+//                bytesRemaining = textByteArray.Length - toalBytesWritten;
+//            }
+//        }
+//
+//        public void ReadString(out string Text, FastBufferReader reader)
+//        {
+//            // Reset our string to empty
+//            Text = string.Empty;
+//            // Get the string size in bytes
+//            reader.ReadValueSafe(out int stringSize);
+//
+//            // If there isn't thing, then we are done
+//            if (stringSize == 0)
+//            {
+//                return;
+//            }
+//
+//            // allocate an byte array to 
+//            var byteArray = new byte[stringSize];
+//            for(int i = 0; i < stringSize; i++)
+//            {
+//                reader.ReadValueSafe(out byte tempByte);
+//                byteArray[i] = tempByte;
+//            }
+//         
+//            // Convert it back to a string
+//            Text = System.Text.Encoding.ASCII.GetString(byteArray);
+//        }
+//
+//        public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
+//        {
+//            // Do nothing for this example
+//        }
+//
+//        public override void WriteDelta(FastBufferWriter writer)
+//        {
+//            // Do nothing for this example
+//        }
+//
+// }

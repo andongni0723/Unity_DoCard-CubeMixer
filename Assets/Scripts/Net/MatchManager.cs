@@ -25,7 +25,8 @@ public class MatchManager : Singleton<MatchManager>
     public TMP_Text networkStatusText;
     private UnityTransport transport;
     
-    //[Header("Settings")]
+    [Header("Settings")]
+    public int maxPlayers = 2;
     private const string joinCodeKey = "j";
     private string playerID;
     
@@ -94,7 +95,7 @@ public class MatchManager : Singleton<MatchManager>
 
     private async Task<Lobby> CreateLobby()
     {
-        const int maxPlayers = 2;
+        // const int maxPlayers = 2;
 
         var a = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
         var joinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);

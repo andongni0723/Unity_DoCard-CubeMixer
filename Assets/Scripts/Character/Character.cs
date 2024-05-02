@@ -22,11 +22,14 @@ public class TileReturnData
     }
 }
 
+
+[RequireComponent(typeof(CharacterHealth))]
 public class Character : MonoBehaviour
 {
     [Header("Component")]
     public MeshRenderer body;
     public CharacterManager characterManager;
+    public CharacterHealth characterHealth;
     public PowerPanel powerPanel;
     
     [Space(15)]
@@ -46,6 +49,7 @@ public class Character : MonoBehaviour
     [Header("Debug")] 
     public Team team;
     public Vector2 characterTilePosition;
+    private CharacterGameData turnStartGameData;
     private Camera mainCamera;
     private bool isTileReturn = false;
     [SerializeField]protected List<TileReturnData> skillTileReturnDataList = new();
@@ -53,6 +57,7 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+        characterHealth = GetComponent<CharacterHealth>();
         powerPanel ??= transform.GetChild(0).GetChild(0).GetComponent<PowerPanel>();
     }
 
@@ -60,12 +65,21 @@ public class Character : MonoBehaviour
 
     private void OnEnable()
     {
-        EventHandler.CharacterActionEnd += OnCharacterActionEnd;
+        EventHandler.CharacterActionClear += OnCharacterActionClear; // character data back to turn start data
+        EventHandler.CharacterActionEnd += OnCharacterActionEnd; // setting variable
     }
 
     private void OnDisable()
     {
+        EventHandler.CharacterActionClear -= OnCharacterActionClear;
         EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
+    }
+
+    private void OnCharacterActionClear()
+    {
+        MoveAction(turnStartGameData.tilePosition);
+        characterHealth.currentHealth = turnStartGameData.currentHealth;
+        characterHealth.currentPower = turnStartGameData.currentHealth;
     }
 
     private void OnCharacterActionEnd()
@@ -77,7 +91,16 @@ public class Character : MonoBehaviour
 
     public void InitialUpdateData(string id)
     {
+        // Setting variable
         this.id = id;
+        characterHealth.InitialUpdateDate(characterDetails.health, characterDetails.power);
+        turnStartGameData = new CharacterGameData(
+            characterDetails.health, 
+            characterDetails.power, 
+            characterHealth.currentHealth,
+            characterHealth.currentPower, 
+            tilePosition: characterTilePosition);
+        
         DetailsManager.Instance.NewCharacterDetails(this);
     }
 

@@ -107,7 +107,19 @@ public class EventHandler
     public static void CallCharacterCardPress(CharacterDetailsSO data, string ID)
     {
         CharacterCardPress?.Invoke(data, ID);
-    } 
+    }
+
+    public static Action CharacterActionClear;
+    public static void CallCharacterActionClear()
+    {
+        CharacterActionClear?.Invoke();
+    }
+    
+    public static Action<float> CameraPositionValueChange;
+    public static void CallCameraPositionValueChange(float value)
+    {
+        CameraPositionValueChange?.Invoke(value);
+    }
 
     #endregion
     

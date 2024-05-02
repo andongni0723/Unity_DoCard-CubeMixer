@@ -21,14 +21,11 @@ public class GameManager : Singleton<GameManager>
     //[Header("Debug")]
     
     private int currentPlayerCount = 0;
-    
-    public void SetSelfCharacterManager(CharacterManager characterManager)
+
+    public override void Awake()
     {
-        selfCharacterManager = characterManager;
-    }
-    public void SetEnemyCharacterManager(CharacterManager characterManager)
-    {
-        enemyCharacterManager = characterManager;
+        base.Awake();
+        Application.targetFrameRate = 300;
     }
 
     private void OnEnable()
@@ -43,7 +40,7 @@ public class GameManager : Singleton<GameManager>
     private void GameStart()
     {
         currentPlayerCount++;
-        if (currentPlayerCount == 2)
+        if (currentPlayerCount == MatchManager.Instance.maxPlayers)
             StartCoroutine(WaitAndStartGame());
     }
 
@@ -53,5 +50,14 @@ public class GameManager : Singleton<GameManager>
         EventHandler.CallCharacterObjectGenerate();
         yield return new WaitForSeconds(0.5f);
         EventHandler.CallUIObjectGenerate();
+    }
+    
+    public void SetSelfCharacterManager(CharacterManager characterManager)
+    {
+        selfCharacterManager = characterManager;
+    }
+    public void SetEnemyCharacterManager(CharacterManager characterManager)
+    {
+        enemyCharacterManager = characterManager;
     }
 }
