@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Component")]
     public CharacterManager selfCharacterManager; 
     public CharacterManager enemyCharacterManager;
+    public GameStateManager gameStateManager;
     
     [Space(15)]
     public Camera redMainCamera;

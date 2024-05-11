@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,24 @@ public class CharacterActionRecord : MonoBehaviour
     //[Header("Settings")]
     [Header("Debug")]
     public List<CharacterActionData> characterActionDataList = new();
+
+    // ----------------- Event -----------------
+    private void OnEnable()
+    {
+        EventHandler.CharacterActionClear += ClearCharacterActionData;
+    }
     
+    private void OnDisable()
+    {
+        EventHandler.CharacterActionClear -= ClearCharacterActionData;
+    }
+
+    private void ClearCharacterActionData()
+    {
+        characterActionDataList.Clear();
+    }
+
+    // ----------------- Tools -----------------
     public void AddCharacterActionData(string id, SkillDetailsSO skillData, List<TileReturnData> tileReturnDataList)
     {
         List<Vector2> tilePosList = new();
@@ -39,10 +57,9 @@ public class CharacterActionRecord : MonoBehaviour
     // tileReturnDataList = { (1, 1), (1, 2), (1, 3) }
     // [1]:
     // ...
-    
+    //
     // - String Data
     // "{B01,S01,0,(1_1|1_2|1_3)}{...}"
-    
     public string ListDataToStringData()
     {
         var result = string.Empty;
@@ -50,8 +67,8 @@ public class CharacterActionRecord : MonoBehaviour
         foreach (var data in characterActionDataList)
         {
             // (1, 1), (1, 2), (1, 3) -> 1_1|1_2|1_3
-            var tilePosList = data.actionTilePosList.
-                Aggregate(string.Empty, (current, tilePos) => current + $"{tilePos.x}_{tilePos.y}|")
+            var tilePosList = data.actionTilePosList
+                .Aggregate(string.Empty, (current, tilePos) => current + $"{tilePos.x}_{tilePos.y}|")
                 .TrimEnd('|');
             
             result += $"{{{data.actionCharacterID},{data.actionSkillName},{(int)data.actionType},({tilePosList})}}";
@@ -76,7 +93,8 @@ public class CharacterActionRecord : MonoBehaviour
             
             var clearData = data.Substring(1, data.Length - 1); // xxx, xxx, xxx, (xxx|xxx|xxx)
             var clearDataList = clearData.Split(',');
-            var tilePosStringList = clearDataList[3].Substring(1, clearDataList[3].Length - 2)
+            var tilePosStringList = clearDataList[3]
+                                                    .Substring(1, clearDataList[3].Length - 2)
                                                     .Split('|'); // (1_2|2_3|3_4) -> 1_2, 2_3, 3_4
 
             List<Vector2> tilePosVector2List = new();

@@ -13,6 +13,11 @@ public class BackButton : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(EventHandler.CallCharacterActionClear);
+        button.onClick.AddListener(() =>
+        {
+            // HintPanelManager.Instance.CallHint("Turn Start");
+            HintPanelManager.Instance.CallChooseBox("Are you sure you want to clear all actions?",
+                EventHandler.CallCharacterActionClear);
+        });
     }
 }

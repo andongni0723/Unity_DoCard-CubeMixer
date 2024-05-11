@@ -69,6 +69,18 @@ public class EventHandler
         TurnCharacterStartAction?.Invoke();
     }
 
+    public static Action<GameState> StateCallback;
+    public static void CallStateCallback(GameState state)
+    {
+        StateCallback?.Invoke(state);
+    }
+    
+    public static Action<GameState> ChangeState;
+    public static void CallChangeState(GameState state)
+    {
+        ChangeState?.Invoke(state);
+    }
+
     #endregion
 
 
@@ -96,6 +108,12 @@ public class EventHandler
     public static void CallUpdateCharacterActionData()
     {
         UpdateCharacterActionData?.Invoke();
+    }
+    
+    public static Action CharacterBackToTurnStartPoint;
+    public static void CallCharacterBackToTurnStartPoint()
+    {
+        CharacterBackToTurnStartPoint?.Invoke();
     }
 
     #endregion

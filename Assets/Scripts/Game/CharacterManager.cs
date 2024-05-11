@@ -64,7 +64,7 @@ public class CharacterManager : NetworkBehaviour
     {
         EventHandler.CharacterObjectGenerate += CallCharacterGenerate; // not owner generate character
         EventHandler.UpdateCharacterActionData += SaveCharacterActionData; // update character action data
-        EventHandler.TurnCharacterStartAction += OnTurnCharacterStartAction;
+        EventHandler.TurnCharacterStartAction += OnTurnCharacterStartAction; // play the character action
     }
 
     private void OnDisable()
@@ -88,21 +88,32 @@ public class CharacterManager : NetworkBehaviour
     // ------------------- Game -------------------
     private void SaveCharacterActionData()
     {
+        
         characterActionDataString.Value = characterActionRecord.ListDataToStringData();
     }
     
     private IEnumerator CharacterActionListToAttackAction(List<CharacterActionData> actionDataList)
     {
+        EventHandler.CallCharacterBackToTurnStartPoint();
+        yield return new WaitForSeconds(1.5f);
+        
         foreach (var actionData in actionDataList)
         {
             var character = DetailsManager.Instance.UseCharacterIDSearchCharacter(actionData.actionCharacterID);
             
+            // move or skill
             if(actionData.actionType == SkillButtonType.Move)
                 yield return character.MoveAction(actionData.actionTilePosList[0]);
             else
                 yield return StartCoroutine(character.AttackAction(actionData.actionSkillName, actionData.actionType, actionData.actionTilePosList));
             
             yield return new WaitForSeconds(0.3f);
+        }
+
+        // Check is real fight not replay , send callback about the fight action is done
+        if (GameManager.Instance.gameStateManager.currentState == GameState.FightState)
+        {
+            EventHandler.StateCallback(GameState.FightState);
         }
     }
     

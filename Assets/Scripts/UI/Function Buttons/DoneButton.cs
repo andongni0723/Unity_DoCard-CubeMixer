@@ -13,6 +13,12 @@ public class DoneButton : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(EventHandler.CallUpdateCharacterActionData);
+        
+        button.onClick.AddListener(() =>
+        {
+           
+            EventHandler.CallStateCallback(GameState.ActionState);
+            button.interactable = false;
+        });
     }
 }

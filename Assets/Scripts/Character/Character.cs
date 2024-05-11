@@ -65,19 +65,20 @@ public class Character : MonoBehaviour
 
     private void OnEnable()
     {
-        EventHandler.CharacterActionClear += OnCharacterActionClear; // character data back to turn start data
+        EventHandler.CharacterActionClear += BackToTurnStartPoint; // character data back to turn start data
+        EventHandler.CharacterBackToTurnStartPoint += BackToTurnStartPoint; // setting variable
         EventHandler.CharacterActionEnd += OnCharacterActionEnd; // setting variable
     }
 
     private void OnDisable()
     {
-        EventHandler.CharacterActionClear -= OnCharacterActionClear;
+        EventHandler.CharacterActionClear -= BackToTurnStartPoint;
         EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
     }
 
-    private void OnCharacterActionClear()
+    protected virtual void BackToTurnStartPoint()
     {
-        MoveAction(turnStartGameData.tilePosition);
+        MoveAction(turnStartGameData.tilePosition, 0);
         characterHealth.currentHealth = turnStartGameData.currentHealth;
         characterHealth.currentPower = turnStartGameData.currentHealth;
     }
@@ -200,6 +201,7 @@ public class Character : MonoBehaviour
         {
             case SkillButtonType.Empty:
                 Debug.LogError("SkillButtonType is Empty :The skill button is not bind with any skill");
+                HintPanelManager.Instance.CallError("SkillButtonType is Empty :The skill button is not bind with any skill");
                 break;
             
             case SkillButtonType.Move:
@@ -235,15 +237,15 @@ public class Character : MonoBehaviour
             AddCharacterActionData(ID, skillDetails, skillTileReturnDataList);
     }
 
-    public async UniTask MoveAction(Vector2 targetTilePos)
+    public async UniTask MoveAction(Vector2 targetTilePos, float duration = 0.5f)
     {
-        await MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos);
+        await MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos, duration);
     }
-    private async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos)
+    private async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos, float duration = 0.5f)
     {
         // Move Animation
         var position = tileGameObject.transform.position;
-        transform.DOMove(new Vector3(position.x, 0.1f, position.z), 0.5f)
+        transform.DOMove(new Vector3(position.x, 0.1f, position.z), duration)
             .OnComplete(() =>
             {
                 // Update Data

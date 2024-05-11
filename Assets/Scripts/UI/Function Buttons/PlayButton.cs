@@ -14,5 +14,6 @@ public class PlayButton : MonoBehaviour
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(EventHandler.CallTurnCharacterStartAction);
+        button.onClick.AddListener(() => HintPanelManager.Instance.CallHint("Replay Action"));
     }
 }

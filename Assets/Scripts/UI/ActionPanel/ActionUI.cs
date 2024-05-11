@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,7 +15,21 @@ public class ActionUI : MonoBehaviour
     private SkillDetailsSO skillDetailsSO;
     //[Header("Debug")]
     
-    
+    // ----------------- Event -----------------
+    private void OnEnable()
+    {
+        EventHandler.CharacterActionClear += DestroySelf;
+    }
+    private void OnDisable()
+    {
+        EventHandler.CharacterActionClear -= DestroySelf;
+    }
+
+    private void DestroySelf()
+    {
+        Destroy(gameObject);
+    }
+
     // -----------------Tools-----------------
     
     /// <summary>
