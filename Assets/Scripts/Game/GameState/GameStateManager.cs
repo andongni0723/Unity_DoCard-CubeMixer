@@ -22,7 +22,7 @@ public class GameStateManager : NetworkBehaviour
         stateData.Add(GameState.LoadPlayerInGame, new LoadPlayerState());
         stateData.Add(GameState.ActionState, new ActionState());
         stateData.Add(GameState.FightState, new FightState());
-        stateData.Add(GameState.FightEnd, new FightEndState());
+        stateData.Add(GameState.FightEndState, new FightEndState());
         
         
         EventHandler.CallChangeState(GameState.ActionState);
@@ -51,6 +51,7 @@ public class GameStateManager : NetworkBehaviour
         if (targetState != currentState)
         {
             HintPanelManager.Instance.CallError("State and State Callback is not match");
+            Debug.LogError($"State and State Callback is not match: now state is {currentState} but callback is {targetState}");
             return;
         }
 
@@ -62,13 +63,12 @@ public class GameStateManager : NetworkBehaviour
     private void CheckCallbackCount(int previousValue, int newValue)
     {
         // check the callback is enough
-        Debug.Log($"{newValue} / {stateData[currentState].needCallbackCount}");
+        // Debug.Log($"{newValue} / {stateData[currentState].needCallbackCount}");
         if (newValue == stateData[currentState].needCallbackCount)
         {
             if (!IsServer) return; // Only server can change state
             
             stateData[currentState].CallChangeNextState();
-            Debug.Log("call");       
             ChangeStateClientRpc(); // call client to change state
 
         }
@@ -79,10 +79,7 @@ public class GameStateManager : NetworkBehaviour
     {
         if(IsServer) return;
         stateData[currentState].CallChangeNextState();
-        Debug.Log("call");       
     }
-    
-    
     [ServerRpc(RequireOwnership = false)]
     public void AddCallbackCountServerRpc(int i)
     {
@@ -94,7 +91,7 @@ public class GameStateManager : NetworkBehaviour
         stateData[currentState].ExitState();
         currentState = toState;
         if (IsServer) stateCallbackCount.Value = 0;
-        // else AddCallbackCountServerRpc(-stateCallbackCount.Value);
+        EventHandler.CallChangeStateDone(toState);
         stateData[currentState].EnterState();
     }
 

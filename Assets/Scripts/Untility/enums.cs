@@ -21,5 +21,5 @@ public enum GameState
     LoadPlayerInGame,
     ActionState,
     FightState,
-    FightEnd,
+    FightEndState,
 }

@@ -5,13 +5,11 @@ using UnityEngine;
 public class FightEndState : IGameState
 {
     public GameState state;
-    private int getCallbackCount = 0;
-
-    public int needCallbackCount => 0;
+    public int needCallbackCount => MatchManager.Instance.maxPlayers;
 
     public void EnterState()
     {
-        state = GameState.FightState;
+        state = GameState.FightEndState;
     }
 
     public void UpdateState()
@@ -19,12 +17,8 @@ public class FightEndState : IGameState
     }
 
     public void CallChangeNextState()
-    {
-        getCallbackCount++;
-        if(getCallbackCount == MatchManager.Instance.maxPlayers)
-        {
-            EventHandler.CallChangeState(GameState.FightEnd);
-        }
+    { 
+        EventHandler.CallChangeState(GameState.ActionState);
     }
 
     public void ExitState()

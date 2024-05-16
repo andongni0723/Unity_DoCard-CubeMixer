@@ -13,7 +13,8 @@ public class CharacterCard : MonoBehaviour
     [SerializeField]private TMP_Text characterName;
     [SerializeField]private Image characterImage;
     [SerializeField]private Slider characterHealthBar;
-    [SerializeField]private GameObject pageImageObj;
+    // [SerializeField]private GameObject pageImageObj;
+    [SerializeField]private GameObject cardObj;
     private Toggle toggle;
     
     [Header("Settings")] 
@@ -27,27 +28,47 @@ public class CharacterCard : MonoBehaviour
     private void Awake()
     {
         toggle = GetComponent<Toggle>();
+        toggle.group = transform.parent.GetComponent<ToggleGroup>();
         defaultScale = transform.localScale;
     }
     
-    public void InitialUpdateData()
+    // ------------------- Event -------------------
+    private void OnEnable()
+    {
+        EventHandler.TurnCharacterStartAction += CloseActive; // close
+        EventHandler.LastPlayActionEnd += OpenActive; // open
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.TurnCharacterStartAction -= CloseActive;
+        EventHandler.LastPlayActionEnd -= OpenActive;
+    }
+
+    private void CloseActive()
+    {
+        cardObj.SetActive(false);
+    }
+
+    private void OpenActive()
+    {
+        cardObj.SetActive(true);
+    }
+
+    public void InitialUpdateData(bool toggleOn)
     {
         characterName.text = characterDetails.characterName;
         characterImage.sprite = characterDetails.characterSprite;
         characterHealthBar.maxValue = characterDetails.health;
         characterHealthBar.value = characterDetails.health;
         
-        toggle.group = transform.parent.GetComponent<ToggleGroup>();
-        toggle.isOn = true;
-        // EventHandler.CallCharacterCardPress(characterDetails, bindingCharacterID);
+        toggle.isOn = toggleOn;
+        EventHandler.CallCharacterCardPress(characterDetails, bindingCharacterID);
     }
     
     public void OnToggleValueChanged(bool isOn)
     {
-        if (isOn)
-            EventHandler.CallCharacterCardPress(characterDetails, bindingCharacterID);
-        
-        
+        if (isOn) EventHandler.CallCharacterCardPress(characterDetails, bindingCharacterID);
         GetComponent<RectTransform>().DOScale(isOn ? Vector3.one * 0.8f : defaultScale, 0.2f);
     }
 }

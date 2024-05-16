@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.Utilities;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -65,6 +66,8 @@ public class CharacterManager : NetworkBehaviour
         EventHandler.CharacterObjectGenerate += CallCharacterGenerate; // not owner generate character
         EventHandler.UpdateCharacterActionData += SaveCharacterActionData; // update character action data
         EventHandler.TurnCharacterStartAction += OnTurnCharacterStartAction; // play the character action
+        EventHandler.LastPlayActionEnd += OnLastPlayActionEnd; // Check is fight state and callback
+        EventHandler.ChangeStateDone += OnChangeStateDone;
     }
 
     private void OnDisable()
@@ -72,6 +75,29 @@ public class CharacterManager : NetworkBehaviour
         EventHandler.CharacterObjectGenerate -= CallCharacterGenerate;
         EventHandler.UpdateCharacterActionData -= SaveCharacterActionData;
         EventHandler.TurnCharacterStartAction -= OnTurnCharacterStartAction;
+        EventHandler.LastPlayActionEnd -= OnLastPlayActionEnd;
+        EventHandler.ChangeStateDone -= OnChangeStateDone;
+    }
+
+    private void OnChangeStateDone(GameState newState)
+    {
+        if (GameManager.Instance.gameStateManager.currentState == GameState.FightEndState && IsOwner)
+        {
+            Invoke(nameof(TestCallBackFightEnd), 2);
+        }
+    }
+
+    public void TestCallBackFightEnd() // TODO: test 
+    {
+        EventHandler.CallStateCallback(GameState.FightEndState);
+    }
+
+    private void OnLastPlayActionEnd()
+    {
+        if (GameManager.Instance.gameStateManager.currentState == GameState.FightState && IsOwner)
+        {
+            EventHandler.CallStateCallback(GameState.FightState);
+        }
     }
 
     private void CallCharacterGenerate()
@@ -88,32 +114,40 @@ public class CharacterManager : NetworkBehaviour
     // ------------------- Game -------------------
     private void SaveCharacterActionData()
     {
-        
-        characterActionDataString.Value = characterActionRecord.ListDataToStringData();
+        if(IsOwner)
+            characterActionDataString.Value = characterActionRecord.ListDataToStringData();
     }
     
     private IEnumerator CharacterActionListToAttackAction(List<CharacterActionData> actionDataList)
     {
-        EventHandler.CallCharacterBackToTurnStartPoint();
+        if(IsOwner) EventHandler.CallCharacterBackToTurnStartPoint();
         yield return new WaitForSeconds(1.5f);
-        
-        foreach (var actionData in actionDataList)
-        {
-            var character = DetailsManager.Instance.UseCharacterIDSearchCharacter(actionData.actionCharacterID);
-            
-            // move or skill
-            if(actionData.actionType == SkillButtonType.Move)
-                yield return character.MoveAction(actionData.actionTilePosList[0]);
-            else
-                yield return StartCoroutine(character.AttackAction(actionData.actionSkillName, actionData.actionType, actionData.actionTilePosList));
-            
-            yield return new WaitForSeconds(0.3f);
-        }
 
-        // Check is real fight not replay , send callback about the fight action is done
-        if (GameManager.Instance.gameStateManager.currentState == GameState.FightState)
+        if (actionDataList.IsNullOrEmpty())
         {
-            EventHandler.StateCallback(GameState.FightState);
+            if(IsOwner) EventHandler.CallLastPlayActionEnd();
+            yield break;
+        }
+        
+        for(int i = 0; i < actionDataList.Count; i++)
+        {
+            var character = DetailsManager.Instance.UseCharacterIDSearchCharacter(actionDataList[i].actionCharacterID);
+            
+            // Execute Move or Skill
+            if(actionDataList[i].actionType == SkillButtonType.Move)
+                yield return character.MoveAction(
+                    actionDataList[i].actionTilePosList[0], 
+                    isLastPlayAction: i == actionDataList.Count - 1);
+            else
+            {
+                yield return StartCoroutine(character.AttackAction(
+                    actionDataList[i].actionSkillName,
+                    actionDataList[i].actionType,
+                    actionDataList[i].actionTilePosList,
+                    i == actionDataList.Count - 1));
+            }
+
+            yield return new WaitForSeconds(0.3f);
         }
     }
     

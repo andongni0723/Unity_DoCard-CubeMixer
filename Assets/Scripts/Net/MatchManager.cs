@@ -16,6 +16,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using UnityEngine;
 using TMPro;
+#pragma warning disable CS0618 
 
 public class MatchManager : Singleton<MatchManager>
 {
@@ -85,7 +86,7 @@ public class MatchManager : Singleton<MatchManager>
             NetworkManager.Singleton.StartClient();
             return lobby;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Debug.Log("No Lobby can quick join");
             messageText.text = "No Lobby can quick join, creating new lobby...";

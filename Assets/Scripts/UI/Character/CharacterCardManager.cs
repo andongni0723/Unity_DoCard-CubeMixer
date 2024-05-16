@@ -46,7 +46,8 @@ public class CharacterCardManager : MonoBehaviour
             characterCard.bindingCharacterID = GenerateCharacterID(team, currentGenerateID);
             characterCard.characterDetails = character;
             characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.bindingCharacterID);
-            characterCard.InitialUpdateData();
+            
+            characterCard.InitialUpdateData(index == data.Count - 1); // Last character card turn on
 
             currentGenerateID++;
         }

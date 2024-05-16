@@ -45,9 +45,6 @@ public class SkillButtonManager : MonoBehaviour
             characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.ID); // TODO:
             characterCard.InitialUpdateData();
 
-            // Last skill button group turn on
-            if(i == data.Count - 1) 
-                EventHandler.CallCharacterCardPress(character, characterCard.ID);
             
             currentGenerateID++;
         }

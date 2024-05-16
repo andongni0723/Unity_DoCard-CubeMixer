@@ -16,7 +16,6 @@ public class DoneButton : MonoBehaviour
         
         button.onClick.AddListener(() =>
         {
-           
             EventHandler.CallStateCallback(GameState.ActionState);
             button.interactable = false;
         });

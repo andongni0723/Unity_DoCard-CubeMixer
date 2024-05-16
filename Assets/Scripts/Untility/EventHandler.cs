@@ -80,7 +80,12 @@ public class EventHandler
     {
         ChangeState?.Invoke(state);
     }
-
+    
+    public static Action<GameState> ChangeStateDone;
+    public static void CallChangeStateDone(GameState state)
+    {
+        ChangeStateDone?.Invoke(state);
+    }
     #endregion
 
 
@@ -98,10 +103,22 @@ public class EventHandler
         AttackRangeColor?.Invoke(tilePos, distance);
     }
 
-    public static Action CharacterActionEnd;
-    public static void CallCharacterActionEnd()
+    public static Action ButtonCallUseSkillEvent;
+    public static void CallButtonCallUseSkillEvent()
     {
-        CharacterActionEnd?.Invoke();
+        ButtonCallUseSkillEvent?.Invoke();
+    }
+
+    public static Action CharacterChooseTileRangeDone;
+    public static void CallCharacterChooseTileRangeDone()
+    {
+        CharacterChooseTileRangeDone?.Invoke();
+    }
+
+    public static Action<bool> CharacterActionEnd;
+    public static void CallCharacterActionEnd(bool isOwner)
+    {
+        CharacterActionEnd?.Invoke(isOwner);
     }
 
     public static Action UpdateCharacterActionData;
@@ -116,6 +133,11 @@ public class EventHandler
         CharacterBackToTurnStartPoint?.Invoke();
     }
 
+    public static Action LastPlayActionEnd;
+    public static void CallLastPlayActionEnd()
+    {
+        LastPlayActionEnd?.Invoke();
+    }
     #endregion
 
 

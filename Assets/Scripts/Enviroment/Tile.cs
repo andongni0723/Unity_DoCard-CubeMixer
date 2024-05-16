@@ -53,18 +53,19 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         EventHandler.TilePosAddManagerList += OnTilePosAddManagerList; // Initial Setting
 
         EventHandler.TileUpAnimation += OnTileUpAnimation; // Tile up animation
-        EventHandler.CharacterActionEnd += OnCharacterCancelMove; // Tile down animation
+        EventHandler.CharacterChooseTileRangeDone += TileDownAnimation; // Tile down animation
+        EventHandler.CharacterActionEnd += TileDownAnimation; // Tile down animation
         EventHandler.AttackRangeColor += OnAttackRangeColor; // Check and Set Material to Attack Range Color
     }
 
     private void OnDisable()
     {
         EventHandler.TilePosYStand -= OnTilePosYStand;
-        EventHandler.TilePosXStand += OnTilePosXStand;
+        EventHandler.TilePosXStand -= OnTilePosXStand;
 
         EventHandler.TilePosAddManagerList += OnTilePosAddManagerList;
         EventHandler.TileUpAnimation -= OnTileUpAnimation;
-        EventHandler.CharacterActionEnd -= OnCharacterCancelMove;
+        EventHandler.CharacterChooseTileRangeDone -= TileDownAnimation;
         EventHandler.AttackRangeColor -= OnAttackRangeColor;
     }
 
@@ -86,7 +87,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             EventHandler.CallAttackRangeColor(tilePosition, skillAttackRange);
     }
 
-    private void OnCharacterCancelMove()
+    private void TileDownAnimation(bool isOwner) => TileDownAnimation();
+    private void TileDownAnimation()
     {
         if (isStand)
         {
@@ -132,6 +134,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (isStand)
         {
+            Debug.Log($"Tile Clicked {tempCharacterWantToMove}");
             if (tempCharacterWantToMove != null)
                 tempCharacterWantToMove.TileReturnClickData(gameObject, tilePosition);
         }

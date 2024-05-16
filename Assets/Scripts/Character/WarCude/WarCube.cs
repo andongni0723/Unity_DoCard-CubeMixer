@@ -39,9 +39,8 @@ public class WarCube : Character
         // }
     }
 
-    public override IEnumerator AttackAction(string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList)
+    public override IEnumerator AttackAction(string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList, bool isLastPlayAction = false)
     {
-        // base.AttackAction(skillID,skillButtonType, skillTargetPosDataList);
         SkillActionStart();
         ResetLookAt();
         
@@ -64,10 +63,9 @@ public class WarCube : Character
                 Debug.LogError("The skill ID is not found.");
                 break;
         }
-        
-        // skillRotate.transform.rotation = quaternion.identity;
-        // skillTrail.transform.rotation = Quaternion.identity;
-        // SetLookAtForward();
-        yield return new WaitUntil(() => !isSkillPlaying);
+
+        yield return new WaitUntil(() => !isSkillPlaying); // wait skill play end
+        if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
+        EventHandler.CallCharacterActionEnd(characterManager.IsOwner);
     }
 }

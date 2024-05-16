@@ -47,9 +47,9 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator WaitAndStartGame()
     {
-        yield return new WaitForSeconds(1);
-        EventHandler.CallCharacterObjectGenerate();
         yield return new WaitForSeconds(0.5f);
+        EventHandler.CallCharacterObjectGenerate();
+        yield return new WaitForSeconds(0.3f);
         EventHandler.CallUIObjectGenerate();
     }
     

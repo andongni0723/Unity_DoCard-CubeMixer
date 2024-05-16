@@ -23,13 +23,11 @@ public class WaitPlayPrepareDone : MonoBehaviour
     private void WaitPlayer()
     {
         StartCoroutine(WaitAndStartGame());
-        
     }
 
     private IEnumerator WaitAndStartGame()
     {
         yield return new WaitForSeconds(waitTime);
         EventHandler.CallStateCallback(GameState.LoadPlayerInGame);
-        Debug.Log("UI K");
     }
 }

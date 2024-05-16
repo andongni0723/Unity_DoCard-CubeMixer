@@ -14,6 +14,7 @@ public class ActionState : IGameState
     {
         state = GameState.ActionState;
         HintPanelManager.Instance.CallHint("Start Action");
+        EventHandler.CallCharacterActionClear();
     }
 
     public void UpdateState()

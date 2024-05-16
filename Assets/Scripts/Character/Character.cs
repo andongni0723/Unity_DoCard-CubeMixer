@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
+#pragma warning disable CS4014 
 
 [Serializable]
 public class TileReturnData
@@ -67,41 +68,49 @@ public class Character : MonoBehaviour
     {
         EventHandler.CharacterActionClear += BackToTurnStartPoint; // character data back to turn start data
         EventHandler.CharacterBackToTurnStartPoint += BackToTurnStartPoint; // setting variable
-        EventHandler.CharacterActionEnd += OnCharacterActionEnd; // setting variable
+        EventHandler.CharacterChooseTileRangeDone += OnCharacterChooseTileRangeDone; // setting variable
+        EventHandler.ChangeStateDone += OnChangeStateDone; // check is Action state to update turn start data
     }
 
     private void OnDisable()
     {
         EventHandler.CharacterActionClear -= BackToTurnStartPoint;
-        EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
+        EventHandler.CharacterBackToTurnStartPoint -= BackToTurnStartPoint;
+        EventHandler.CharacterChooseTileRangeDone -= OnCharacterChooseTileRangeDone;
+        EventHandler.ChangeStateDone -= OnChangeStateDone; 
     }
 
     protected virtual void BackToTurnStartPoint()
-    {
+    { 
         MoveAction(turnStartGameData.tilePosition, 0);
         characterHealth.currentHealth = turnStartGameData.currentHealth;
         characterHealth.currentPower = turnStartGameData.currentHealth;
     }
 
-    private void OnCharacterActionEnd()
+    private void OnCharacterChooseTileRangeDone()
     {
         isTileReturn = false;
     }
-
+    
+    private void OnChangeStateDone(GameState newState)
+    {
+        if (newState == GameState.ActionState)
+        {
+            characterHealth.InitialUpdateDate(characterDetails.health, characterDetails.power);
+            turnStartGameData = new CharacterGameData(
+                characterDetails.health, 
+                characterDetails.power, 
+                characterHealth.currentHealth,
+                characterHealth.currentPower, 
+                tilePosition: characterTilePosition); 
+        }
+    }
     #endregion
 
     public void InitialUpdateData(string id)
     {
         // Setting variable
         this.id = id;
-        characterHealth.InitialUpdateDate(characterDetails.health, characterDetails.power);
-        turnStartGameData = new CharacterGameData(
-            characterDetails.health, 
-            characterDetails.power, 
-            characterHealth.currentHealth,
-            characterHealth.currentPower, 
-            tilePosition: characterTilePosition);
-        
         DetailsManager.Instance.NewCharacterDetails(this);
     }
 
@@ -118,6 +127,7 @@ public class Character : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(SkillExecuteAction(skillDetailsSo));
+        EventHandler.CallButtonCallUseSkillEvent();
     }
 
     protected virtual void SetTeamBodyMaterial()
@@ -179,12 +189,13 @@ public class Character : MonoBehaviour
     public virtual void SkillActionEnd()
     {
         isSkillPlaying = false;
-        Debug.Log("Skill Done");
     }
 
-    public virtual IEnumerator AttackAction
-        (string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList) {
-        Debug.Log("Parent");yield return null;}
+    public virtual IEnumerator AttackAction (string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList, bool isLastPlayAction = false) 
+    {
+        Debug.Log("Parent");
+        yield return null;
+    }
     
     
     // --------------- Game --------------- // 
@@ -205,22 +216,29 @@ public class Character : MonoBehaviour
                 break;
             
             case SkillButtonType.Move:
-                yield return CallTileStandAnimation(skillDetails, Vector2.zero, 
+                yield return CallTileStandAnimation(
+                    skillDetails, 
+                    Vector2.zero, 
                     new Vector2(skillDetails.moveRange, skillDetails.moveRange));
                 
                 yield return new WaitUntil(() => isTileReturn); // back the skill tile return data
-                yield return MoveAction(skillTileReturnDataList[0].tileGameObject, skillTileReturnDataList[0].targetTilePos);
-                EventHandler.CallCharacterActionEnd();
+                EventHandler.CallCharacterChooseTileRangeDone();
+                yield return MoveAction(
+                    skillTileReturnDataList[0].tileGameObject,
+                    skillTileReturnDataList[0].targetTilePos);
                 break;
             
             case SkillButtonType.Attack:
                 for (int i = 0; i < skillDetails.attackAimTime; i++)
                 {
-                    yield return CallTileStandAnimation(skillDetails, skillDetails.SkillAimDataList[i].skillAttackRange,
-                                  skillDetails.SkillAimDataList[i].skillCastRange, i == 0 ? 0.1f : 0f);
+                    yield return CallTileStandAnimation(
+                        skillDetails,
+                        skillDetails.SkillAimDataList[i].skillAttackRange, 
+                        skillDetails.SkillAimDataList[i].skillCastRange, i == 0 ? 0.1f : 0f);
                     
-                    yield return new WaitUntil(() => isTileReturn); 
-                    EventHandler.CallCharacterActionEnd();
+                    yield return new WaitUntil(() => isTileReturn);
+                    Debug.Log("isTileReturn is true");
+                    EventHandler.CallCharacterChooseTileRangeDone();
                 }
                 
                 var skillTargetPosList = 
@@ -228,7 +246,11 @@ public class Character : MonoBehaviour
                     .Select(data => new Vector2(data.targetTilePos.x, data.targetTilePos.y))
                     .ToList();
                 
-                StartCoroutine(AttackAction(skillDetails.skillID,skillDetails.skillType, skillTargetPosList));
+                StartCoroutine(AttackAction(
+                    skillDetails.skillID,
+                    skillDetails.skillType, 
+                    skillTargetPosList,
+                    true));
                 break;
         }
         
@@ -237,11 +259,11 @@ public class Character : MonoBehaviour
             AddCharacterActionData(ID, skillDetails, skillTileReturnDataList);
     }
 
-    public async UniTask MoveAction(Vector2 targetTilePos, float duration = 0.5f)
+    public async UniTask MoveAction(Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
     {
-        await MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos, duration);
+        await MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos, duration, isLastPlayAction);
     }
-    private async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos, float duration = 0.5f)
+    private async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
     {
         // Move Animation
         var position = tileGameObject.transform.position;
@@ -254,6 +276,8 @@ public class Character : MonoBehaviour
             });
 
         await UniTask.Yield(0); 
+        if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
+        EventHandler.CallCharacterActionEnd(characterManager.IsOwner);
     }
 
     private async UniTask CallTileStandAnimation(SkillDetailsSO data, Vector2 skillAttackRange, Vector2 maxStandDistance, float duration = 0.1f)

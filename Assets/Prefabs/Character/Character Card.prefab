@@ -113,9 +113,10 @@ MonoBehaviour:
   characterName: {fileID: 8094091414319505851}
   characterImage: {fileID: 3642231244342971352}
   characterHealthBar: {fileID: 3771062560238458614}
-  pageImageObj: {fileID: 3570316463622401942}
-  ID: 
+  cardObj: {fileID: 2306714528264781744}
+  bindingCharacterID: 
   characterDetails: {fileID: 0}
+  character: {fileID: 0}
 --- !u!1 &379329087679888085
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,7 +604,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7644383306275004506}
   m_Layer: 5
-  m_Name: Card Image
+  m_Name: Card Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

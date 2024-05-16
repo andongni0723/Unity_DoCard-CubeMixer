@@ -47,7 +47,7 @@ public class SkillButton : MonoBehaviour
         EventHandler.CharacterActionEnd -= OnCharacterCancelMove; // isOn to false
     }
 
-    private void OnCharacterCancelMove()
+    private void OnCharacterCancelMove(bool isOwner)
     {
         isOn = false;
     }
@@ -70,10 +70,10 @@ public class SkillButton : MonoBehaviour
     
     private void ClickAction()
     {
-        EventHandler.CallCharacterActionEnd();
+        // EventHandler.CallCharacterActionEnd(true);
         
         if(isOn)
-            EventHandler.CallCharacterActionEnd();
+            EventHandler.CallCharacterActionEnd(true); // interrupt the executing action
         else
         {
             isOn = true;            
