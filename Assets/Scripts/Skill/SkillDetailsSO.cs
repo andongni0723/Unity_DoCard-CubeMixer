@@ -24,6 +24,7 @@ public class SkillDetailsSO : ScriptableObject
     public string skillDisplayName;
     public string skillID;
     public string skillDescription;
+    public int skillNeedPower;
     public bool isSkillAreaCanEnemyOn;
     
     [Space(10)][EnumToggleButtons]

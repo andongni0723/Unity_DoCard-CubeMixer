@@ -135,7 +135,7 @@ public class CharacterManager : NetworkBehaviour
             
             // Execute Move or Skill
             if(actionDataList[i].actionType == SkillButtonType.Move)
-                yield return character.MoveAction(
+                 character.MoveAction(
                     actionDataList[i].actionTilePosList[0], 
                     isLastPlayAction: i == actionDataList.Count - 1);
             else

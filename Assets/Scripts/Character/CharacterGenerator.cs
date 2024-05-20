@@ -133,22 +133,22 @@ public class CharacterGenerator : NetworkBehaviour
             
             
             // Generate
-            Character characterObj = Instantiate(character.characterPrefab, 
+            Character newCharacter = Instantiate(character.characterPrefab, 
                 tileTransform.position + Vector3.up * 0.1f, Quaternion.identity).GetComponent<Character>();
             
             // New Object Setting
-            characterObj.transform.parent = tileTransform;
-            characterObj.characterTilePosition = startSpawnPosition;
-            characterObj.characterManager = characterManager;
-            characterObj.characterDetails = character;
-            characterObj.InitialUpdateData(GenerateCharacterID(team, currentGenerateID)); // TODO: add character to save pos and load pos
-            characterObj.SetTeam(team);
+            newCharacter.transform.parent = tileTransform;
+            newCharacter.characterTilePosition = startSpawnPosition;
+            newCharacter.characterManager = characterManager;
+            newCharacter.characterDetails = character;
+            newCharacter.InitialUpdateData(GenerateCharacterID(team, currentGenerateID)); // TODO: add character to save pos and load pos
+            newCharacter.SetTeam(team);
             
             // currentIDUpdateServerRpc();
             
             // Save Data
             characterManager.SaveData(character.characterName,
-                new CharacterGameData(character.health,character.power, character.health, character.power, characterObj.gameObject));
+                new CharacterGameData(character.health,character.power, character.health, character.power, newCharacter.gameObject));
             
             // Set spawn position
             startSpawnPosition += Vector2.right;

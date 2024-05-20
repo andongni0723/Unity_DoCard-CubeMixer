@@ -16,6 +16,7 @@ MonoBehaviour:
   characterName: "\u8D77\u6E90\u65B9\u584A"
   characterDescription: 
   health: 50
+  power: 10
   characterPrefab: {fileID: 6115863782023368708, guid: 2977264b873134056930db3887499ef5,
     type: 3}
   skillButtonsGroupPrefab: {fileID: 8016292836242377493, guid: ea247c130ff9345a8ab7bdb8efa81c9e,

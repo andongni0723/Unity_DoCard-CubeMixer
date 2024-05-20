@@ -134,7 +134,6 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (isStand)
         {
-            Debug.Log($"Tile Clicked {tempCharacterWantToMove}");
             if (tempCharacterWantToMove != null)
                 tempCharacterWantToMove.TileReturnClickData(gameObject, tilePosition);
         }

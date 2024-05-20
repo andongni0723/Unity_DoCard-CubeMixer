@@ -10,13 +10,24 @@ public class CharacterHealth : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public int maxPower;
-    public int currentPower;
-    
+    [SerializeField]public int currentPower { get; [SerializeField]private set; }
+
     public void InitialUpdateDate(int maxHealth, int maxPower)
     {
         this.maxHealth = maxHealth;
         this.maxPower = maxPower;
         currentHealth = maxHealth;
-        currentPower = 0;
+        currentPower = maxPower;
     }
+    
+    public void SetPower(int target)
+    {
+        currentPower = target;
+    }
+    
+    public void PowerBackToStart()
+    {
+        currentPower = maxPower;
+    }
+    
 }

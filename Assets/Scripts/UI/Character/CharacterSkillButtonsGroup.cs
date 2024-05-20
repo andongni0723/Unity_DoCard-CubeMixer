@@ -38,15 +38,19 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
         EventHandler.CharacterCardPress += OnCharacterCardPress; // toggle on/off
         EventHandler.CharacterObjectGeneratedDone += InitialUpdateData; // initial
         EventHandler.TurnCharacterStartAction += CloseButtonActive; // close button
-        EventHandler.LastPlayActionEnd += OpenButtonActive; // open button if is owner call
+        EventHandler.LastPlayActionEnd += OnLastPlayActionEnd; // open button if is  Action state
+        EventHandler.ChangeStateDone += OnChangeStateDone; // open button if is  Action state
     }
+    
 
     private void OnDisable()
     {
         EventHandler.CharacterCardPress -= OnCharacterCardPress;
         EventHandler.CharacterObjectGeneratedDone -= InitialUpdateData;
         EventHandler.TurnCharacterStartAction -= CloseButtonActive;
-        EventHandler.LastPlayActionEnd -= OpenButtonActive; // close button
+        EventHandler.LastPlayActionEnd -= OnLastPlayActionEnd;
+        EventHandler.ChangeStateDone -= OnChangeStateDone;
+
     }
 
     private void OnCharacterCardPress(CharacterDetailsSO data, string ID)
@@ -65,6 +69,17 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
         buttonsObj.SetActive(false);
 
         toggle.isOn = true;
+    }
+    private void OnLastPlayActionEnd()
+    {
+        if(GameManager.Instance.gameStateManager.currentState == GameState.ActionState)
+            OpenButtonActive();
+    }
+    
+    private void OnChangeStateDone(GameState newGameState)
+    {
+        if(newGameState == GameState.ActionState)
+            OpenButtonActive();
     }
 
     private void OpenButtonActive()

@@ -17,6 +17,7 @@ MonoBehaviour:
   skillDisplayName: "\u6280\u80FD2"
   skillID: 002-trail
   skillDescription: 
+  skillNeedPower: 3
   isSkillAreaCanEnemyOn: 1
   skillType: 2
   moveRange: 0

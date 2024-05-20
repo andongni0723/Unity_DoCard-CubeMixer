@@ -53,31 +53,27 @@ public class SkillButton : MonoBehaviour
     }
 
 
-    // Remember to add the method to CharacterCard in the inspector 
-    public void ParentClickMoveAnimation()
-    {
-        transform.SetParent(handPanelTransform);
-        transform.SetSiblingIndex(parentManager.transform.GetSiblingIndex());
-        backgroundImage.gameObject.SetActive(true);
-        
-        // Animation
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(backgroundImage.DOFade(1, 0.5f).From(0)); // color
-        sequence.Join(backgroundImage.transform.DOMove(transform.position, 0.5f)
-            .From(parentManager.transform.position)); // move
-
-    }
-    
+    // // Remember to add the method to CharacterCard in the inspector 
+    // public void ParentClickMoveAnimation()
+    // {
+    //     transform.SetParent(handPanelTransform);
+    //     transform.SetSiblingIndex(parentManager.transform.GetSiblingIndex());
+    //     backgroundImage.gameObject.SetActive(true);
+    //     
+    //     // Animation
+    //     Sequence sequence = DOTween.Sequence();
+    //     sequence.Append(backgroundImage.DOFade(1, 0.5f).From(0)); // color
+    //     sequence.Join(backgroundImage.transform.DOMove(transform.position, 0.5f)
+    //         .From(parentManager.transform.position)); // move
+    //
+    // }
+    //
     private void ClickAction()
     {
-        // EventHandler.CallCharacterActionEnd(true);
+        EventHandler.CallCharacterActionEnd(true);
         
-        if(isOn)
-            EventHandler.CallCharacterActionEnd(true); // interrupt the executing action
-        else
-        {
-            isOn = true;            
-            parentManager.character.ButtonCallUseSkill(skillDetails);
-        }
+        if(isOn) return; // Prevent double click
+        isOn = true;            
+        parentManager.character.ButtonCallUseSkill(skillDetails); 
     }
 }

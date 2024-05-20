@@ -31,7 +31,7 @@ public class Character : MonoBehaviour
     public MeshRenderer body;
     public CharacterManager characterManager;
     public CharacterHealth characterHealth;
-    public PowerPanel powerPanel;
+    public CharacterPowerManager powerManager;
     
     [Space(15)]
     public Material blueBodyMaterial;
@@ -59,32 +59,51 @@ public class Character : MonoBehaviour
     {
         mainCamera = Camera.main;
         characterHealth = GetComponent<CharacterHealth>();
-        powerPanel ??= transform.GetChild(0).GetChild(0).GetComponent<PowerPanel>();
+        powerManager = GetComponent<CharacterPowerManager>();
+        powerManager.characterHealth = characterHealth;
+    }
+
+    private void Start()
+    {
+        characterHealth.InitialUpdateDate(characterDetails.health, characterDetails.power);
     }
 
     #region Event
 
     private void OnEnable()
     {
-        EventHandler.CharacterActionClear += BackToTurnStartPoint; // character data back to turn start data
+        EventHandler.CharacterActionClear += OnCharacterActionClear; // character data back to turn start data
         EventHandler.CharacterBackToTurnStartPoint += BackToTurnStartPoint; // setting variable
         EventHandler.CharacterChooseTileRangeDone += OnCharacterChooseTileRangeDone; // setting variable
         EventHandler.ChangeStateDone += OnChangeStateDone; // check is Action state to update turn start data
+        EventHandler.CharacterActionEnd += OnCharacterActionEnd; // cancel ready power
+
     }
 
     private void OnDisable()
     {
-        EventHandler.CharacterActionClear -= BackToTurnStartPoint;
+        EventHandler.CharacterActionClear -= OnCharacterActionClear;
         EventHandler.CharacterBackToTurnStartPoint -= BackToTurnStartPoint;
         EventHandler.CharacterChooseTileRangeDone -= OnCharacterChooseTileRangeDone;
         EventHandler.ChangeStateDone -= OnChangeStateDone; 
+        EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
     }
 
+    private void OnCharacterActionEnd(bool isOwner)
+    {
+        if(isOwner) powerManager.CancelReadyPower();
+    }
+
+    private void OnCharacterActionClear()
+    {
+        MoveAction(turnStartGameData.tilePosition, 0);
+        characterHealth.currentHealth = turnStartGameData.currentHealth;
+        characterHealth.SetPower(turnStartGameData.currentPower); 
+    } 
     protected virtual void BackToTurnStartPoint()
     { 
         MoveAction(turnStartGameData.tilePosition, 0);
         characterHealth.currentHealth = turnStartGameData.currentHealth;
-        characterHealth.currentPower = turnStartGameData.currentHealth;
     }
 
     private void OnCharacterChooseTileRangeDone()
@@ -96,7 +115,8 @@ public class Character : MonoBehaviour
     {
         if (newState == GameState.ActionState)
         {
-            characterHealth.InitialUpdateDate(characterDetails.health, characterDetails.power);
+            characterHealth.PowerBackToStart();
+            powerManager.powerPanel.InitialDisplay(characterDetails.power);
             turnStartGameData = new CharacterGameData(
                 characterDetails.health, 
                 characterDetails.power, 
@@ -126,8 +146,15 @@ public class Character : MonoBehaviour
     public void ButtonCallUseSkill(SkillDetailsSO skillDetailsSo)
     {
         StopAllCoroutines();
-        StartCoroutine(SkillExecuteAction(skillDetailsSo));
-        EventHandler.CallButtonCallUseSkillEvent();
+        if (powerManager.CheckPowerEnough(skillDetailsSo.skillNeedPower))
+        {
+            StartCoroutine(SkillExecuteAction(skillDetailsSo));
+            EventHandler.CallButtonCallUseSkillEvent(); 
+        }
+        else
+        {
+            HintPanelManager.Instance.CallError("Not enough power!");
+        }
     }
 
     protected virtual void SetTeamBodyMaterial()
@@ -223,7 +250,7 @@ public class Character : MonoBehaviour
                 
                 yield return new WaitUntil(() => isTileReturn); // back the skill tile return data
                 EventHandler.CallCharacterChooseTileRangeDone();
-                yield return MoveAction(
+                MoveAction(
                     skillTileReturnDataList[0].tileGameObject,
                     skillTileReturnDataList[0].targetTilePos);
                 break;
@@ -237,7 +264,6 @@ public class Character : MonoBehaviour
                         skillDetails.SkillAimDataList[i].skillCastRange, i == 0 ? 0.1f : 0f);
                     
                     yield return new WaitUntil(() => isTileReturn);
-                    Debug.Log("isTileReturn is true");
                     EventHandler.CallCharacterChooseTileRangeDone();
                 }
                 
@@ -254,16 +280,18 @@ public class Character : MonoBehaviour
                 break;
         }
         
+        powerManager.UsePower(skillDetails.skillNeedPower);
+
         // Record the character action
         characterManager.characterActionRecord.
             AddCharacterActionData(ID, skillDetails, skillTileReturnDataList);
     }
 
-    public async UniTask MoveAction(Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
-    {
-        await MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos, duration, isLastPlayAction);
+    public void MoveAction(Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
+    { 
+        MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos, duration, isLastPlayAction);
     }
-    private async UniTask MoveAction(GameObject tileGameObject, Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
+    private void MoveAction(GameObject tileGameObject, Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
     {
         // Move Animation
         var position = tileGameObject.transform.position;
@@ -273,11 +301,10 @@ public class Character : MonoBehaviour
                 // Update Data
                 characterTilePosition = targetTilePos;
                 transform.SetParent(tileGameObject.transform);  
+                
+                if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
+                EventHandler.CallCharacterActionEnd(characterManager.IsOwner); 
             });
-
-        await UniTask.Yield(0); 
-        if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
-        EventHandler.CallCharacterActionEnd(characterManager.IsOwner);
     }
 
     private async UniTask CallTileStandAnimation(SkillDetailsSO data, Vector2 skillAttackRange, Vector2 maxStandDistance, float duration = 0.1f)

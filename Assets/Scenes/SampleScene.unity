@@ -1336,7 +1336,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &340631853
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19655,7 +19655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1311202642
 RectTransform:
   m_ObjectHideFlags: 0
@@ -42508,7 +42508,7 @@ MonoBehaviour:
   body: {fileID: 0}
   characterManager: {fileID: 0}
   characterHealth: {fileID: 0}
-  powerPanel: {fileID: 0}
+  powerManager: {fileID: 0}
   blueBodyMaterial: {fileID: 0}
   id: 0
   characterDetails: {fileID: 0}
@@ -42551,7 +42551,6 @@ MonoBehaviour:
   maxHealth: 0
   currentHealth: 0
   maxPower: 0
-  currentPower: 0
 --- !u!4 &2042607618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2366105369947334816, guid: d40753f09d1ad43b58ea872b1fd504c0,

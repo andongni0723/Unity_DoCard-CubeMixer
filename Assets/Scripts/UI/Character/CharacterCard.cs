@@ -36,13 +36,27 @@ public class CharacterCard : MonoBehaviour
     private void OnEnable()
     {
         EventHandler.TurnCharacterStartAction += CloseActive; // close
-        EventHandler.LastPlayActionEnd += OpenActive; // open
+        EventHandler.LastPlayActionEnd += OnLastPlayActionEnd; // open if is  Action state
+        EventHandler.ChangeStateDone += OnChangeStateDone; // open if is  Action state
     }
-
+    
     private void OnDisable()
     {
         EventHandler.TurnCharacterStartAction -= CloseActive;
-        EventHandler.LastPlayActionEnd -= OpenActive;
+        EventHandler.LastPlayActionEnd -= OnLastPlayActionEnd;
+        EventHandler.ChangeStateDone -= OnChangeStateDone;
+    }
+
+    private void OnChangeStateDone(GameState newState)
+    {
+        if(newState == GameState.ActionState)
+            OpenActive();
+    }
+
+    private void OnLastPlayActionEnd()
+    {
+        if(GameManager.Instance.gameStateManager.currentState == GameState.ActionState)
+            OpenActive();
     }
 
     private void CloseActive()

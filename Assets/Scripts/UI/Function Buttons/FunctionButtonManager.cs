@@ -19,7 +19,8 @@ public class FunctionButtonManager : MonoBehaviour
         EventHandler.CharacterActionEnd += OnCharacterActionEnd; // Check is action state to set button enable
         EventHandler.TurnCharacterStartAction += CloseAllButtonEnable;
         EventHandler.ButtonCallUseSkillEvent += CloseAllButtonEnable; // set button enable
-        EventHandler.LastPlayActionEnd += OpenAllButtonEnable; // set button enable
+        EventHandler.LastPlayActionEnd += OnLastPlayActionEnd; // set button enable
+        EventHandler.ChangeStateDone += OnChangeStateDone; // set button enable
     }
 
     private void OnDisable()
@@ -27,12 +28,25 @@ public class FunctionButtonManager : MonoBehaviour
         EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
         EventHandler.TurnCharacterStartAction -= CloseAllButtonEnable;
         EventHandler.ButtonCallUseSkillEvent -= CloseAllButtonEnable;
-        EventHandler.LastPlayActionEnd -= OpenAllButtonEnable;
+        EventHandler.LastPlayActionEnd -= OnLastPlayActionEnd;
+        EventHandler.ChangeStateDone -= OnChangeStateDone;
     }
 
     private void OnCharacterActionEnd(bool isOwner)
     {
         if(isOwner && GameManager.Instance.gameStateManager.currentState == GameState.ActionState) 
+            OpenAllButtonEnable();
+    }
+
+    private void OnLastPlayActionEnd()
+    {
+        if(GameManager.Instance.gameStateManager.currentState == GameState.ActionState)
+            OpenAllButtonEnable();
+    }
+
+    private void OnChangeStateDone(GameState newGameState)
+    {
+        if(newGameState == GameState.ActionState)
             OpenAllButtonEnable();
     }
 
