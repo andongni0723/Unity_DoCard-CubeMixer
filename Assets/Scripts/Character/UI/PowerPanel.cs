@@ -116,7 +116,7 @@ public class PowerPanel : MonoBehaviour
     
     private void LateUpdate()
     {
-        transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
+        // transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
 
         //TODO: Fix the color fade animation
         // while (isColorFade)

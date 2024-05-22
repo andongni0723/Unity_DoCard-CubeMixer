@@ -21,6 +21,7 @@ MonoBehaviour:
   isSkillAreaCanEnemyOn: 1
   skillType: 2
   moveRange: 0
+  damage: 8
   attackAimTime: 1
   SkillAimDataList:
   - skillAttackRange: {x: 3, y: 3}

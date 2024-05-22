@@ -50,6 +50,7 @@ public class Character : MonoBehaviour
     [Header("Debug")] 
     public Team team;
     public Vector2 characterTilePosition;
+    public Vector3 bodyStartPos;
     private CharacterGameData turnStartGameData;
     private Camera mainCamera;
     private bool isTileReturn = false;
@@ -61,6 +62,8 @@ public class Character : MonoBehaviour
         characterHealth = GetComponent<CharacterHealth>();
         powerManager = GetComponent<CharacterPowerManager>();
         powerManager.characterHealth = characterHealth;
+        
+        bodyStartPos = body.transform.localPosition;
     }
 
     private void Start()
@@ -97,13 +100,13 @@ public class Character : MonoBehaviour
     private void OnCharacterActionClear()
     {
         MoveAction(turnStartGameData.tilePosition, 0);
-        characterHealth.currentHealth = turnStartGameData.currentHealth;
+        characterHealth.SetHealth(turnStartGameData.currentHealth);
         characterHealth.SetPower(turnStartGameData.currentPower); 
     } 
     protected virtual void BackToTurnStartPoint()
     { 
         MoveAction(turnStartGameData.tilePosition, 0);
-        characterHealth.currentHealth = turnStartGameData.currentHealth;
+        characterHealth.SetHealth(turnStartGameData.currentHealth);
     }
 
     private void OnCharacterChooseTileRangeDone()
@@ -142,6 +145,16 @@ public class Character : MonoBehaviour
     }
     
     // --------------- Tools --------------- //
+
+    public void HitAnimation()
+    {
+        body.transform.DOPunchPosition(Vector3.forward * 0.3f, 0.5f)
+            .OnComplete(BodyResetPosition);
+    }
+    public void BodyResetPosition()
+    {
+        body.transform.localPosition = bodyStartPos;
+    }
     
     public void ButtonCallUseSkill(SkillDetailsSO skillDetailsSo)
     {
@@ -179,6 +192,7 @@ public class Character : MonoBehaviour
     /// <returns>the object rotate value</returns>
     protected int UseSkillTargetPosToRotateCharacter(Vector2 skillTargetPosition)
     {
+        Debug.Log("skillTargetPosition: " + skillTargetPosition + " characterTilePosition: " + characterTilePosition);
         Vector2 vector = skillTargetPosition - characterTilePosition;
         
         int angle = (int)(Mathf.Atan2(vector.y, vector.x) * Mathf.Rad2Deg) - 90; // get angle
@@ -220,8 +234,7 @@ public class Character : MonoBehaviour
 
     public virtual IEnumerator AttackAction (string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList, bool isLastPlayAction = false) 
     {
-        Debug.Log("Parent");
-        yield return null;
+        yield return null; // Override by child
     }
     
     
@@ -295,11 +308,12 @@ public class Character : MonoBehaviour
     {
         // Move Animation
         var position = tileGameObject.transform.position;
+        characterTilePosition = targetTilePos;
         transform.DOMove(new Vector3(position.x, 0.1f, position.z), duration)
             .OnComplete(() =>
             {
                 // Update Data
-                characterTilePosition = targetTilePos;
+                // characterTilePosition = targetTilePos;
                 transform.SetParent(tileGameObject.transform);  
                 
                 if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();

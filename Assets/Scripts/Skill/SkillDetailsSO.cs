@@ -33,6 +33,9 @@ public class SkillDetailsSO : ScriptableObject
     [ShowIf("skillType", SkillButtonType.Move)]
     [Range(0, 20)]public int moveRange;
 
+    [ShowIf("skillType", SkillButtonType.Attack)]
+    public int damage;
+    
     [ShowIf("skillType", SkillButtonType.Attack)] [Min(1)]
     public int attackAimTime;
 

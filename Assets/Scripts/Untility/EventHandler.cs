@@ -138,6 +138,17 @@ public class EventHandler
     {
         LastPlayActionEnd?.Invoke();
     }
+
+    public static Action<Character, int, int> HealthChange;
+    public static void CallHealthChange(Character character, int newValue, int maxHealth)
+    {
+        HealthChange?.Invoke(character, newValue, maxHealth);
+    }
+    public static Action<Character, int, int> PowerChange;
+    public static void CallPowerChange(Character character, int newValue, int maxPower)
+    {
+        PowerChange?.Invoke(character, newValue, maxPower);
+    }
     #endregion
 
 

@@ -731,7 +731,7 @@ MonoBehaviour:
   panel: {fileID: 340631852}
   messageText: {fileID: 1848231357}
   networkStatusText: {fileID: 1597633655}
-  maxPlayers: 1
+  maxPlayers: 2
 --- !u!114 &218160119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9254,7 +9254,6 @@ GameObject:
   - component: {fileID: 1129412373}
   - component: {fileID: 1129412372}
   - component: {fileID: 1129412371}
-  - component: {fileID: 1129412374}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -9344,34 +9343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1129412374
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1129412369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 418e42c7d0405cc48a7b83f63ea53bb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Path: {fileID: 0}
-  m_PathPosition: 0
-  m_PositionUnits: 0
-  m_PathOffset: {x: 0, y: 0, z: 0}
-  m_XDamping: 0
-  m_YDamping: 0
-  m_ZDamping: 1
-  m_CameraUp: 0
-  m_PitchDamping: 0
-  m_YawDamping: 0
-  m_RollDamping: 0
-  m_AutoDolly:
-    m_Enabled: 0
-    m_PositionOffset: 0
-    m_SearchRadius: 2
-    m_SearchResolution: 5
 --- !u!1 &1135379180
 GameObject:
   m_ObjectHideFlags: 0
@@ -14618,7 +14589,6 @@ GameObject:
   - component: {fileID: 1244619708}
   - component: {fileID: 1244619707}
   - component: {fileID: 1244619706}
-  - component: {fileID: 1244619709}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -14708,34 +14678,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1244619709
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1244619704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 418e42c7d0405cc48a7b83f63ea53bb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Path: {fileID: 0}
-  m_PathPosition: 0
-  m_PositionUnits: 0
-  m_PathOffset: {x: 0, y: 0, z: 0}
-  m_XDamping: 0
-  m_YDamping: 0
-  m_ZDamping: 1
-  m_CameraUp: 0
-  m_PitchDamping: 0
-  m_YawDamping: 0
-  m_RollDamping: 0
-  m_AutoDolly:
-    m_Enabled: 0
-    m_PositionOffset: 0
-    m_SearchRadius: 2
-    m_SearchResolution: 5
 --- !u!1 &1249826388
 GameObject:
   m_ObjectHideFlags: 0
@@ -42517,6 +42459,7 @@ MonoBehaviour:
   isSkillPlaying: 0
   team: 0
   characterTilePosition: {x: 4, y: 12}
+  bodyStartPos: {x: 0, y: 0, z: 0}
   skillTileReturnDataList: []
 --- !u!4 &2025048331
 Transform:
@@ -42548,8 +42491,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d6d6d2b08694cdba363c3d679b0f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hurtUI: {fileID: 0}
+  character: {fileID: 0}
   maxHealth: 0
-  currentHealth: 0
   maxPower: 0
 --- !u!4 &2042607618 stripped
 Transform:
