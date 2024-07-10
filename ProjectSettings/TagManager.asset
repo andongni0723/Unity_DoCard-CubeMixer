@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Character
   - Attacker
+  - Plane
   layers:
   - Default
   - TransparentFX

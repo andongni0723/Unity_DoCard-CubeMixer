@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,8 +13,8 @@ public class GameManager : Singleton<GameManager>
     public GameStateManager gameStateManager;
     
     [Space(15)]
-    public Camera redMainCamera;
-    public Camera blueMainCamera;
+    public CinemachineVirtualCamera redMainCamera;
+    public CinemachineVirtualCamera blueMainCamera;
     
     
     [Header("Settings")]
@@ -53,6 +54,8 @@ public class GameManager : Singleton<GameManager>
         EventHandler.CallUIObjectGenerate();
     }
     
+    
+    // Tools
     public void SetSelfCharacterManager(CharacterManager characterManager)
     {
         selfCharacterManager = characterManager;
@@ -61,4 +64,9 @@ public class GameManager : Singleton<GameManager>
     {
         enemyCharacterManager = characterManager;
     }
+    
+    public CameraController GetSelfCameraController()
+    {
+        return selfTeam == Team.Red ? redMainCamera.GetComponent<CameraController>() : blueMainCamera.GetComponent<CameraController>();
+    } 
 }
