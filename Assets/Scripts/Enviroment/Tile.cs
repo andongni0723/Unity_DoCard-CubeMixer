@@ -117,7 +117,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void OnPointerEnter(PointerEventData eventData)
     {
         EventHandler.CallReturnMouseHitTilePosition(tilePosition);
-     
+
+        Debug.Log("Mouse");
         isMouseHit = true;
         if (isStand)
             EventHandler.CallAttackRangeColor(tilePosition, tempCharacterAttackRangeDistance);

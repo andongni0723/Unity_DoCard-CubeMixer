@@ -109,9 +109,9 @@ MonoBehaviour:
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: -1730
+    x: -1731
     y: 1811
-    width: 1548
+    width: 1549
     height: 2022
 --- !u!114 &8926484042661617879
 MonoBehaviour:
@@ -4446,7 +4446,7 @@ MonoBehaviour:
   uvMode: 0
   flipbookLayout: 0
   useSoftParticle: 0
-  vfxSystemSortPriority: 5
+  vfxSystemSortPriority: 1
   sort: 0
   sortMode: 0
   revertSorting: 0
@@ -4492,7 +4492,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 0.046
+      m_SerializableObject: 0.039
     m_Space: -1
   m_Property:
     name: _Amount
@@ -4698,7 +4698,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":4.400000095367432,"y":0.8999999761581421}'
+      m_SerializableObject: '{"x":4.920000076293945,"y":0.7699999809265137}'
     m_Space: -1
   m_Property:
     name: _Tilling
@@ -4934,7 +4934,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.UInt32, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 4294967295
+      m_SerializableObject: 4026531839
     m_Space: -1
   m_Property:
     name: subMeshMask
