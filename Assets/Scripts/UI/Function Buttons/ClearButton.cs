@@ -18,6 +18,7 @@ public class ClearButton : MonoBehaviour
             // HintPanelManager.Instance.CallHint("Turn Start");
             HintPanelManager.Instance.CallChooseBox("Are you sure you want to clear all actions?",
                 EventHandler.CallCharacterActionClear);
+            FunctionButtonManager.Instance.CallButtonDisableEvent(ButtonCode.ClearButton);
         });
     }
 }

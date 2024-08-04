@@ -162,6 +162,7 @@ public class Character : MonoBehaviour
         if (powerManager.CheckPowerEnough(skillDetailsSo.skillNeedPower))
         {
             StartCoroutine(SkillExecuteAction(skillDetailsSo));
+            FunctionButtonManager.Instance.CallButtonDisableEvent(ButtonCode.CharacterAction);
             EventHandler.CallButtonCallUseSkillEvent(); 
         }
         else
@@ -232,9 +233,20 @@ public class Character : MonoBehaviour
         isSkillPlaying = false;
     }
 
+    public virtual void CallCameraShake()
+    {
+        CameraShake.Instance.Shake(2, 0.2f); 
+    }
+
     public virtual IEnumerator AttackAction (string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList, bool isLastPlayAction = false) 
     {
-        yield return null; // Override by child
+        // Override by child, Write the skill action
+
+        
+        // Wait skill play end
+        yield return new WaitUntil(() => !isSkillPlaying); // wait skill play end
+        if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
+        EventHandler.CallCharacterActionEnd(characterManager.IsOwner);
     }
     
     
@@ -289,6 +301,18 @@ public class Character : MonoBehaviour
                     skillDetails.skillID,
                     skillDetails.skillType, 
                     skillTargetPosList,
+                    true));
+                break;
+            
+            case SkillButtonType.Skill:
+                yield return CallTileStandAnimation(skillDetails, Vector2.zero, Vector2.one);
+                yield return new WaitUntil(() => isTileReturn);
+                EventHandler.CallCharacterChooseTileRangeDone();
+                
+                StartCoroutine(AttackAction(
+                    skillDetails.skillID,
+                    skillDetails.skillType, 
+                    new List<Vector2>() { Vector2.zero },
                     true));
                 break;
         }

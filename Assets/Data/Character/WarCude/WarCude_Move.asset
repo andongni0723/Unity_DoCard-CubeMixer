@@ -17,9 +17,10 @@ MonoBehaviour:
   skillDisplayName: "\u79FB\u52D5"
   skillID: move
   skillDescription: "\u79FB\u52D53\u683C"
-  skillNeedPower: 1
+  skillNeedPower: 5
   isSkillAreaCanEnemyOn: 0
   skillType: 1
   moveRange: 3
+  damage: 0
   attackAimTime: 0
   SkillAimDataList: []

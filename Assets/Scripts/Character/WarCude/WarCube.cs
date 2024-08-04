@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using Sirenix.Serialization;
 using Unity.Mathematics;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -10,6 +11,7 @@ using UnityEngine.Timeline;
 public class WarCube : Character
 {
     [Header("Skill Object")] 
+    public Animator cameraAnimator;
     public List<GameObject> redSwordVFXList;
     public List<GameObject> blueSwordVFXList;
     public List<MeshRenderer> skillCubeList;
@@ -23,6 +25,18 @@ public class WarCube : Character
     {
         base.SetTeamBodyMaterial();
         
+        // set skill light world binding "camera" to cameraAnimator
+        cameraAnimator = GameManager.Instance.GetSelfCameraController().GetComponentInChildren<Animator>();
+        using var enumerator = skillLightWorld.playableAsset.outputs.GetEnumerator();
+        int i = 0;
+        while (enumerator.MoveNext())
+        {
+            Object currentKey = enumerator.Current.sourceObject;
+            if (currentKey.name == "camera")
+                skillLightWorld.SetGenericBinding(currentKey, cameraAnimator);
+        }
+        
+        // set different team body material
         if (team == Team.Blue)
         {
             foreach (var meshRenderer in skillCubeList)
@@ -32,11 +46,12 @@ public class WarCube : Character
         // set different team sword vfx don't show
         foreach (var swordVFX in team == Team.Red ? blueSwordVFXList : redSwordVFXList)
             swordVFX.SetActive(false);
+    }
 
-        // foreach (var clip in swordVFXClipList)
-        // {
-        //     // clip.animationClip.
-        // }
+    public override void CallCameraShake()
+    {
+        // light world skill camera shake
+        CameraShake.Instance.Shake(8, 5, 3.5f);
     }
 
     public override IEnumerator AttackAction(string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList, bool isLastPlayAction = false)
@@ -55,6 +70,9 @@ public class WarCube : Character
                 skillTrail.Play();
                 break;
             case "003-light-world":
+                skillLightWorld.transform.position = 
+                    GridManager.Instance.GetTileWithTilePos(skillTargetPosDataList[0]).transform.position;
+                skillLightWorld.Play();
                 break;
             case "FIN-to-dark":
                 break;
@@ -64,8 +82,6 @@ public class WarCube : Character
                 break;
         }
 
-        yield return new WaitUntil(() => !isSkillPlaying); // wait skill play end
-        if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
-        EventHandler.CallCharacterActionEnd(characterManager.IsOwner);
+        yield return base.AttackAction(skillID, skillButtonType, skillTargetPosDataList, isLastPlayAction);
     }
 }

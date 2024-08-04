@@ -86,6 +86,12 @@ public class EventHandler
     {
         ChangeStateDone?.Invoke(state);
     }
+    
+    public static Action HitPanelAnyButtonPress;
+    public static void CallHitPanelAnyButtonPress()
+    {
+        HitPanelAnyButtonPress?.Invoke();
+    }
     #endregion
 
 
@@ -137,6 +143,12 @@ public class EventHandler
     public static void CallLastPlayActionEnd()
     {
         LastPlayActionEnd?.Invoke();
+    }
+    
+    public static Action SelfTeamCharacterActionEnd;
+    public static void CallSelfTeamCharacterActionEnd()
+    {
+        SelfTeamCharacterActionEnd?.Invoke();
     }
 
     public static Action<Character, int, int> HealthChange;

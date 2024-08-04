@@ -39,11 +39,6 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         mainCamera = Camera.main;
     }
 
-    private void OnValidate()
-    {
-        // tilePosition = new Vector2(transform.GetSiblingIndex(), transform.parent.GetSiblingIndex());
-    }
-
     #region Event
 
     private void OnEnable()
@@ -118,12 +113,9 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         EventHandler.CallReturnMouseHitTilePosition(tilePosition);
 
-        Debug.Log("Mouse");
         isMouseHit = true;
         if (isStand)
             EventHandler.CallAttackRangeColor(tilePosition, tempCharacterAttackRangeDistance);
-
-        // Debug.Log(tempCharacterAttackRangeDistance.x + " " + tempCharacterAttackRangeDistance.y);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -145,7 +137,6 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void Update()
     {
         UpdateTileColor();
-        // TODO: Fix this , the skill direction is wrong
     }
 
     private void UpdateTileColor()

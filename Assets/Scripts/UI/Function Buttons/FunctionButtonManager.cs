@@ -4,7 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FunctionButtonManager : MonoBehaviour
+public enum ButtonCode
+{
+    CharacterAction,
+    ClearButton,
+    PlayButton,
+    FightButton,
+}
+
+public class FunctionButtonManager : Singleton<FunctionButtonManager>
 {
     //[Header("Component")]
     public Button clearButton;
@@ -13,41 +21,19 @@ public class FunctionButtonManager : MonoBehaviour
     
     //[Header("Settings")]
     //[Header("Debug")]
-
+    private ButtonCode _currentCode;
+    private HashSet<ButtonCode> codesSet = new();
+    
     private void OnEnable()
     {
-        EventHandler.CharacterActionEnd += OnCharacterActionEnd; // Check is action state to set button enable
-        EventHandler.TurnCharacterStartAction += CloseAllButtonEnable;
-        EventHandler.ButtonCallUseSkillEvent += CloseAllButtonEnable; // set button enable
-        EventHandler.LastPlayActionEnd += OnLastPlayActionEnd; // set button enable
-        EventHandler.ChangeStateDone += OnChangeStateDone; // set button enable
-    }
-
-    private void OnDisable()
-    {
-        EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
-        EventHandler.TurnCharacterStartAction -= CloseAllButtonEnable;
-        EventHandler.ButtonCallUseSkillEvent -= CloseAllButtonEnable;
-        EventHandler.LastPlayActionEnd -= OnLastPlayActionEnd;
-        EventHandler.ChangeStateDone -= OnChangeStateDone;
-    }
-
-    private void OnCharacterActionEnd(bool isOwner)
-    {
-        if(isOwner && GameManager.Instance.gameStateManager.currentState == GameState.ActionState) 
-            OpenAllButtonEnable();
-    }
-
-    private void OnLastPlayActionEnd()
-    {
-        if(GameManager.Instance.gameStateManager.currentState == GameState.ActionState)
-            OpenAllButtonEnable();
-    }
-
-    private void OnChangeStateDone(GameState newGameState)
-    {
-        if(newGameState == GameState.ActionState)
-            OpenAllButtonEnable();
+        EventHandler.CharacterActionEnd += (isOwner) =>
+        {
+            if(isOwner)  CallButtonEnableEvent(ButtonCode.CharacterAction);
+        }; 
+        
+        EventHandler.LastPlayActionEnd += () => CallButtonEnableEvent(ButtonCode.PlayButton); 
+        EventHandler.ChangeStateDone += _ => CallButtonEnableEvent(ButtonCode.FightButton);
+        EventHandler.HitPanelAnyButtonPress += () => CallButtonEnableEvent(ButtonCode.ClearButton);
     }
 
     private void CloseAllButtonEnable()
@@ -64,9 +50,42 @@ public class FunctionButtonManager : MonoBehaviour
         doneButton.interactable = true;
     }
 
-    private void Awake()
+    // Tools
+    public void CallButtonDisableEvent(ButtonCode code)
     {
-        playButton.onClick.AddListener(CloseAllButtonEnable);
-        doneButton.onClick.AddListener(CloseAllButtonEnable);
+        _currentCode = code;
+        codesSet.Add(code);
+        if(codesSet.Count == 1)
+            CloseAllButtonEnable();
+    }
+
+    /// <summary>
+    /// Use Code Find and Remove code from Set, if set is empty, Open All Button Enable
+    /// </summary>
+    /// <param name="code"></param>
+    /// <returns>has found</returns>
+    private bool CallButtonEnableEvent(ButtonCode code)
+    {
+        if (!codesSet.Contains(code)) return false; // not found
+
+        // found
+        codesSet.Remove(code);
+        if (codesSet.Count == 0)
+            OpenAllButtonEnable();
+        
+        return true;
+    }
+    private void CallButtonEnableEvent(ButtonCode code1, ButtonCode code2)
+    {
+        if (!CallButtonEnableEvent(code1))
+            CallButtonEnableEvent(code2);
+    } 
+    private void CallButtonEnableEvent(ButtonCode[] codes)
+    {
+        foreach (var code in codes)
+        {
+            if(CallButtonEnableEvent(code))
+                break;
+        }
     }
 }

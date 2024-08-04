@@ -13,6 +13,7 @@ public class FightState : IGameState
         HintPanelManager.Instance.CallHint("Fight !!!");
         EventHandler.CallUpdateCharacterActionData();
         EventHandler.CallTurnCharacterStartAction();
+        FunctionButtonManager.Instance.CallButtonDisableEvent(ButtonCode.FightButton);
     }
 
     public void UpdateState()

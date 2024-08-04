@@ -24,14 +24,14 @@ public class CharacterGenerator : NetworkBehaviour
 
     public NetworkVariable<int> teamNetwork = new(0, writePerm: NetworkVariableWritePermission.Owner);
     // private NetworkVariable<int> currentGenerateID = new(1000);
-    private NetworkList<int> tempDataIndexList = new(writePerm: NetworkVariableWritePermission.Owner);
+    private NetworkList<int> tempDataIndexList;
     
     public override void OnNetworkSpawn()
     {
         // tempList value initialize
         // if( IsOwner && tempDataIndexList.Value == null)
         //     tempDataIndexList.Value = new NetworkCharacterDetailsIndexList();
-        
+
         // Event
         teamNetwork.OnValueChanged += OnTeamValueChanged;
         
@@ -44,6 +44,14 @@ public class CharacterGenerator : NetworkBehaviour
         isInitial = true;
         EventHandler.CallReturnCharacterInitializedDone();
     }
+    private void Awake()
+    {
+        characterManager = GetComponent<CharacterManager>();
+        tempDataIndexList = new(writePerm: NetworkVariableWritePermission.Owner);
+        //
+        // if (IsOwner)
+        //     tempDataIndexList = new();
+    }
     
     // Call by Owner in CharacterManageder
     public void SetCharacterIndexList(List<int> indexList)
@@ -54,14 +62,7 @@ public class CharacterGenerator : NetworkBehaviour
         }
     }
 
-    private void Awake()
-    {
-        characterManager = GetComponent<CharacterManager>();
-        
-        if(IsOwner)
-            tempDataIndexList = new();
-
-    }
+    
 
     private void OnTeamValueChanged(int previousvalue, int newvalue)
     {

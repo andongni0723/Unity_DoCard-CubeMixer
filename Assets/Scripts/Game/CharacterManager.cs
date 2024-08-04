@@ -12,6 +12,8 @@ public class CharacterManager : NetworkBehaviour
     [Header("Component")] 
     private CharacterGenerator characterGenerator;
     public CharacterActionRecord characterActionRecord;
+
+    private int lastActionEndCount = 0; // When self characters action end, count + 1
     
     [Header("Settings")]
     // public List<CharacterDetailsSO> characterDetailsList;
@@ -95,9 +97,14 @@ public class CharacterManager : NetworkBehaviour
     private void OnLastPlayActionEnd()
     {
         if (GameManager.Instance.gameStateManager.currentState == GameState.FightState && IsOwner)
-        {
             EventHandler.CallStateCallback(GameState.FightState);
-        }
+
+        // lastActionEndCount++;
+        // if(lastActionEndCount == 2 && IsOwner)
+        // {
+        //     EventHandler.CallSelfTeamCharacterActionEnd();
+        //     lastActionEndCount = 0;
+        // }
     }
 
     private void CallCharacterGenerate()

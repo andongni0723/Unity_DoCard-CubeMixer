@@ -90,7 +90,6 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
 
     private void CloseButtonActive()
     {
-        Debug.Log("Close");
         tempToggleIsOn = toggle.isOn;
         toggle.isOn = false;
     }

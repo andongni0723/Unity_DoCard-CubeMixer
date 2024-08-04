@@ -57,6 +57,7 @@ public class HintPanelManager : Singleton<HintPanelManager>
         
         AnyButtonCallback += () =>
         {
+            EventHandler.CallHitPanelAnyButtonPress();
             mainPanel.CloseImageAnimation();
             yesButtonImage.CloseImageAnimation();
             noButtonImage.CloseImageAnimation();
