@@ -6,6 +6,12 @@ public enum SkillButtonType
     Skill
 }
 
+public enum SkillUseCondition
+{
+    Power,
+    Count
+}
+
 public enum Team
 {
     Red, Blue

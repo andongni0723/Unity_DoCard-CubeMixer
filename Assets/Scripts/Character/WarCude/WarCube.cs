@@ -16,7 +16,9 @@ public class WarCube : Character
     public List<GameObject> blueSwordVFXList;
     public List<MeshRenderer> skillCubeList;
     public PlayableDirector skillRotate;
+    public PlayableDirector skillCeaselessCycle;
     public PlayableDirector skillTrail;
+    public PlayableDirector skillCircularCarrier;
     public PlayableDirector skillLightWorld;
     
     // --------------Game-----------------
@@ -58,22 +60,36 @@ public class WarCube : Character
     {
         SkillActionStart();
         ResetLookAt();
-        
+
+        int dir;
         switch (skillID)
         {
             case "001-rotate":
                 skillRotate.Play();
                 break;
+            
+            case "011-circular-carrier":
+                skillCircularCarrier.Play();
+                break;
+            
             case "002-trail":
-                var dir = UseSkillTargetPosToRotateCharacter(skillTargetPosDataList[0]);
+                dir = UseSkillTargetPosToRotateCharacter(skillTargetPosDataList[0]);
                 skillTrail.transform.rotation = Quaternion.Euler(0, dir, 0);
                 skillTrail.Play();
                 break;
+            
+            case "012-ceaseless-cycle":
+                dir = UseSkillTargetPosToRotateCharacter(skillTargetPosDataList[0]);
+                skillCeaselessCycle.transform.rotation = Quaternion.Euler(0, dir, 0);
+                skillCeaselessCycle.Play();
+                break;
+            
             case "003-light-world":
                 skillLightWorld.transform.position = 
                     GridManager.Instance.GetTileWithTilePos(skillTargetPosDataList[0]).transform.position;
                 skillLightWorld.Play();
                 break;
+            
             case "FIN-to-dark":
                 break;
             

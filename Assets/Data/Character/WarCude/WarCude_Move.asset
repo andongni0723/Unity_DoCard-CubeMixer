@@ -14,11 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSprite: {fileID: 21300000, guid: 9c63b51755ec8c845b857cc73a35d606, type: 3}
   skillName: "\u79FB\u52D5"
+  skillENName: Move
   skillDisplayName: "\u79FB\u52D5"
   skillID: move
-  skillDescription: "\u79FB\u52D53\u683C"
-  skillNeedPower: 5
+  skillDescription: "\u82B1\u8CBB[Power]\u9EDE\u80FD\u91CF\uFF0C\u53EF\u79FB\u52D5\u5230[Cast](3\xD73)\u7BC4\u570D\u5167\u7684\u4EFB\u4F55\u4E00\u683C"
   isSkillAreaCanEnemyOn: 0
+  skillUseCondition: 0
+  skillNeedPower: 5
+  needCount: 0
+  isUseSkill: 0
+  isSkillHit: 0
+  isUsePower: 0
+  hasBeenDamage: 0
   skillType: 1
   moveRange: 3
   damage: 0

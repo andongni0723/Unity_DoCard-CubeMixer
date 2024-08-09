@@ -64,12 +64,13 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         EventHandler.AttackRangeColor -= OnAttackRangeColor;
     }
 
-    private void OnTileUpAnimation(SkillDetailsSO data, Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
+    private void OnTileUpAnimation(SkillDetailsSO data, Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance, bool isStrict = false)
     {
         tempCharacterWantToMove = character;
         tempCharacterAttackRangeDistance = skillAttackRange;
 
-        if (Vector2.Distance(playerPos, tilePosition) <= distance.y)
+        if (isStrict? (Vector2.Distance(playerPos, tilePosition) == distance.y) :
+                Vector2.Distance(playerPos, tilePosition) <= distance.y)
         {
             // If skill area can't enemy on and have character who not temp one on the tile
             if (!data.isSkillAreaCanEnemyOn && CheckHaveCharacterWhoNotTempCharacterWOnTile()) return;

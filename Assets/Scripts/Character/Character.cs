@@ -286,7 +286,9 @@ public class Character : MonoBehaviour
                     yield return CallTileStandAnimation(
                         skillDetails,
                         skillDetails.SkillAimDataList[i].skillAttackRange, 
-                        skillDetails.SkillAimDataList[i].skillCastRange, i == 0 ? 0.1f : 0f);
+                        skillDetails.SkillAimDataList[i].skillCastRange,
+                        skillDetails.isDirectionAttack,
+                        i == 0 ? 0.1f : 0f);
                     
                     yield return new WaitUntil(() => isTileReturn);
                     EventHandler.CallCharacterChooseTileRangeDone();
@@ -345,13 +347,13 @@ public class Character : MonoBehaviour
             });
     }
 
-    private async UniTask CallTileStandAnimation(SkillDetailsSO data, Vector2 skillAttackRange, Vector2 maxStandDistance, float duration = 0.1f)
+    private async UniTask CallTileStandAnimation(SkillDetailsSO data, Vector2 skillAttackRange, Vector2 maxStandDistance, bool isStrict = false, float duration = 0.1f)
     {
         Vector2 beforeMoveTilePos = characterTilePosition;
         
-        for (int j = 0; j <= maxStandDistance.y; j++)
+        for (int j = isStrict ? (int)maxStandDistance.y : 0 ; j <= maxStandDistance.y; j++)
         {
-            EventHandler.CallTileUpAnimation(data, this, skillAttackRange, beforeMoveTilePos, new Vector2(j, j));
+            EventHandler.CallTileUpAnimation(data, this, skillAttackRange, beforeMoveTilePos, new Vector2(j, j), isStrict);
             await UniTask.Delay(TimeSpan.FromSeconds(duration)); // Let the difference radius tile stand time
                                                                  // to show the animation
         }

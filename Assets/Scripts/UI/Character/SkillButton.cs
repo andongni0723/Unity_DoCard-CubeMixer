@@ -3,16 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillButton : MonoBehaviour
+public class SkillButton : MonoBehaviour, IPointerEnterHandler ,IPointerExitHandler
 {
-    //[Header("Component")]
+    [Header("Component")]
     private Transform handPanelTransform;
     private CharacterSkillButtonsGroup parentManager;
     private Button button;
     private Image backgroundImage;
     [SerializeField]private Image spriteRenderer;
+    private SkillDescription skillDescription;
 
     [Header("Settings")]
     public SkillDetailsSO skillDetails;
@@ -23,10 +25,8 @@ public class SkillButton : MonoBehaviour
 
     private void Awake()
     {
-        // handPanelTransform = GameObject.FindWithTag("HandPanel").transform;
-        // parentManager = GetComponentInParent<CharacterSkillButtonsGroup>();
-        // backgroundImage = GetComponentInChildren<Image>();
         button = GetComponent<Button>();
+        skillDescription = GetComponentInChildren<SkillDescription>();
         button.interactable = false;
         button.onClick.AddListener(ClickAction);
     }
@@ -36,6 +36,8 @@ public class SkillButton : MonoBehaviour
         button.interactable = true;
         parentManager = parent;
         spriteRenderer.sprite = skillDetails.skillSprite;
+        
+        skillDescription.InitialUpdate(skillDetails);
     }
 
     private void OnEnable()
@@ -51,23 +53,7 @@ public class SkillButton : MonoBehaviour
     {
         isOn = false;
     }
-
-
-    // // Remember to add the method to CharacterCard in the inspector 
-    // public void ParentClickMoveAnimation()
-    // {
-    //     transform.SetParent(handPanelTransform);
-    //     transform.SetSiblingIndex(parentManager.transform.GetSiblingIndex());
-    //     backgroundImage.gameObject.SetActive(true);
-    //     
-    //     // Animation
-    //     Sequence sequence = DOTween.Sequence();
-    //     sequence.Append(backgroundImage.DOFade(1, 0.5f).From(0)); // color
-    //     sequence.Join(backgroundImage.transform.DOMove(transform.position, 0.5f)
-    //         .From(parentManager.transform.position)); // move
-    //
-    // }
-    //
+    
     private void ClickAction()
     {
         EventHandler.CallCharacterActionEnd(true);
@@ -76,4 +62,14 @@ public class SkillButton : MonoBehaviour
         isOn = true;            
         parentManager.character.ButtonCallUseSkill(skillDetails); 
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        spriteRenderer.DOColor(Color.black, 0.2f);
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        spriteRenderer.DOColor(Color.white, 0.2f);
+    }
+    
 }

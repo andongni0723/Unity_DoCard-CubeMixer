@@ -97,10 +97,10 @@ public class EventHandler
 
     #region Character
 
-    public static Action<SkillDetailsSO, Character, Vector2, Vector2, Vector2> TileUpAnimation;
-    public static void CallTileUpAnimation(SkillDetailsSO data, Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance)
+    public static Action<SkillDetailsSO, Character, Vector2, Vector2, Vector2, bool> TileUpAnimation;
+    public static void CallTileUpAnimation(SkillDetailsSO data, Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance, bool isStrict = false)
     {
-        TileUpAnimation?.Invoke(data, character, skillAttackRange, playerPos, distance);
+        TileUpAnimation?.Invoke(data, character, skillAttackRange, playerPos, distance, isStrict);
     }
     
     public static Action<Vector2, Vector2> AttackRangeColor;

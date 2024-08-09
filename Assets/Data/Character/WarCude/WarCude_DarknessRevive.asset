@@ -12,17 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d969930520284343b378ef93d799772, type: 3}
   m_Name: WarCude_DarknessRevive
   m_EditorClassIdentifier: 
-  skillSprite: {fileID: 21300000, guid: 45751a4124f67c443bf96ed1df7c550b, type: 3}
+  skillSprite: {fileID: 21300000, guid: a56afeb4493bc4b57a09188d046295f1, type: 3}
   skillName: "\u6B65\u5165\u9ED1\u6697"
+  skillENName: Darkness Revive
   skillDisplayName: "\u7D55\u62DB"
   skillID: FIN-to-dark
   skillDescription: 
-  skillNeedPower: 0
   isSkillAreaCanEnemyOn: 1
+  skillUseCondition: 1
+  skillNeedPower: 0
+  needCount: 7
+  isUseSkill: 1
+  isSkillHit: 1
+  isUsePower: 0
+  hasBeenDamage: 1
   skillType: 3
   moveRange: 0
   damage: 3
   attackAimTime: 1
+  isDirectionAttack: 0
   SkillAimDataList:
-  - skillAttackRange: {x: 3, y: 2}
-    skillCastRange: {x: 1, y: 1}
+  - skillAttackRange: {x: 0, y: 0}
+    skillCastRange: {x: 0, y: 0}

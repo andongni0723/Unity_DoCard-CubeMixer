@@ -12,17 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d969930520284343b378ef93d799772, type: 3}
   m_Name: WarCude_Trail
   m_EditorClassIdentifier: 
-  skillSprite: {fileID: 21300000, guid: 45751a4124f67c443bf96ed1df7c550b, type: 3}
+  skillSprite: {fileID: 21300000, guid: 059c0799d1fc8409ebbeb66f3d056152, type: 3}
   skillName: "\u9023\u65AC"
+  skillENName: Trail
   skillDisplayName: "\u6280\u80FD2"
   skillID: 002-trail
-  skillDescription: 
-  skillNeedPower: 3
+  skillDescription: "\u82B1\u8CBB[Power]\u9EDE\u7684\u80FD\u91CF\uFF0C\u5C0D[Cast](3x2)\u7BC4\u570D\u5167\u6575\u4EBA\u5171\u9020\u6210[HitCount](5)\u6BB5\u50B7\u5BB3,
+    \u6BCF\u6BB5\u9020\u6210[Damage]\u9EDE\u50B7\u5BB3"
   isSkillAreaCanEnemyOn: 1
+  skillUseCondition: 0
+  skillNeedPower: 3
+  needCount: 0
+  isUseSkill: 0
+  isSkillHit: 0
+  isUsePower: 0
+  hasBeenDamage: 0
   skillType: 2
   moveRange: 0
   damage: 3
   attackAimTime: 1
+  isDirectionAttack: 1
   SkillAimDataList:
   - skillAttackRange: {x: 3, y: 2}
     skillCastRange: {x: 1, y: 1}
