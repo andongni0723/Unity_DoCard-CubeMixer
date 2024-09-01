@@ -22,6 +22,8 @@ MonoBehaviour:
   skillUseCondition: 1
   skillNeedPower: 0
   needCount: 7
+  countStatusEffectData: {fileID: 11400000, guid: c3ae73a40f4b34affabcf2e6392b50b3,
+    type: 2}
   isUseSkill: 1
   isSkillHit: 1
   isUsePower: 0
@@ -34,3 +36,8 @@ MonoBehaviour:
   SkillAimDataList:
   - skillAttackRange: {x: 0, y: 0}
     skillCastRange: {x: 0, y: 0}
+  skillBuffRound: 2
+  skillEffectList:
+  - statusFrom: {fileID: 11400000}
+    data: {fileID: 11400000, guid: 075fd36bdeb2b4988bd305fa0c67df9b, type: 2}
+    count: 1

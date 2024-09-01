@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Sirenix.OdinInspector;
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Serialization;
-#pragma warning disable CS4014 
+using UnityEngine.Timeline;
+
+#pragma warning disable CS4014
 
 [Serializable]
 public class TileReturnData
@@ -24,44 +25,49 @@ public class TileReturnData
 }
 
 
-[RequireComponent(typeof(CharacterHealth))]
-public class Character : MonoBehaviour
+[RequireComponent(typeof(CharacterHealth), typeof(CharacterPowerManager), typeof(GameDataBackUp))]
+[RequireComponent(typeof(CharacterStatusManager), typeof(SignalReceiver), typeof(BoxCollider))]
+[RequireComponent(typeof(Rigidbody))]
+public class Character : CharacterActionEvent, ITileClickHandler
 {
     [Header("Component")]
-    public MeshRenderer body;
-    public CharacterManager characterManager;
+    [HideInInspector] public MeshRenderer body;
+    [HideInInspector] public CharacterManager characterManager; // set by CharacterGenerator
     public CharacterHealth characterHealth;
-    public CharacterPowerManager powerManager;
+    public CharacterPowerManager CharacterPower;
+    public CharacterStatusManager characterStatus;
+    protected GameDataBackUp gameDataBackUp;
+    public CharacterSkillButtonsGroup characterSkillButtonsGroup; // set by CharacterSkillButtonsGroup
     
     [Space(15)]
     public Material blueBodyMaterial;
-    
-    
-    [Header("Settings")] 
-    [SerializeField]private string id;
-    public string ID => id;
-    
-    public CharacterDetailsSO characterDetails;
-    [Range(0, 20)]
-    public int moveMaxDistance;
-    public float faceRotation = 0; // red = 0, blue = 180
-    public bool isSkillPlaying = false;
 
-    [Header("Debug")] 
-    public Team team;
-    public Vector2 characterTilePosition;
-    public Vector3 bodyStartPos;
-    private CharacterGameData turnStartGameData;
-    private Camera mainCamera;
-    private bool isTileReturn = false;
-    [SerializeField]protected List<TileReturnData> skillTileReturnDataList = new();
+    [SerializeField]
+    [FoldoutGroup("Setting Debug")] private string id;
+    public string ID => id;
+    [FoldoutGroup("Setting Debug")]  public CharacterDetailsSO characterDetails; // set by CharacterGenerator
+    [Range(0, 20)]
+    [FoldoutGroup("Setting Debug")]  public int moveMaxDistance;
+    [FoldoutGroup("Setting Debug")]  public float faceRotation = 0; // red = 0, blue = 180
+    [FoldoutGroup("Setting Debug")] public bool isSkillPlaying = false;
+
+    
+    [FoldoutGroup("Debug")] public Team team;
+    [FoldoutGroup("Debug")] public Vector2 characterTilePosition;
+    [FoldoutGroup("Debug")] public Vector3 bodyStartPos;
+    [FoldoutGroup("Debug")] private Camera mainCamera;
+    [FoldoutGroup("Debug")] public bool isTileReturn = false;
+    [SerializeField]
+    [FoldoutGroup("Debug")] public List<TileReturnData> skillTileReturnDataList = new();
 
     private void Awake()
     {
         mainCamera = Camera.main;
         characterHealth = GetComponent<CharacterHealth>();
-        powerManager = GetComponent<CharacterPowerManager>();
-        powerManager.characterHealth = characterHealth;
+        CharacterPower = GetComponent<CharacterPowerManager>();
+        gameDataBackUp = GetComponent<GameDataBackUp>();
+        characterStatus = GetComponent<CharacterStatusManager>();
+        // powerManager.characterHealth = characterHealth;
         
         bodyStartPos = body.transform.localPosition;
     }
@@ -70,23 +76,33 @@ public class Character : MonoBehaviour
     {
         characterHealth.InitialUpdateDate(characterDetails.health, characterDetails.power);
     }
+    
+    public void InitialUpdateData(string id)
+    {
+        // Setting variable
+        this.id = id;
+        DetailsManager.Instance.NewCharacterDetails(this);
+        gameDataBackUp.InitialUpdate();
+    }
+
+    public void SetTeam(Team team)
+    {
+        this.team = team;
+        SetTeamBodyMaterial();
+        SetLookAtForward();
+    }
 
     #region Event
 
     private void OnEnable()
     {
-        EventHandler.CharacterActionClear += OnCharacterActionClear; // character data back to turn start data
-        EventHandler.CharacterBackToTurnStartPoint += BackToTurnStartPoint; // setting variable
         EventHandler.CharacterChooseTileRangeDone += OnCharacterChooseTileRangeDone; // setting variable
         EventHandler.ChangeStateDone += OnChangeStateDone; // check is Action state to update turn start data
         EventHandler.CharacterActionEnd += OnCharacterActionEnd; // cancel ready power
-
     }
 
     private void OnDisable()
     {
-        EventHandler.CharacterActionClear -= OnCharacterActionClear;
-        EventHandler.CharacterBackToTurnStartPoint -= BackToTurnStartPoint;
         EventHandler.CharacterChooseTileRangeDone -= OnCharacterChooseTileRangeDone;
         EventHandler.ChangeStateDone -= OnChangeStateDone; 
         EventHandler.CharacterActionEnd -= OnCharacterActionEnd;
@@ -94,19 +110,7 @@ public class Character : MonoBehaviour
 
     private void OnCharacterActionEnd(bool isOwner)
     {
-        if(isOwner) powerManager.CancelReadyPower();
-    }
-
-    private void OnCharacterActionClear()
-    {
-        MoveAction(turnStartGameData.tilePosition, 0);
-        characterHealth.SetHealth(turnStartGameData.currentHealth);
-        characterHealth.SetPower(turnStartGameData.currentPower); 
-    } 
-    protected virtual void BackToTurnStartPoint()
-    { 
-        MoveAction(turnStartGameData.tilePosition, 0);
-        characterHealth.SetHealth(turnStartGameData.currentHealth);
+        if(isOwner) CharacterPower.CancelReadyPower();
     }
 
     private void OnCharacterChooseTileRangeDone()
@@ -116,34 +120,14 @@ public class Character : MonoBehaviour
     
     private void OnChangeStateDone(GameState newState)
     {
-        if (newState == GameState.ActionState)
-        {
-            characterHealth.PowerBackToStart();
-            powerManager.powerPanel.InitialDisplay(characterDetails.power);
-            turnStartGameData = new CharacterGameData(
-                characterDetails.health, 
-                characterDetails.power, 
-                characterHealth.currentHealth,
-                characterHealth.currentPower, 
-                tilePosition: characterTilePosition); 
-        }
+        if (newState != GameState.ActionState) return;
+        
+        characterHealth.PowerBackToStart();
+        CharacterPower.powerPanel.InitialDisplay(characterDetails.power);
     }
     #endregion
 
-    public void InitialUpdateData(string id)
-    {
-        // Setting variable
-        this.id = id;
-        DetailsManager.Instance.NewCharacterDetails(this);
-    }
-
-    public void SetTeam(Team team)
-    {
-        this.team = team;
-        SetTeamBodyMaterial();
-        SetLookAtForward();
-    }
-    
+    #region Tools
     // --------------- Tools --------------- //
 
     public void HitAnimation()
@@ -156,12 +140,12 @@ public class Character : MonoBehaviour
         body.transform.localPosition = bodyStartPos;
     }
     
-    public void ButtonCallUseSkill(SkillDetailsSO skillDetailsSo)
+    public void ButtonCallUseSkill(SkillDetailsSO skillDetails)
     {
         StopAllCoroutines();
-        if (powerManager.CheckPowerEnough(skillDetailsSo.skillNeedPower))
+        if (CharacterPower.CheckPowerEnough(skillDetails))
         {
-            StartCoroutine(SkillExecuteAction(skillDetailsSo));
+            StartCoroutine(SkillExecuteAction(skillDetails));
             FunctionButtonManager.Instance.CallButtonDisableEvent(ButtonCode.CharacterAction);
             EventHandler.CallButtonCallUseSkillEvent(); 
         }
@@ -198,30 +182,33 @@ public class Character : MonoBehaviour
         
         int angle = (int)(Mathf.Atan2(vector.y, vector.x) * Mathf.Rad2Deg) - 90; // get angle
         angle = angle < 0 ? angle + 360 : angle;                                 // set angle to 0 - 360
-        angle = vector == Vector2.zero ? 0 : angle;                              // set mouse hit the character position is dir to up
+        angle = vector == Vector2.zero ? 0 : angle;                              // set mouse on character position is dir to forward
         
         // up
-        if (angle is >= 0 and <= 45 or >= 315 and <= 360) // 0 ~ 45 or 315 ~ 360
+        if (angle is >= 0 and <= 45 or >= 315 and <= 360) // 0 ~ 45 or 315 ~ 360 degree
             return 0;
         // left
-        if (angle is >= 45 and <= 135)
+        if (angle is >= 45 and <= 135)                    // 45 ~ 135 degree
             return -90;
         // right
-        if (angle is >= 225 and <= 315)
+        if (angle is >= 225 and <= 315)                   // 225 ~ 315 degree
             return 90;
         // down
         return 180;
     }
     
-  
+    #endregion
+
+
+    #region Callback and Child override
     // --------------- Callback and Child override --------------- //
 
     /// <summary>
-    /// Call by tile, when mouse click the target tile
+    /// Dependency Injection: Call by tile, when mouse click the target tile
     /// </summary>
     /// <param name="tileGameObject">the tile the mouse click</param>
     /// <param name="targetTilePos"></param>
-    public void TileReturnClickData(GameObject tileGameObject, Vector2 targetTilePos)
+    void ITileClickHandler.TileReturnClickData(GameObject tileGameObject, Vector2 targetTilePos)
     {
         isTileReturn = true;
         skillTileReturnDataList.Add(new TileReturnData(tileGameObject, targetTilePos));
@@ -242,14 +229,16 @@ public class Character : MonoBehaviour
     {
         // Override by child, Write the skill action
 
-        
         // Wait skill play end
         yield return new WaitUntil(() => !isSkillPlaying); // wait skill play end
         if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
         EventHandler.CallCharacterActionEnd(characterManager.IsOwner);
     }
     
-    
+    #endregion
+
+
+    #region Game
     // --------------- Game --------------- // 
 
     /// <summary>
@@ -259,7 +248,6 @@ public class Character : MonoBehaviour
     private IEnumerator SkillExecuteAction(SkillDetailsSO skillDetails)
     {
         skillTileReturnDataList.Clear();
-        
         switch (skillDetails.skillType)
         {
             case SkillButtonType.Empty:
@@ -272,8 +260,8 @@ public class Character : MonoBehaviour
                     skillDetails, 
                     Vector2.zero, 
                     new Vector2(skillDetails.moveRange, skillDetails.moveRange));
+                yield return new WaitUntil(() => isTileReturn); // when player choose the tile
                 
-                yield return new WaitUntil(() => isTileReturn); // back the skill tile return data
                 EventHandler.CallCharacterChooseTileRangeDone();
                 MoveAction(
                     skillTileReturnDataList[0].tileGameObject,
@@ -289,8 +277,9 @@ public class Character : MonoBehaviour
                         skillDetails.SkillAimDataList[i].skillCastRange,
                         skillDetails.isDirectionAttack,
                         i == 0 ? 0.1f : 0f);
+                    yield return new WaitUntil(() => isTileReturn); // when player choose the tile
                     
-                    yield return new WaitUntil(() => isTileReturn);
+                    CharacterUseSkill();
                     EventHandler.CallCharacterChooseTileRangeDone();
                 }
                 
@@ -307,9 +296,15 @@ public class Character : MonoBehaviour
                 break;
             
             case SkillButtonType.Skill:
-                yield return CallTileStandAnimation(skillDetails, Vector2.zero, Vector2.one);
-                yield return new WaitUntil(() => isTileReturn);
+                yield return CallTileStandAnimation(skillDetails, Vector2.zero, Vector2.zero);
+                yield return new WaitUntil(() => isTileReturn); // when player choose the tile
+                
+                CharacterUseSkill();
                 EventHandler.CallCharacterChooseTileRangeDone();
+                
+                skillDetails.skillEffectList.ForEach(effect => 
+                    characterStatus.AddStatusEffect(skillDetails, effect.data, effect.count));
+                Debug.Log("SKill type");
                 
                 StartCoroutine(AttackAction(
                     skillDetails.skillID,
@@ -319,32 +314,45 @@ public class Character : MonoBehaviour
                 break;
         }
         
-        powerManager.UsePower(skillDetails.skillNeedPower);
+        UsePowerOrStatus(skillDetails);
 
         // Record the character action
         characterManager.characterActionRecord.
             AddCharacterActionData(ID, skillDetails, skillTileReturnDataList);
     }
 
+    private void UsePowerOrStatus(SkillDetailsSO skillDetails)
+    {
+        switch (skillDetails.skillUseCondition)
+        {
+            case SkillUseCondition.Power:
+                CharacterPower.UsePower(skillDetails.skillNeedPower);
+                break;
+            case SkillUseCondition.Count:
+                characterStatus.RemoveStatusEffect(skillDetails, skillDetails.countStatusEffectData, skillDetails.needCount);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
     public void MoveAction(Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
     { 
         MoveAction(GridManager.Instance.GetTileWithTilePos(targetTilePos).gameObject, targetTilePos, duration, isLastPlayAction);
     }
-    private void MoveAction(GameObject tileGameObject, Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
+
+    public void MoveAction(GameObject tileGameObject, Vector2 targetTilePos, float duration = 0.5f, bool isLastPlayAction = false)
     {
         // Move Animation
         var position = tileGameObject.transform.position;
         characterTilePosition = targetTilePos;
-        transform.DOMove(new Vector3(position.x, 0.1f, position.z), duration)
-            .OnComplete(() =>
-            {
-                // Update Data
-                // characterTilePosition = targetTilePos;
-                transform.SetParent(tileGameObject.transform);  
-                
-                if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
-                EventHandler.CallCharacterActionEnd(characterManager.IsOwner); 
-            });
+        transform.DOMove(new Vector3(position.x, 0.1f, position.z), duration).OnComplete(() =>
+        {
+            transform.SetParent(tileGameObject.transform);  
+            
+            if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
+            EventHandler.CallCharacterActionEnd(characterManager.IsOwner); 
+        });
     }
 
     private async UniTask CallTileStandAnimation(SkillDetailsSO data, Vector2 skillAttackRange, Vector2 maxStandDistance, bool isStrict = false, float duration = 0.1f)
@@ -358,4 +366,43 @@ public class Character : MonoBehaviour
                                                                  // to show the animation
         }
     }
+    
+    #endregion
+
+    #region ActionEvent
+    // -------------- ActionEvent --------------- 
+    
+    /// <summary>
+    /// Those method will override by child
+    /// </summary>
+
+    private void ApplyStatusEffect(Func<SkillDetailsSO, bool> condition)
+    {
+        foreach (var skill in characterDetails.characterSkillList.Where(condition))
+            characterStatus.AddStatusEffect(skill, skill.countStatusEffectData, 1);
+    }
+
+
+    public override void CharacterUseSkill()
+    {
+        ApplyStatusEffect(data => data.isUseSkill);
+    }
+
+    public override void CharacterSkillHit()
+    {
+        ApplyStatusEffect(data => data.isSkillHit);
+    }
+
+    public override void CharacterUsePower()
+    {
+        ApplyStatusEffect(data => data.isUsePower);
+    }
+
+    public override void CharacterHasBeenDamage()
+    {
+        ApplyStatusEffect(data => data.hasBeenDamage);
+    }
+
+    
+    #endregion
 }

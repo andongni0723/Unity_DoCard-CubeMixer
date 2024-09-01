@@ -40,8 +40,13 @@ public class CharacterManager : NetworkBehaviour
         
         foreach (var index in characterDetailsList)
         {
-            CharacterDetailsSO data = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
-            SaveData(data.characterName, new CharacterGameData(data.health, data.power, data.health, data.power));
+            var data = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(index);
+            SaveData(data.characterName, new CharacterGameData(
+                data.health, 
+                data.power, 
+                data.health, 
+                data.power, 
+                statusList: new()));
         }
         
         //character action list On Value Changed
@@ -228,6 +233,7 @@ public class CharacterGameData
     public int currentPower;
     public GameObject characterObject;
     public Vector2 tilePosition;
+    public List<StatusEffect> statusList = new();
 
     /// <summary>
     /// 
@@ -237,7 +243,8 @@ public class CharacterGameData
     /// <param name="currentHealth"></param>
     /// <param name="currentPower"></param>
     /// <param name="characterObject"></param>
-    public CharacterGameData(int maxHealth, int maxPower, int currentHealth, int currentPower, GameObject characterObject = null, Vector2 tilePosition = default)
+    public CharacterGameData(int maxHealth, int maxPower, int currentHealth, int currentPower,
+        GameObject characterObject = null, Vector2 tilePosition = default, List<StatusEffect> statusList = default)
     {
         this.maxHealth = maxHealth;
         this.currentHealth = currentHealth;
@@ -245,6 +252,7 @@ public class CharacterGameData
         this.currentPower = currentPower;
         this.characterObject = characterObject;
         this.tilePosition = tilePosition;
+        this.statusList = new(statusList);
     }
 }
 

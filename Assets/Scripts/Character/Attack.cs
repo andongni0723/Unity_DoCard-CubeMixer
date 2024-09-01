@@ -21,11 +21,13 @@ public class Attack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<CharacterHealth>(out var targetCharacterHealth))
+        if (!other.TryGetComponent<CharacterHealth>(out var targetCharacterHealth)) return; // not can attack 
+        
+        // Check is different team
+        if (character.team != targetCharacterHealth.character.team)
         {
-            // Check is different team
-            if(character.team != targetCharacterHealth.character.team) 
-                targetCharacterHealth.Damage(skillDetails.damage);
+            targetCharacterHealth.Damage(skillDetails.damage);
+            character.CharacterSkillHit();
         }
     }
 }

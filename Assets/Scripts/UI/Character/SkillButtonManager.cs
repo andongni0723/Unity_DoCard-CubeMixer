@@ -36,13 +36,13 @@ public class SkillButtonManager : MonoBehaviour
         {
             var character = DetailsManager.Instance.UseIndexSearchCharacterDetailsSO(data[i]);
 
-            CharacterSkillButtonsGroup characterCard = Instantiate(character.skillButtonsGroupPrefab, transform)
-                .GetComponent<CharacterSkillButtonsGroup>();
+            var characterCard = Instantiate(character.skillButtonsGroupPrefab, transform).GetComponent<CharacterSkillButtonsGroup>();
             
             // Update data
             characterCard.characterDetails = character;
             characterCard.ID = GenerateCharacterID(team, currentGenerateID);
-            characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.ID); // TODO:
+            characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.ID); 
+            characterCard.character.characterSkillButtonsGroup = characterCard;
             characterCard.InitialUpdateData();
 
             

@@ -1,26 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
-using Sirenix.Serialization;
-using Unity.Mathematics;
+using Sirenix.OdinInspector;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
+using Object = UnityEngine.Object;
 
 
 public class WarCube : Character
 {
     [Header("Skill Object")] 
-    public Animator cameraAnimator;
-    public List<GameObject> redSwordVFXList;
-    public List<GameObject> blueSwordVFXList;
-    public List<MeshRenderer> skillCubeList;
+    [ReadOnly]public Animator cameraAnimator;
+    
+    [Space(10)]
     public PlayableDirector skillRotate;
     public PlayableDirector skillCeaselessCycle;
     public PlayableDirector skillTrail;
     public PlayableDirector skillCircularCarrier;
     public PlayableDirector skillLightWorld;
-    
+    public PlayableDirector darknessRevive;
+
+    public List<GameObject> redSwordVFXList;
+    public List<GameObject> blueSwordVFXList;
+    public List<MeshRenderer> skillCubeList;
+
     // --------------Game-----------------
 
     protected override void SetTeamBodyMaterial()
@@ -91,6 +94,7 @@ public class WarCube : Character
                 break;
             
             case "FIN-to-dark":
+                darknessRevive.Play();
                 break;
             
             default:

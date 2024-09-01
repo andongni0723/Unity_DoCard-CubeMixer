@@ -86,25 +86,22 @@ public class CharacterActionRecord : MonoBehaviour
         var dataList = stringData.Split('}'); 
         foreach (var data in dataList) // data have "{..."
         {
-            if (data.Length < 3)
-            {
-                continue;
-            }
+            if (data.Length < 3) continue;
             
             var clearData = data.Substring(1, data.Length - 1); // xxx, xxx, xxx, (xxx|xxx|xxx)
             var clearDataList = clearData.Split(',');
-            var tilePosStringList = clearDataList[3]
-                                                    .Substring(1, clearDataList[3].Length - 2)
-                                                    .Split('|'); // (1_2|2_3|3_4) -> 1_2, 2_3, 3_4
+            var tilePosStringList = 
+                clearDataList[3]
+                    .Substring(1, clearDataList[3].Length - 2)
+                    .Split('|'); // (1_2|2_3|3_4) -> 1_2, 2_3, 3_4
 
             List<Vector2> tilePosVector2List = new();
             foreach (var tilePos in tilePosStringList)
             {
                 var pairStringPosList = tilePos.Split('_'); // "2", "3"
-                
                 tilePosVector2List.Add(new Vector2(int.Parse(pairStringPosList[0]), int.Parse(pairStringPosList[1])));
             }
-            
+
             characterActionDataList.Add(new CharacterActionData()
             {
                 actionCharacterID = clearDataList[0],

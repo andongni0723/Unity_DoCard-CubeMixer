@@ -18,4 +18,6 @@ public class CharacterDetailsSO : ScriptableObject
     [Space(15)] 
     public GameObject characterPrefab;
     public GameObject skillButtonsGroupPrefab;
+    
+    public List<SkillDetailsSO> characterSkillList;
 }

@@ -23,9 +23,6 @@ public class GameStateManager : NetworkBehaviour
         stateData.Add(GameState.ActionState, new ActionState());
         stateData.Add(GameState.FightState, new FightState());
         stateData.Add(GameState.FightEndState, new FightEndState());
-        
-        
-        EventHandler.CallChangeState(GameState.ActionState);
     }
 
     public override void OnNetworkSpawn()
@@ -36,15 +33,20 @@ public class GameStateManager : NetworkBehaviour
 
     private void OnEnable()
     {
+        // EventHandler.CharacterObjectGeneratedDone += OnCharacterObjectGeneratedDone; // to action state
         EventHandler.StateCallback += OnStateCallback;
         EventHandler.ChangeState += OnChangeState;
+        
     }
 
     private void OnDisable()
     {
+        // EventHandler.CharacterObjectGeneratedDone -= OnCharacterObjectGeneratedDone; 
         EventHandler.StateCallback -= OnStateCallback;
         EventHandler.ChangeState -= OnChangeState;
     }
+
+    // private void OnCharacterObjectGeneratedDone() => EventHandler.CallChangeState(GameState.ActionState);
 
     private void OnStateCallback(GameState targetState)
     {

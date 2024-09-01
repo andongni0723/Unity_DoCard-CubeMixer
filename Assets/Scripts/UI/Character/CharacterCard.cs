@@ -29,7 +29,7 @@ public class CharacterCard : MonoBehaviour
     public CharacterDetailsSO characterDetails;
 
     //[Header("Debug")]
-    public Character character;
+    public Character character; // set by CharacterCardManager
     private Vector3 defaultScale;
     private Vector3 startPos;
 
@@ -49,8 +49,9 @@ public class CharacterCard : MonoBehaviour
         EventHandler.ChangeStateDone += OnChangeStateDone; // open if is  Action state
         EventHandler.HealthChange += OnHealthChange;
         EventHandler.PowerChange += OnPowerChange;
+        EventHandler.CharacterDead += OnCharacterDead; // close
     }
-    
+
     private void OnDisable()
     {
         EventHandler.TurnCharacterStartAction -= CloseActive;
@@ -58,6 +59,8 @@ public class CharacterCard : MonoBehaviour
         EventHandler.ChangeStateDone -= OnChangeStateDone;
         EventHandler.HealthChange -= OnHealthChange;
         EventHandler.PowerChange -= OnPowerChange;
+        EventHandler.CharacterDead += OnCharacterDead;
+
     }
 
     private void OnPowerChange(Character target, int newValue, int maxPower)
@@ -104,6 +107,12 @@ public class CharacterCard : MonoBehaviour
     {
         // cardObj.SetActive(true);
         toggle.interactable = true;
+    }
+    
+    private void OnCharacterDead(Character character)
+    {
+        if(this.character == character)
+            gameObject.SetActive(false);
     }
     
     // ------------- Game ----------------

@@ -34,3 +34,6 @@ MonoBehaviour:
   SkillAimDataList:
   - skillAttackRange: {x: 4, y: 4}
     skillCastRange: {x: 0, y: 0}
+  skillBuffRound: 0
+  enableSkillIDList: []
+  disableSkillIDList: []

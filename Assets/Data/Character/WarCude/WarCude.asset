@@ -21,3 +21,11 @@ MonoBehaviour:
     type: 3}
   skillButtonsGroupPrefab: {fileID: 6684503081504046911, guid: cf3fb2facfb20452982253de68bf7318,
     type: 3}
+  characterSkillList:
+  - {fileID: 11400000, guid: 1d5b9ea5862ad4fc39fa2092d2d4cbc6, type: 2}
+  - {fileID: 11400000, guid: ddabc389f39214a8bad529b0ea8fd327, type: 2}
+  - {fileID: 11400000, guid: 18416bd9792004614b0f845085e80739, type: 2}
+  - {fileID: 11400000, guid: 40e68e570414a4ca989d27652c91d980, type: 2}
+  - {fileID: 11400000, guid: a1a3ad843bc334e0b930eb819e22f985, type: 2}
+  - {fileID: 11400000, guid: 8e3bcd6f3d236435795a4ac6fa3556ad, type: 2}
+  - {fileID: 11400000, guid: fe2df8602218c42838bde5135d899420, type: 2}

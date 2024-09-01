@@ -16,7 +16,9 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     public CharacterDetailsSO characterDetails;
     public CharacterGameData characterGameData;
 
-    public Character character;
+    public Character character; // set by SkillButtonManager
+
+    [Header("Data")] private Dictionary<string, SkillButton> skillIDToSkillButtonDict = new();
 
     [Header("Debug")] 
     private bool tempToggleIsOn; // When player play replay action ,
@@ -30,13 +32,16 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
         toggle.group = transform.parent.GetComponent<ToggleGroup>();
         toggle.onValueChanged.AddListener(OnToggleValueChanged);
     }
-    
+
+   
+
     // ------------------- Event -------------------
 
     private void OnEnable()
     {
         EventHandler.CharacterCardPress += OnCharacterCardPress; // toggle on/off
         EventHandler.CharacterObjectGeneratedDone += InitialUpdateData; // initial
+        EventHandler.StateCallback += CloseButtonActive; // press done button, close button
         EventHandler.TurnCharacterStartAction += CloseButtonActive; // close button
         EventHandler.LastPlayActionEnd += OnLastPlayActionEnd; // open button if is  Action state
         EventHandler.ChangeStateDone += OnChangeStateDone; // open button if is  Action state
@@ -47,6 +52,7 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     {
         EventHandler.CharacterCardPress -= OnCharacterCardPress;
         EventHandler.CharacterObjectGeneratedDone -= InitialUpdateData;
+        EventHandler.StateCallback += CloseButtonActive;
         EventHandler.TurnCharacterStartAction -= CloseButtonActive;
         EventHandler.LastPlayActionEnd -= OnLastPlayActionEnd;
         EventHandler.ChangeStateDone -= OnChangeStateDone;
@@ -61,10 +67,11 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     public void InitialUpdateData()
     {
         buttonsObj.SetActive(true);
-        for (int i = 0; i < buttonsObj.transform.childCount; i++)
+        
+        foreach (var skillButton in buttonsObj.GetComponentsInChildren<SkillButton>())
         {
-            SkillButton skillButton = buttonsObj.transform.GetChild(i).GetComponent<SkillButton>();
-            skillButton.InitialUpdate(this);
+            skillIDToSkillButtonDict.Add(skillButton.skillDetails.skillID, skillButton); // Update Dict
+            skillButton.InitialUpdate(this); // Initial Button
         }
         buttonsObj.SetActive(false);
 
@@ -92,6 +99,17 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     {
         tempToggleIsOn = toggle.isOn;
         toggle.isOn = false;
+    }
+    private void CloseButtonActive(GameState gameState)
+    {
+        if(gameState == GameState.ActionState)
+            CloseButtonActive();
+    }
+    
+    // ------------------- Tool -------------------
+    public SkillButton UseSkillIDToSkillButton(string skillID)
+    {
+        return skillIDToSkillButtonDict[skillID];
     }
     
     // ------------------- Toggle Event -------------------

@@ -38,6 +38,8 @@ public class SkillDetailsSO : ScriptableObject
     // Count
     [ShowIf("skillUseCondition", SkillUseCondition.Count)]
     public int needCount;
+    [ShowIf("skillUseCondition", SkillUseCondition.Count)]
+    public StatusEffectSO countStatusEffectData;
 
     [ShowIf("skillUseCondition", SkillUseCondition.Count)]
     public bool isUseSkill;
@@ -69,4 +71,10 @@ public class SkillDetailsSO : ScriptableObject
     public bool isDirectionAttack;
     [ShowIf("skillType", SkillButtonType.Attack)]
     public List<SkillAimData> SkillAimDataList;
+    
+    //Skill
+    [ShowIf("skillType", SkillButtonType.Skill)]
+    public int skillBuffRound;
+    [ShowIf("skillType", SkillButtonType.Skill)]
+    public List<StatusEffect> skillEffectList;
 }

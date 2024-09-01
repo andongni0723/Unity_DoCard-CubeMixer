@@ -29,6 +29,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private bool isMouseHit = false;
     private bool inAttackRange = false;
     private Character tempCharacterWantToMove;
+    private ITileClickHandler _tileClickHandler;
     private Vector2 tempCharacterAttackRangeDistance;
 
     private void Awake()
@@ -67,6 +68,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void OnTileUpAnimation(SkillDetailsSO data, Character character, Vector2 skillAttackRange, Vector2 playerPos, Vector2 distance, bool isStrict = false)
     {
         tempCharacterWantToMove = character;
+        _tileClickHandler = character;
         tempCharacterAttackRangeDistance = skillAttackRange;
 
         if (isStrict? (Vector2.Distance(playerPos, tilePosition) == distance.y) :
@@ -126,11 +128,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isStand)
-        {
-            if (tempCharacterWantToMove != null)
-                tempCharacterWantToMove.TileReturnClickData(gameObject, tilePosition);
-        }
+        if (isStand) 
+            _tileClickHandler?.TileReturnClickData(gameObject, tilePosition);
     }
 
     #endregion

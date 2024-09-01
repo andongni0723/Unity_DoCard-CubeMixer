@@ -21,7 +21,7 @@ MonoBehaviour:
     \u6BCF\u6BB5\u9020\u6210[Damage]\u9EDE\u50B7\u5BB3"
   isSkillAreaCanEnemyOn: 1
   skillUseCondition: 0
-  skillNeedPower: 3
+  skillNeedPower: 7
   needCount: 0
   isUseSkill: 0
   isSkillHit: 0
@@ -29,9 +29,12 @@ MonoBehaviour:
   hasBeenDamage: 0
   skillType: 2
   moveRange: 0
-  damage: 5
+  damage: 4
   attackAimTime: 1
   isDirectionAttack: 1
   SkillAimDataList:
   - skillAttackRange: {x: 7, y: 4}
     skillCastRange: {x: 3, y: 3}
+  skillBuffRound: 0
+  enableSkillIDList: []
+  disableSkillIDList: []

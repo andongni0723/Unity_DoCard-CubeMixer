@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,7 +11,8 @@ public class DetailsManager : Singleton<DetailsManager>
     [Header("Settings")]
     [SerializeField] private List<CharacterDetailsSO> allCharacterDetailsList = new();
     [SerializeField] private Dictionary<string, Character> characterDict = new();
-    
+    public Dictionary<StatusEffectSO, BaseStatus> statusScriptDict = new();
+
     [Header("Public Data")]
     public Vector2 mouseHitTilePos;
     
@@ -63,6 +65,19 @@ public class DetailsManager : Singleton<DetailsManager>
         }
     }
     
+    // public IStatus UseStatusEffectSOGetStatusScript(StatusEffectSO statusEffect)
+    // {
+    //     try
+    //     {
+    //         // return statusScriptDict[statusEffect];
+    //         return new();
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Debug.LogError("SearchStatusScriptError: Doesn't put the ScriptableObject bind with script to dict\n" + e);
+    //         return null;
+    //     }
+    // }
     
 }
 

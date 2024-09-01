@@ -14,15 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSprite: {fileID: 21300000, guid: 45751a4124f67c443bf96ed1df7c550b, type: 3}
   skillName: "\u9023\u65AC"
+  skillENName: 
   skillDisplayName: "\u6280\u80FDT"
-  skillID: 002-trail
+  skillID: test
   skillDescription: 
-  skillNeedPower: 3
   isSkillAreaCanEnemyOn: 1
+  skillUseCondition: 0
+  skillNeedPower: 3
+  needCount: 0
+  isUseSkill: 0
+  isSkillHit: 0
+  isUsePower: 0
+  hasBeenDamage: 0
   skillType: 2
   moveRange: 0
   damage: 20
   attackAimTime: 5
+  isDirectionAttack: 0
   SkillAimDataList:
   - skillAttackRange: {x: 2, y: 2}
     skillCastRange: {x: 3, y: 3}
@@ -34,3 +42,5 @@ MonoBehaviour:
     skillCastRange: {x: 3, y: 3}
   - skillAttackRange: {x: 1, y: 1}
     skillCastRange: {x: 3, y: 3}
+  skillBuffRound: 0
+  skillEffectList: []

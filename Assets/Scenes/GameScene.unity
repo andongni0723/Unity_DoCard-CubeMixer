@@ -540,6 +540,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29d0370d07cd64932bfa3c823e74bf76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   selfCamera: {fileID: 0}
 --- !u!4 &165125697
 Transform:
@@ -773,10 +782,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 539926e10306944539b3ef9501282d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   panel: {fileID: 340631852}
   messageText: {fileID: 1848231357}
   networkStatusText: {fileID: 1597633655}
-  maxPlayers: 2
+  maxPlayers: 1
 --- !u!114 &218160119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2233,6 +2251,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98015e99a7917499a96c4b6610c5d926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   selfCharacterManager: {fileID: 0}
   enemyCharacterManager: {fileID: 0}
   gameStateManager: {fileID: 1630891991}
@@ -2266,8 +2293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9640837caf0904361a968469fc740cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 195100462414591342, guid: 1940448667cc44ed8ae83585147aa5fb, type: 3}
-  count: 1
 --- !u!1 &461190824
 GameObject:
   m_ObjectHideFlags: 0
@@ -2511,6 +2536,7 @@ MonoBehaviour:
     currentPower: 0
     characterObject: {fileID: 0}
     tilePosition: {x: 0, y: 0}
+    statusList: []
 --- !u!4 &528989413 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2366105369947334816, guid: d40753f09d1ad43b58ea872b1fd504c0,
@@ -4258,6 +4284,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12ef820a903c54f7898185d9f7af4ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   clearButton: {fileID: 1444142113}
   playButton: {fileID: 1354229576}
   doneButton: {fileID: 1900206192}
@@ -4821,6 +4856,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0584e2a574948bfbbb3c44754af285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: AnyButtonCallback
+      Entry: 6
+      Data: 
+    - Name: YesButtonCallback
+      Entry: 6
+      Data: 
   mainPanel: {fileID: 1588728802}
   yesButtonImage: {fileID: 1588032173}
   noButtonImage: {fileID: 1427741819}
@@ -15874,6 +15924,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3dd4378a92c4fb89e26836d7c58f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: characterDict
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Character,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: statusScriptDict
+      Entry: 7
+      Data: 2|System.Collections.Generic.Dictionary`2[[StatusEffectSO, Assembly-CSharp],[BaseStatus,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 3|System.Collections.Generic.ObjectEqualityComparer`1[[StatusEffectSO,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   allCharacterDetailsList:
   - {fileID: 11400000, guid: d0690e14776c4442db134ab92582c1bd, type: 2}
   - {fileID: 11400000, guid: 7c9e1b1d3cbf24747b4f9fe91d47d02e, type: 2}
@@ -17830,6 +17929,59 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8274091893292607396}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1836226991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1836226993}
+  - component: {fileID: 1836226992}
+  m_Layer: 0
+  m_Name: \\\ SkillExecutor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1836226992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836226991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0a3521f78b94f43912e11ca0ec1456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+--- !u!4 &1836226993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836226991}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1773.0461, y: 1035.1449, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1847664006 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2366105369947334816, guid: d40753f09d1ad43b58ea872b1fd504c0,
@@ -19020,6 +19172,12 @@ GameObject:
   - component: {fileID: 2025048331}
   - component: {fileID: 2025048330}
   - component: {fileID: 2025048332}
+  - component: {fileID: 2025048335}
+  - component: {fileID: 2025048334}
+  - component: {fileID: 2025048333}
+  - component: {fileID: 2025048338}
+  - component: {fileID: 2025048337}
+  - component: {fileID: 2025048336}
   m_Layer: 0
   m_Name: \Test Enemy
   m_TagString: Untagged
@@ -19042,7 +19200,9 @@ MonoBehaviour:
   body: {fileID: 0}
   characterManager: {fileID: 0}
   characterHealth: {fileID: 0}
-  powerManager: {fileID: 0}
+  CharacterPower: {fileID: 0}
+  characterStatus: {fileID: 0}
+  characterSkillButtonsGroup: {fileID: 0}
   blueBodyMaterial: {fileID: 0}
   id: 0
   characterDetails: {fileID: 0}
@@ -19052,6 +19212,7 @@ MonoBehaviour:
   team: 0
   characterTilePosition: {x: 4, y: 12}
   bodyStartPos: {x: 0, y: 0, z: 0}
+  isTileReturn: 0
   skillTileReturnDataList: []
 --- !u!4 &2025048331
 Transform:
@@ -19087,6 +19248,117 @@ MonoBehaviour:
   character: {fileID: 0}
   maxHealth: 0
   maxPower: 0
+  <currentHealth>k__BackingField: 0
+  <currentPower>k__BackingField: 0
+--- !u!114 &2025048333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025048329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de993c7f8a844425cb81bb562f387d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusList: []
+--- !u!114 &2025048334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025048329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ddff5138b5b490db8e35bf1b09ced5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  characterHealth: {fileID: 0}
+  characterPower: {fileID: 0}
+  characterStatusManager: {fileID: 0}
+  characterDetails: {fileID: 0}
+--- !u!114 &2025048335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025048329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad99b251fc1f140669ebf9982df24237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterHealth: {fileID: 0}
+  characterStatus: {fileID: 0}
+  character: {fileID: 0}
+  powerPanel: {fileID: 0}
+--- !u!54 &2025048336
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025048329}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2025048337
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025048329}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2025048338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025048329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals: []
+    m_Events: []
 --- !u!4 &2042607618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2366105369947334816, guid: d40753f09d1ad43b58ea872b1fd504c0,
@@ -23772,6 +24044,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0978d5cba959d44179ff6720d9a83c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!1001 &3595215421196358671
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32807,6 +33088,7 @@ SceneRoots:
   - {fileID: 455270274}
   - {fileID: 1630891992}
   - {fileID: 1483399475}
+  - {fileID: 1836226993}
   - {fileID: 165125697}
   - {fileID: 94051969}
   - {fileID: 197576413}

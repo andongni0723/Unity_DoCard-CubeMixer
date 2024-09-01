@@ -122,45 +122,73 @@ public class EventHandler
     }
 
     public static Action<bool> CharacterActionEnd;
+
     public static void CallCharacterActionEnd(bool isOwner)
     {
         CharacterActionEnd?.Invoke(isOwner);
     }
 
     public static Action UpdateCharacterActionData;
+
     public static void CallUpdateCharacterActionData()
     {
         UpdateCharacterActionData?.Invoke();
     }
-    
+
     public static Action CharacterBackToTurnStartPoint;
+
     public static void CallCharacterBackToTurnStartPoint()
     {
         CharacterBackToTurnStartPoint?.Invoke();
     }
 
     public static Action LastPlayActionEnd;
+
     public static void CallLastPlayActionEnd()
     {
         LastPlayActionEnd?.Invoke();
     }
-    
+
     public static Action SelfTeamCharacterActionEnd;
+
     public static void CallSelfTeamCharacterActionEnd()
     {
         SelfTeamCharacterActionEnd?.Invoke();
     }
 
     public static Action<Character, int, int> HealthChange;
+
     public static void CallHealthChange(Character character, int newValue, int maxHealth)
     {
         HealthChange?.Invoke(character, newValue, maxHealth);
     }
+
     public static Action<Character, int, int> PowerChange;
+
     public static void CallPowerChange(Character character, int newValue, int maxPower)
     {
         PowerChange?.Invoke(character, newValue, maxPower);
     }
+
+    public static Action<Character> CharacterDead;
+    
+    public static void CallCharacterDead(Character character)
+    {
+        CharacterDead?.Invoke(character);
+    }
+
+    #endregion
+
+    #region Status Effect
+    
+
+    // public static Action<Character, SkillDetailsSO, StatusEffectSO> CharacterAddStatusEffect;
+    // public static void CallCharacterAddStatusEffect(Character character, SkillDetailsSO skillDetailsSo, StatusEffectSO statusEffect)
+    // {
+    //     CharacterAddStatusEffect?.Invoke(character, skillDetailsSo, statusEffect);
+    //     Debug.Log("Eveg");
+    // }
+
     #endregion
 
 

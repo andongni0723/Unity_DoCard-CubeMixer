@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 public class CharacterHealth : MonoBehaviour
@@ -15,9 +17,10 @@ public class CharacterHealth : MonoBehaviour
     [Header("Debug")]
     public int maxHealth;
     public int maxPower;
-    public int currentHealth { get; private set; }
-    public int currentPower { get; private set; }
-
+    
+    [FoldoutGroup("Debug")][field: SerializeReference]public int currentHealth { get; private set; }
+    [FoldoutGroup("Debug")][field: SerializeReference]public int currentPower { get; private set; }
+    
     private void Awake()
     {
         hurtUI ??= GetComponentInChildren<HurtUI>();
@@ -59,6 +62,7 @@ public class CharacterHealth : MonoBehaviour
         // the value change must be in fight state
         if(GameManager.Instance.gameStateManager.currentState != GameState.FightState) return;
         currentHealth -= damage;
+        character.CharacterHasBeenDamage();
         EventHandler.CallHealthChange(character, currentHealth, maxHealth);
         if(currentHealth <= 0)
             Dead();
@@ -67,6 +71,8 @@ public class CharacterHealth : MonoBehaviour
     private void Dead()
     {
         Debug.LogWarning("DEAD");
+        EventHandler.CallCharacterDead(character);
+        gameObject.SetActive(false);
     }
     
 }
