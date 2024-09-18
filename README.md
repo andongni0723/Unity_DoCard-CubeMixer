@@ -34,5 +34,5 @@ The project was built using Unity, focusing on implementing networking features,
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/CubeMixer.git
+   git clone https://github.com/yourusername/Unity_DoCard-CubeMixer.git
 2. Open the project in Unity (version 2023.2.11 or later).
