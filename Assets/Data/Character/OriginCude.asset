@@ -21,3 +21,6 @@ MonoBehaviour:
     type: 3}
   skillButtonsGroupPrefab: {fileID: 8016292836242377493, guid: ea247c130ff9345a8ab7bdb8efa81c9e,
     type: 3}
+  characterSkillList:
+  - {fileID: 11400000, guid: 8e3bcd6f3d236435795a4ac6fa3556ad, type: 2}
+  - {fileID: 11400000, guid: fe2df8602218c42838bde5135d899420, type: 2}

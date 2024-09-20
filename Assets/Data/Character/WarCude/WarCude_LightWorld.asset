@@ -22,11 +22,11 @@ MonoBehaviour:
   isSkillAreaCanEnemyOn: 1
   skillUseCondition: 1
   skillNeedPower: 3
-  needCount: 2
+  needCount: 7
   countStatusEffectData: {fileID: 11400000, guid: c7703d59aaa87450499e52f265bbe9b9,
     type: 2}
   isUseSkill: 1
-  isSkillHit: 1
+  isSkillHit: 0
   isUsePower: 0
   hasBeenDamage: 1
   skillType: 2

@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 524efc9fbda0e445da58db73852f7f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons: {fileID: 3372216281054255656}
+  buttonsObj: {fileID: 0}
   toggle: {fileID: 0}
   ID: 
   characterDetails: {fileID: 0}
@@ -126,6 +126,7 @@ MonoBehaviour:
     currentPower: 0
     characterObject: {fileID: 0}
     tilePosition: {x: 0, y: 0}
+    statusList: []
   character: {fileID: 0}
 --- !u!114 &233562602873107997
 MonoBehaviour:
@@ -312,7 +313,7 @@ PrefabInstance:
         type: 3}
       propertyPath: skillDetails
       value: 
-      objectReference: {fileID: 11400000, guid: eec1be5fa49eb4a5db1cf25c656eda03,
+      objectReference: {fileID: 11400000, guid: fe2df8602218c42838bde5135d899420,
         type: 2}
     - target: {fileID: 5884203122835319358, guid: e6db483b6ebb549a4a92737e3ee38b20,
         type: 3}

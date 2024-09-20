@@ -25,7 +25,7 @@ MonoBehaviour:
   countStatusEffectData: {fileID: 11400000, guid: c3ae73a40f4b34affabcf2e6392b50b3,
     type: 2}
   isUseSkill: 1
-  isSkillHit: 1
+  isSkillHit: 0
   isUsePower: 0
   hasBeenDamage: 1
   skillType: 3
