@@ -27,7 +27,6 @@ public class EventHandler
     {
         ReturnMouseHitTilePosition?.Invoke(pos);
     }
-
     #endregion
 
     #region Game
@@ -190,7 +189,6 @@ public class EventHandler
     // }
 
     #endregion
-
 
     #region UI
 

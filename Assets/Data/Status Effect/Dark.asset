@@ -16,6 +16,8 @@ MonoBehaviour:
   effectName: "\u9ED1\u6697"
   effectID: dark
   effectDescription: 
+  maxHaveCountType: 1
+  maxHaveCount: 2
   effectType: 0
   StatusType: 1
   enableSkillIDList:

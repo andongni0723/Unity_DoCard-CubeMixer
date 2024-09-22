@@ -81,6 +81,9 @@ public class CharacterStatusManager : MonoBehaviour, IStatus
         var status = statusList.FirstOrDefault(x => x.data == statusEffect);
         if (status != null)
         {
+            if (statusEffect.maxHaveCountType == EffectMaxHaveCountType.Limit && 
+                status.count >= statusEffect.maxHaveCount) return;
+            
             CallStatusChange(status, status.count, status.count + count);
             status.count += count;
         }
@@ -158,28 +161,45 @@ public class CharacterStatusManager : MonoBehaviour, IStatus
         }
     }
     
-    
-
     public void OnStateStart(Character character, GameState newState)
     {
         var currentMultGameState = ConvertToMultipleGameState(newState);
         
-        statusList.ForEach(s =>
+        // statusList.ForEach(s =>
+        // {
+        //     switch (s.data.disappearType)
+        //     {
+        //         case StatusEffectDisappearType.None:
+        //             break;
+        //         case StatusEffectDisappearType.Event:
+        //             if ((s.data.DisappearWhenGameState & currentMultGameState) != 0)
+        //             {
+        //                 RemoveStatusEffect(s.statusFrom, s.data, 1);
+        //             }
+        //             break;
+        //         default:
+        //             throw new ArgumentOutOfRangeException();
+        //     }
+        // });
+
+        for (int i = 0; i < statusList.Count; i++)
         {
-            switch (s.data.disappearType)
+            switch (statusList[i].data.disappearType)
             {
                 case StatusEffectDisappearType.None:
                     break;
+                
                 case StatusEffectDisappearType.Event:
-                    if ((s.data.DisappearWhenGameState & currentMultGameState) != 0)
+                    if ((statusList[i].data.DisappearWhenGameState & currentMultGameState) != 0)
                     {
-                        RemoveStatusEffect(s.statusFrom, s.data, 1);
+                        RemoveStatusEffect(statusList[i].statusFrom, statusList[i].data, 1);
                     }
                     break;
+                
                 default:
                     throw new ArgumentOutOfRangeException();
-            }
-        });
+            } 
+        }
     }
 
     public void OnStateEnd(Character character, GameState cur)

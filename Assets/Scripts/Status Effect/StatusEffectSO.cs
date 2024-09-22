@@ -17,6 +17,12 @@ public class StatusEffectSO : ScriptableObject
     [TextArea] public string effectDescription;
 
     // Effect Action Setting
+    
+    // Max have count
+    [Space(10)] [EnumToggleButtons] public EffectMaxHaveCountType maxHaveCountType;
+    
+    [ShowIf("maxHaveCountType", EffectMaxHaveCountType.Limit)]
+    public int maxHaveCount;
 
     // Effect
     [Space(10)] [EnumToggleButtons] public EffectType effectType;

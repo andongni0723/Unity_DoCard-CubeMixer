@@ -74,7 +74,7 @@ public class Character : CharacterActionEvent, ITileClickHandler
 
     private void Start()
     {
-        characterHealth.InitialUpdateDate(characterDetails.health, characterDetails.power);
+        characterHealth.InitialUpdateData(characterDetails.health, characterDetails.power);
     }
     
     public void InitialUpdateData(string id)

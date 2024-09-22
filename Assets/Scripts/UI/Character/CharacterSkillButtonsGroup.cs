@@ -21,7 +21,7 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     [Header("Data")] private Dictionary<string, SkillButton> skillIDToSkillButtonDict = new();
 
     [Header("Debug")] 
-    private bool tempToggleIsOn; // When player play replay action ,
+    public bool tempToggleIsOn; // When player play replay action ,
                                  // record the toggle state and turn off the toggle
 
     private void Awake()
@@ -85,7 +85,7 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
     
     private void OnChangeStateDone(GameState newGameState)
     {
-        if(newGameState == GameState.ActionState)
+        if (newGameState == GameState.ActionState)
             OpenButtonActive();
     }
 
@@ -97,6 +97,7 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
 
     private void CloseButtonActive()
     {
+        if(!toggle.isOn) return;
         tempToggleIsOn = toggle.isOn;
         toggle.isOn = false;
     }

@@ -15,8 +15,12 @@ MonoBehaviour:
   effectIcon: {fileID: 21300000, guid: bef1e03eb9ac0463481bff6610677cf5, type: 3}
   effectName: "\u529B\u91CF"
   effectID: power
-  effectDescription: 
+  effectDescription: Light World count effect
+  maxHaveCountType: 1
+  maxHaveCount: 7
   effectType: 0
   StatusType: 0
   enableSkillIDList: []
   disableSkillIDList: []
+  disappearType: 0
+  DisappearWhenGameState: 0

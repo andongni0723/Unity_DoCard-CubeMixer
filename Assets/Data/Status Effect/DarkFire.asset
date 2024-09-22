@@ -15,8 +15,12 @@ MonoBehaviour:
   effectIcon: {fileID: 21300000, guid: a56afeb4493bc4b57a09188d046295f1, type: 3}
   effectName: "\u6697\u706B"
   effectID: darkFire
-  effectDescription: 
+  effectDescription: ' darkness revive count effect'
+  maxHaveCountType: 1
+  maxHaveCount: 7
   effectType: 0
   StatusType: 0
   enableSkillIDList: []
   disableSkillIDList: []
+  disappearType: 0
+  DisappearWhenGameState: 0

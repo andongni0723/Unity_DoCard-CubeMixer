@@ -40,4 +40,4 @@ MonoBehaviour:
   skillEffectList:
   - statusFrom: {fileID: 11400000}
     data: {fileID: 11400000, guid: 075fd36bdeb2b4988bd305fa0c67df9b, type: 2}
-    count: 1
+    count: 2

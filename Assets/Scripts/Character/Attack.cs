@@ -24,7 +24,7 @@ public class Attack : MonoBehaviour
         if (!other.TryGetComponent<CharacterHealth>(out var targetCharacterHealth)) return; // not can attack 
         
         // Check is different team
-        if (character.team != targetCharacterHealth.character.team)
+        if (targetCharacterHealth.isBot || character.team != targetCharacterHealth.character.team)
         {
             targetCharacterHealth.Damage(skillDetails.damage);
             character.CharacterSkillHit();

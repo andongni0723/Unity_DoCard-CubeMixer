@@ -12,8 +12,10 @@ public class CharacterHealth : MonoBehaviour
     public HurtUI hurtUI;
 
     public Character character;
+
+    [BoxGroup("Extra Setting")]
+    public bool isBot;
     
-    //[Header("Settings")]
     [Header("Debug")]
     public int maxHealth;
     public int maxPower;
@@ -24,10 +26,12 @@ public class CharacterHealth : MonoBehaviour
     private void Awake()
     {
         hurtUI ??= GetComponentInChildren<HurtUI>();
-        character ??= GetComponent<Character>();
+        
+        if(!isBot)
+            character ??= GetComponent<Character>();
     }
 
-    public void InitialUpdateDate(int maxHealth, int maxPower)
+    public void InitialUpdateData(int maxHealth, int maxPower)
     {
         this.maxHealth = maxHealth;
         this.maxPower = maxPower;
@@ -57,8 +61,10 @@ public class CharacterHealth : MonoBehaviour
     public void Damage(int damage)
     {
         hurtUI.CallHurtTextAnimation(damage);
+
+        if (isBot) return;
+
         character.HitAnimation();
-        
         // the value change must be in fight state
         if(GameManager.Instance.gameStateManager.currentState != GameState.FightState) return;
         currentHealth -= damage;

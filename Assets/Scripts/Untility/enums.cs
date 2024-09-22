@@ -12,6 +12,12 @@ public enum SkillUseCondition
     Count
 }
 
+public enum EffectMaxHaveCountType
+{
+    Infinite,
+    Limit,
+}
+
 public enum EffectType
 {
     None,

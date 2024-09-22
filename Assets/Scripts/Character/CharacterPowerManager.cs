@@ -46,6 +46,8 @@ public class CharacterPowerManager : MonoBehaviour
     
     public void UsePower(int powerCost)
     {
+        if(TestModePanel.Instance.infinityPower) return;
+        
         characterHealth.SetPower(characterHealth.currentPower - powerCost);
         powerPanel.SetPowerUI(characterHealth.currentPower);
         character.CharacterUsePower();
