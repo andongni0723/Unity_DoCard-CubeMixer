@@ -38,6 +38,8 @@ public class Character : CharacterActionEvent, ITileClickHandler
     public CharacterStatusManager characterStatus;
     protected GameDataBackUp gameDataBackUp;
     public CharacterSkillButtonsGroup characterSkillButtonsGroup; // set by CharacterSkillButtonsGroup
+    public GameObject characterObject;
+
     
     [Space(15)]
     public Material blueBodyMaterial;
@@ -67,6 +69,7 @@ public class Character : CharacterActionEvent, ITileClickHandler
         CharacterPower = GetComponent<CharacterPowerManager>();
         gameDataBackUp = GetComponent<GameDataBackUp>();
         characterStatus = GetComponent<CharacterStatusManager>();
+        characterObject = transform.GetChild(0).gameObject;
         // powerManager.characterHealth = characterHealth;
         
         bodyStartPos = body.transform.localPosition;
@@ -99,6 +102,15 @@ public class Character : CharacterActionEvent, ITileClickHandler
         EventHandler.CharacterChooseTileRangeDone += OnCharacterChooseTileRangeDone; // setting variable
         EventHandler.ChangeStateDone += OnChangeStateDone; // check is Action state to update turn start data
         EventHandler.CharacterActionEnd += OnCharacterActionEnd; // cancel ready power
+        EventHandler.CharacterDead += OnCharacterDead;
+    }
+
+    private void OnCharacterDead(Character target)
+    {
+        if(target != this) return;
+        //
+        // if(isLastPlayAction && characterManager.IsOwner) EventHandler.CallLastPlayActionEnd();
+        // EventHandler.CallCharacterActionEnd(characterManager.IsOwner);
     }
 
     private void OnDisable()
@@ -124,6 +136,7 @@ public class Character : CharacterActionEvent, ITileClickHandler
         
         characterHealth.PowerBackToStart();
         CharacterPower.powerPanel.InitialDisplay(characterDetails.power);
+        characterHealth.healthPanel.InitialDisplay(characterHealth.currentHealth);
     }
     #endregion
 
@@ -225,6 +238,8 @@ public class Character : CharacterActionEvent, ITileClickHandler
         CameraShake.Instance.Shake(2, 0.2f); 
     }
 
+    
+    
     public virtual IEnumerator AttackAction (string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList, bool isLastPlayAction = false) 
     {
         // Override by child, Write the skill action

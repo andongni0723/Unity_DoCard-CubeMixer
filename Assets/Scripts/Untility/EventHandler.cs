@@ -43,10 +43,10 @@ public class EventHandler
         CharacterObjectGenerate?.Invoke();
     }
     
-    public static Action CharacterObjectGeneratedDone;
-    public static void CallCharacterObjectGeneratedDone()
+    public static Action<bool> CharacterObjectGeneratedDone;
+    public static void CallCharacterObjectGeneratedDone(bool isOwner)
     {
-        CharacterObjectGeneratedDone?.Invoke();
+        CharacterObjectGeneratedDone?.Invoke(isOwner);
     } 
     
     public static Action UIObjectGenerate;

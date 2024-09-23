@@ -23,7 +23,7 @@ public class CameraShake : Singleton<CameraShake>
         EventHandler.CharacterObjectGeneratedDone -= Initial;
     }
 
-    private void Initial()
+    private void Initial(bool isOwner)
     {
         selfCamera = GameManager.Instance.GetSelfCameraController();
         noise = selfCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();

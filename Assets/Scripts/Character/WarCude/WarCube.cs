@@ -61,6 +61,14 @@ public class WarCube : Character
 
     public override IEnumerator AttackAction(string skillID,SkillButtonType skillButtonType, List<Vector2> skillTargetPosDataList, bool isLastPlayAction = false)
     {
+        if (characterHealth.isDead)
+        {
+            SkillActionEnd();
+            Debug.Log("Break");
+            yield return base.AttackAction(skillID, skillButtonType, skillTargetPosDataList, isLastPlayAction);
+            yield break;
+        }
+        
         SkillActionStart();
         ResetLookAt();
 

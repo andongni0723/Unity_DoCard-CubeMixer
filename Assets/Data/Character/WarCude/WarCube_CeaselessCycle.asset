@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d969930520284343b378ef93d799772, type: 3}
-  m_Name: WarCude_CircularCarrier
+  m_Name: WarCube_CeaselessCycle
   m_EditorClassIdentifier: 
-  skillSprite: {fileID: 21300000, guid: e639489fc4dd049ba90a1cbc90462c0d, type: 3}
-  skillName: "\u74B0\u72C0\u5E36\u7269"
-  skillENName: Circular Carrier
-  skillDisplayName: "\u5F37\u5316\u6280\u80FD1"
-  skillID: 011-circular-carrier
-  skillDescription: "\u82B1\u8CBB[Power]\u9EDE\u7684\u80FD\u91CF\uFF0C\u4EE5\u81EA\u8EAB\u70BA\u5713\u5FC3\uFF0C\u5C0D[Cast](6x6)\u7BC4\u570D\u5167\u6575\u4EBA\u9020\u6210[Damage]\u9EDE\u50B7\u5BB3"
+  skillSprite: {fileID: 21300000, guid: 4c41d74662669416c842e9e2a4f6f2e8, type: 3}
+  skillName: "\u751F\u4F86\u6B7B\u53BB"
+  skillENName: Ceaseless Cycle
+  skillDisplayName: "\u5F37\u5316\u6280\u80FD2"
+  skillID: 012-ceaseless-cycle
+  skillDescription: "\u82B1\u8CBB[Power]\u9EDE\u7684\u80FD\u91CF\uFF0C\u5C0D[Cast](7x4)\u7BC4\u570D\u5167\u6575\u4EBA\u5171\u9020\u6210[HitCount](5)\u6BB5\u50B7\u5BB3,
+    \u6BCF\u6BB5\u9020\u6210[Damage]\u9EDE\u50B7\u5BB3"
   isSkillAreaCanEnemyOn: 1
   skillUseCondition: 0
-  skillNeedPower: 3
+  skillNeedPower: 7
   needCount: 0
   isUseSkill: 0
   isSkillHit: 0
@@ -28,12 +29,12 @@ MonoBehaviour:
   hasBeenDamage: 0
   skillType: 2
   moveRange: 0
-  damage: 16
+  damage: 4
   attackAimTime: 1
-  isDirectionAttack: 0
+  isDirectionAttack: 1
   SkillAimDataList:
-  - skillAttackRange: {x: 4, y: 4}
-    skillCastRange: {x: 0, y: 0}
+  - skillAttackRange: {x: 7, y: 4}
+    skillCastRange: {x: 3, y: 3}
   skillBuffRound: 0
   enableSkillIDList: []
   disableSkillIDList: []

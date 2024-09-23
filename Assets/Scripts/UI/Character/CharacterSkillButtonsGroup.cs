@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Sirenix.OdinInspector;
 using UnityEngine.UI;
 
-public class CharacterSkillButtonsGroup : MonoBehaviour
+public class CharacterSkillButtonsGroup : SerializedMonoBehaviour
 {
     [Header("Component")] 
     public GameObject buttonsObj;
@@ -18,7 +20,7 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
 
     public Character character; // set by SkillButtonManager
 
-    [Header("Data")] private Dictionary<string, SkillButton> skillIDToSkillButtonDict = new();
+    [Header("Data")] public Dictionary<string, SkillButton> skillIDToSkillButtonDict = new();
 
     [Header("Debug")] 
     public bool tempToggleIsOn; // When player play replay action ,
@@ -64,12 +66,15 @@ public class CharacterSkillButtonsGroup : MonoBehaviour
         toggle.isOn = data == characterDetails;
     }
 
-    public void InitialUpdateData()
+    public void InitialUpdateData(bool isOwner)
     {
+        if (!isOwner) return;
+            
         buttonsObj.SetActive(true);
         
         foreach (var skillButton in buttonsObj.GetComponentsInChildren<SkillButton>())
         {
+            Debug.Log($"c: {character.name}, name:{skillButton.name}, id: {skillButton.skillDetails.skillID}");
             skillIDToSkillButtonDict.Add(skillButton.skillDetails.skillID, skillButton); // Update Dict
             skillButton.InitialUpdate(this); // Initial Button
         }

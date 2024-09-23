@@ -29,12 +29,16 @@ public class PowerPanel : MonoBehaviour
 
     private void Awake()
     {
-        character ??= transform.parent.parent.GetComponent<Character>();
+        character ??= GetComponentInParent<Character>();
         mainCamera = Camera.main;
 
         TextAndInsideImageColorAnimation();
     }
     
+    /// <summary>
+    /// Call By Character.cs
+    /// </summary>
+    /// <param name="startPower"></param>
     public void InitialDisplay(int startPower)
     {
         if(character.team != GameManager.Instance.selfTeam) 
@@ -112,16 +116,5 @@ public class PowerPanel : MonoBehaviour
         textAndInsideImageSequence.Append(powerInsideFillImage.DOColor(powerInsideBarColor1, 0.5f));
         textAndInsideImageSequence.Join(powerText.DOColor(powerInsideBarColor1, 0.5f));
         textAndInsideImageSequence.Pause();
-    }
-    
-    private void LateUpdate()
-    {
-        // transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
-
-        //TODO: Fix the color fade animation
-        // while (isColorFade)
-        // {
-        
-        // }
     }
 }

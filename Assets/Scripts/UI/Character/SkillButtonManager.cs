@@ -43,7 +43,7 @@ public class SkillButtonManager : MonoBehaviour
             characterCard.ID = GenerateCharacterID(team, currentGenerateID);
             characterCard.character = DetailsManager.Instance.UseCharacterIDSearchCharacter(characterCard.ID); 
             characterCard.character.characterSkillButtonsGroup = characterCard;
-            characterCard.InitialUpdateData();
+            characterCard.InitialUpdateData(true);
 
             
             currentGenerateID++;

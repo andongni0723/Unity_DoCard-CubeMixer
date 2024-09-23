@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d969930520284343b378ef93d799772, type: 3}
-  m_Name: WarCude_Rotate
+  m_Name: WarCube_CircularCarrier
   m_EditorClassIdentifier: 
-  skillSprite: {fileID: 21300000, guid: 478145766b66a42cab79744ca9d23926, type: 3}
-  skillName: "\u5713\u65AC"
-  skillENName: Rotate
-  skillDisplayName: "\u6280\u80FD1"
-  skillID: 001-rotate
-  skillDescription: "\u82B1\u8CBB[Power]\u9EDE\u7684\u80FD\u91CF\uFF0C\u4EE5\u81EA\u8EAB\u70BA\u5713\u5FC3\uFF0C\u5C0D[Cast](3x3)\u7BC4\u570D\u5167\u6575\u4EBA\u9020\u6210[Damage]\u9EDE\u50B7\u5BB3"
+  skillSprite: {fileID: 21300000, guid: e639489fc4dd049ba90a1cbc90462c0d, type: 3}
+  skillName: "\u74B0\u72C0\u5E36\u7269"
+  skillENName: Circular Carrier
+  skillDisplayName: "\u5F37\u5316\u6280\u80FD1"
+  skillID: 011-circular-carrier
+  skillDescription: "\u82B1\u8CBB[Power]\u9EDE\u7684\u80FD\u91CF\uFF0C\u4EE5\u81EA\u8EAB\u70BA\u5713\u5FC3\uFF0C\u5C0D[Cast](6x6)\u7BC4\u570D\u5167\u6575\u4EBA\u9020\u6210[Damage]\u9EDE\u50B7\u5BB3"
   isSkillAreaCanEnemyOn: 1
   skillUseCondition: 0
   skillNeedPower: 3
@@ -28,8 +28,12 @@ MonoBehaviour:
   hasBeenDamage: 0
   skillType: 2
   moveRange: 0
-  damage: 8
+  damage: 16
   attackAimTime: 1
+  isDirectionAttack: 0
   SkillAimDataList:
-  - skillAttackRange: {x: 3, y: 3}
+  - skillAttackRange: {x: 4, y: 4}
     skillCastRange: {x: 0, y: 0}
+  skillBuffRound: 0
+  enableSkillIDList: []
+  disableSkillIDList: []

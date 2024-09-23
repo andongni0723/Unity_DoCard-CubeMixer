@@ -24,6 +24,7 @@ public class CharacterManager : NetworkBehaviour
     public NetworkVariable<FixedString512Bytes> characterActionDataString
         = new(writePerm: NetworkVariableWritePermission.Owner);
 
+    
 
     //[Header("Debug")]
 
@@ -162,36 +163,6 @@ public class CharacterManager : NetworkBehaviour
             yield return new WaitForSeconds(0.3f);
         }
     }
-    
-    // [ServerRpc]
-    // private void AddIDServerRpc(int id)
-    // {
-    //     characterIDList.Add(id);
-    // }
-    
-    // public void AddID(int id)
-    // {
-    //     AddIDServerRpc(id);
-    // }
-    //
-    // public void SavePosition(string key, Vector2 saveTilePos)
-    // {
-    //     characterGameDataDict[key].tilePosition = saveTilePos;
-    // }
-    // public bool LoadPosition(string key, ref Vector2 data)
-    // {
-    //     if(characterGameDataDict.TryGetValue(key, out var value))
-    //     {
-    //         data = value.tilePosition;
-    //         return true;
-    //     }
-    //     
-    //     if (characterGameDataDict[key].tilePosition == new Vector2(-1, -1))
-    //         return false;
-    //     
-    //     data = characterGameDataDict[key].tilePosition;
-    //     return true;
-    // }
 
     public void SaveData(string key, CharacterGameData data)
     {
@@ -207,19 +178,6 @@ public class CharacterManager : NetworkBehaviour
         }
        
     }
-    
-    // public CharacterGameData LoadData(string key)
-    // {
-    //     if (characterGameDataDict.TryGetValue(key, out var data))
-    //     {
-    //         return data;
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("Key not found");
-    //         return null;
-    //     }
-    // }
 }
 
 // ------------------- Data -------------------

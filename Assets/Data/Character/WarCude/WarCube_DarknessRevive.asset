@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d969930520284343b378ef93d799772, type: 3}
-  m_Name: WarCude_DarknessRevive
+  m_Name: WarCube_DarknessRevive
   m_EditorClassIdentifier: 
   skillSprite: {fileID: 21300000, guid: a56afeb4493bc4b57a09188d046295f1, type: 3}
   skillName: "\u6B65\u5165\u9ED1\u6697"

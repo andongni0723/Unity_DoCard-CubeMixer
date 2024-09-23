@@ -19,7 +19,8 @@ public class CharacterPowerManager : MonoBehaviour
     // ----------------- Game -----------------
     private void Awake()
     {
-        powerPanel ??= transform.GetChild(0).GetChild(0).GetComponent<PowerPanel>();
+        // powerPanel ??= transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<PowerPanel>();
+        powerPanel ??= GetComponentInChildren<PowerPanel>();
         character ??= GetComponent<Character>();
         characterHealth ??= GetComponent<CharacterHealth>();
         characterStatus ??= GetComponent<CharacterStatusManager>();

@@ -98,6 +98,7 @@ public class MatchManager : Singleton<MatchManager>
     {
         // const int maxPlayers = 2;
 
+        maxPlayers = TestModePanel.Instance.singlePlayerMode ? 1 : 2;
         var a = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
         var joinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);
 

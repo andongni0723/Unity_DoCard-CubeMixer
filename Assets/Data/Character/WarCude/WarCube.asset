@@ -10,17 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43929a1fb0e9345a4a2bf7fe8a467f4c, type: 3}
-  m_Name: OriginCude
+  m_Name: WarCube
   m_EditorClassIdentifier: 
-  characterSprite: {fileID: 21300000, guid: 8063050a249eef441beb8cbbd04c086c, type: 3}
-  characterName: "\u8D77\u6E90\u65B9\u584A"
+  characterSprite: {fileID: 21300000, guid: 2b9bf8ec5d54fe249ac9e20979ccd42c, type: 3}
+  characterName: "\u597D\u6230\u65B9\u584A"
   characterDescription: 
-  health: 50
+  health: 111
   power: 10
   characterPrefab: {fileID: 6115863782023368708, guid: 2977264b873134056930db3887499ef5,
     type: 3}
-  skillButtonsGroupPrefab: {fileID: 8016292836242377493, guid: ea247c130ff9345a8ab7bdb8efa81c9e,
+  skillButtonsGroupPrefab: {fileID: 6684503081504046911, guid: cf3fb2facfb20452982253de68bf7318,
     type: 3}
   characterSkillList:
+  - {fileID: 11400000, guid: 1d5b9ea5862ad4fc39fa2092d2d4cbc6, type: 2}
+  - {fileID: 11400000, guid: ddabc389f39214a8bad529b0ea8fd327, type: 2}
+  - {fileID: 11400000, guid: 18416bd9792004614b0f845085e80739, type: 2}
+  - {fileID: 11400000, guid: 40e68e570414a4ca989d27652c91d980, type: 2}
+  - {fileID: 11400000, guid: a1a3ad843bc334e0b930eb819e22f985, type: 2}
   - {fileID: 11400000, guid: 8e3bcd6f3d236435795a4ac6fa3556ad, type: 2}
   - {fileID: 11400000, guid: fe2df8602218c42838bde5135d899420, type: 2}

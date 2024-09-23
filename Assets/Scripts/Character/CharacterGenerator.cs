@@ -23,14 +23,11 @@ public class CharacterGenerator : NetworkBehaviour
     private Vector2 startSpawnPosition;
 
     public NetworkVariable<int> teamNetwork = new(0, writePerm: NetworkVariableWritePermission.Owner);
-    // private NetworkVariable<int> currentGenerateID = new(1000);
     private NetworkList<int> tempDataIndexList;
     
     public override void OnNetworkSpawn()
     {
-        // tempList value initialize
-        // if( IsOwner && tempDataIndexList.Value == null)
-        //     tempDataIndexList.Value = new NetworkCharacterDetailsIndexList();
+        Debug.Log("d");
 
         // Event
         teamNetwork.OnValueChanged += OnTeamValueChanged;
@@ -83,10 +80,6 @@ public class CharacterGenerator : NetworkBehaviour
     {
         yield return new WaitUntil(() => isInitial);
         
-        // List<int> to int[]
-       
-
-        //tempDataIndexList.Value.dataArray = tempArray;
         GenerateCallServerRpc();
         CharacterGenerate(tempDataIndexList);
     }
@@ -162,7 +155,7 @@ public class CharacterGenerator : NetworkBehaviour
             currentGenerateID++;
         }
         
-        EventHandler.CallCharacterObjectGeneratedDone();
+        EventHandler.CallCharacterObjectGeneratedDone(IsOwner);
     }
 
     private string GenerateCharacterID(Team team, int currentGenerateID)

@@ -12,11 +12,13 @@ public class CharacterHealth : MonoBehaviour
     public HurtUI hurtUI;
 
     public Character character;
+    public HealthPanel healthPanel;
 
     [BoxGroup("Extra Setting")]
     public bool isBot;
-    
+
     [Header("Debug")]
+    public bool isDead;
     public int maxHealth;
     public int maxPower;
     
@@ -26,6 +28,8 @@ public class CharacterHealth : MonoBehaviour
     private void Awake()
     {
         hurtUI ??= GetComponentInChildren<HurtUI>();
+        // healthPanel ??= transform.GetChild(0).GetChild(1).GetComponent<HealthPanel>();
+        healthPanel ??= GetComponentInChildren<HealthPanel>();
         
         if(!isBot)
             character ??= GetComponent<Character>();
@@ -69,6 +73,7 @@ public class CharacterHealth : MonoBehaviour
         if(GameManager.Instance.gameStateManager.currentState != GameState.FightState) return;
         currentHealth -= damage;
         character.CharacterHasBeenDamage();
+        healthPanel.SetHealthUI(currentHealth);
         EventHandler.CallHealthChange(character, currentHealth, maxHealth);
         if(currentHealth <= 0)
             Dead();
@@ -77,8 +82,10 @@ public class CharacterHealth : MonoBehaviour
     private void Dead()
     {
         Debug.LogWarning("DEAD");
+        character.SkillActionEnd();
+        isDead = true;
         EventHandler.CallCharacterDead(character);
-        gameObject.SetActive(false);
+        character.characterObject.SetActive(false);
     }
     
 }
