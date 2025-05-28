@@ -109,10 +109,10 @@ MonoBehaviour:
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: -1731
+    x: -1730
     y: 1811
-    width: 1549
-    height: 2022
+    width: 1548
+    height: 2002
 --- !u!114 &8926484042661617879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,7 +826,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 20
+      m_SerializableObject: 19
     m_Space: -1
   m_Property:
     name: LoopCount
